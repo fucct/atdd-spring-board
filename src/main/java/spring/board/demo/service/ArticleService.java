@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import spring.board.demo.domain.Article;
+import spring.board.demo.domain.Comment;
 import spring.board.demo.dto.ArticleResponseDto;
 import spring.board.demo.repository.ArticleRepository;
 
@@ -29,5 +30,10 @@ public class ArticleService {
 
     public ArticleResponseDto findById(Long articleId) {
         return ArticleResponseDto.of(articleRepository.findById(articleId));
+    }
+
+    @Transactional
+    public void addComment(Long articleId, Comment comment) {
+        articleRepository.addComment(articleId, comment);
     }
 }

@@ -12,10 +12,11 @@ import javax.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import spring.board.demo.BaseTimeEntity;
 
-@Getter
-@Entity
+@Getter @Setter
+@Entity(name = "comment")
 @NoArgsConstructor
 public class Comment extends BaseTimeEntity {
 
@@ -27,14 +28,25 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "article_id")
     private Article article;
 
+    @Column(name = "comment_nickname")
     private String nickName;
+    @Column(name = "comment_password")
     private String password;
+    @Column(name = "comment_content")
     private String content;
 
-    @Builder
-    public Comment(String nickName, String password, String content) {
-        this.nickName = nickName;
-        this.password = password;
-        this.content = content;
+    public void setArticle(Article article){
+        this.article = article;
+        article.getComments().add(this);
+    }
+
+    public static Comment createComment(Article article, String content, String nickName, String password){
+        Comment comment = new Comment();
+        comment.setArticle(article);
+        comment.setNickName(nickName);
+        comment.setPassword(password);
+        comment.setContent(content);
+
+        return comment;
     }
 }

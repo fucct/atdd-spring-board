@@ -3,25 +3,60 @@
   <h1><a href="/" id="title">디디 게시판</a></h1>
   <div class="col-md-12">
     <div class="col-md-12">
-      <form>
+      <div class="form-group">
+        <label for="id">no</label>
+        <input type="text" class="form-control" id="id" value="{{id}}" readonly>
+      </div>
+      <div class="form-group">
+        <label for="title">제목</label>
+        <input type="text" class="form-control" id="title" value="{{title}}" readonly>
+      </div>
+      <div class="form-group">
+        <label for="nickName">작성자</label>
+        <input type="text" class="form-control" id="nickName" value="{{nickName}}" readonly>
+      </div>
+      <div class="form-group">
+        <label for="content">글 내용</label>
+        <textarea class="form-control" id="content" readonly>{{content}}</textarea>
+      </div>
+      <div class="form-group">
+        <label for="comment-content">댓글 내용</label>
+        <table class="table table-horizontal table-bordered">
+          <thead class="thead-strong">
+          <tr>
+            <th>no</th>
+            <th>내용</th>
+            <th>닉네임</th>
+            <th>작성날짜</th>
+          </tr>
+          </thead>
+          <tbody id="tbody">
+          {{#comments}}
+            <tr>
+              <td>{{commentId}}</td>
+              <td>{{content}}</a></td>
+              <td>{{nickName}}</td>
+              <td>{{createdDate}}</td>
+            </tr>
+          {{/comments}}
+          </tbody>
+        </table>
+      </div>
+      <form action="/comment/{{id}}" method="post">
         <div class="form-group">
-          <label for="id">no</label>
-          <input type="text" class="form-control" id="id" value="{{id}}" readonly>
+          <textarea class="form-control" id="commentContent" name="commentContent"
+                    placeholder="댓글 입력"></textarea>
         </div>
         <div class="form-group">
-          <label for="title">제목</label>
-          <input type="text" class="form-control" id="title" value="{{title}}" readonly>
+          <label for="commentNickname">닉네임</label>
+          <input type="text" class="form-control" id="commentNickname" name="commentNickname"/>
         </div>
         <div class="form-group">
-          <label for="nickName">작성자</label>
-          <input type="text" class="form-control" id="nickName" value="{{nickName}}" readonly>
+          <label for="commentContent">패스워드</label>
+          <input type="password" class="form-control" id="commentContent" name="commentContent"/>
         </div>
-        <div class="form-group">
-          <label for="content">글 내용</label>
-          <textarea class="form-control" id="content" readonly>{{content}}</textarea>
-        </div>
+        <input type="submit" class="btn btn-primary" id="btn-comment-save" placeholder="등록"/>
       </form>
-      <button type="button" class="btn btn-primary" id="btn-update">수정</button>
     </div>
   </div>
 {{/article}}

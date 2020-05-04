@@ -36,7 +36,7 @@ public class CommentRepository {
         return em.createQuery("select a from Comment a", Comment.class)
             .getResultList()
             .stream()
-            .map(CommentResponseDto::new)
+            .map(CommentResponseDto::of)
             .collect(Collectors.toList());
     }
 }

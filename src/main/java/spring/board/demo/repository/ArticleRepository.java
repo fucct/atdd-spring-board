@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
 import spring.board.demo.domain.Article;
+import spring.board.demo.domain.Comment;
 import spring.board.demo.dto.ArticleResponseDto;
 
 @Repository
@@ -37,5 +38,10 @@ public class ArticleRepository {
             .stream()
             .map(ArticleResponseDto::of)
             .collect(Collectors.toList());
+    }
+
+    public void addComment(Long articleId, Comment comment) {
+        Article article = em.find(Article.class, articleId);
+        article.getComments().add(comment);
     }
 }
