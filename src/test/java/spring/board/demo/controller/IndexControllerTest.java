@@ -51,9 +51,10 @@ class IndexControllerTest {
 
     private List<ArticleResponse> getArticles() {
         return given().when().
-            get("/posts/list").
+            get("/articles/list").
             then().
             log().all().
+            statusCode(HttpStatus.OK.value()).
             extract().
             jsonPath().getList(".", ArticleResponse.class);
     }
@@ -69,7 +70,7 @@ class IndexControllerTest {
             contentType(MediaType.APPLICATION_JSON_VALUE).
             accept(MediaType.APPLICATION_JSON_VALUE).
         when().
-            post("/posts").
+            post("/articles").
         then().
             log().all().
             statusCode(HttpStatus.CREATED.value());
