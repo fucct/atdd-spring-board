@@ -1,38 +1,42 @@
-{{>layout/header}}
-
-<h1><a href="/" id="title">디디 게시판</a></h1>
-<div class="col-md-12">
-  <div class="row">
-    <div class="col-md-6">
-      <a href="/post/save" role="button" class="btn btn-primary">글 등록</a>
+<!DOCTYPE html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>디디 게시판</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no"
+    />
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.materialdesignicons.com/5.0.45/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link href="./css/admin-app.css" rel="stylesheet" />
+  </head>
+  <body class="bg-gray-200 h-screen">
+    <div class="flex justify-center items-center app-container">
+      <div class="text-center">
+        <img src="./images/main_logo.png" class="main-logo mx-auto" />
+        <p class="mt-2 text-gray-700">
+          디디 게시판 <br />
+        </p>
+        <ul class="text-blue-700">
+          <li class="inline-block p-1">
+            <a href="/articles" class="underline">게시판</a>
+          </li>
+          <li class="inline-block p-1">
+            <a href="admin-line.mustache" class="underline">노선 관리</a>
+          </li>
+          <li class="inline-block p-1">
+            <a href="admin-edge.mustache" class="underline">구간 관리</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-  <br>
-  <!--    목록 출력 영역-->
-  <table class="table table-horizontal table-bordered">
-    <thead class="thead-strong">
-    <tr>
-      <th>no</th>
-      <th>제목</th>
-      <th>닉네임</th>
-      <th>작성날짜</th>
-    </tr>
-    </thead>
-    <tbody id="tbody">
-    {{#articles}}
-      <tr>
-        <td>{{id}}</td>
-        <td><a href="/post/{{id}}">{{title}}</a></td>
-        <td>{{nickName}}</td>
-        <td>{{createdDate}}</td>
-      </tr>
-    {{/articles}}
-    </tbody>
-  </table>
-  <div class="row">
-    <div class="col-md-12" id="post-button">
-      <a href="/post/save" role="button" class="btn btn-primary">글 등록</a>
-    </div>
-  </div>
-</div>
-{{>layout/footer}}
+    <script type="module" src="./js/AdminApp.js"></script>
+  </body>
+</html>

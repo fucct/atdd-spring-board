@@ -1,7 +1,6 @@
 package spring.board.demo.controller;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +48,8 @@ class ArticleControllerTest {
         //when
         ArticleResponse response1 = getArticle(1L);
         ArticleResponse response2 = getArticle(2L);
+
+        //then
         assertThat(response1.getTitle()).isEqualTo("안녕하세요");
         assertThat(response1.getUserName()).isEqualTo("디디");
         assertThat(response1.getContent()).isEqualTo("안녕하세요 좋은하루 되세요");
@@ -56,6 +57,58 @@ class ArticleControllerTest {
         assertThat(response2.getUserName()).isEqualTo("노루");
         assertThat(response2.getContent()).isEqualTo("아이구 졸려라");
 
+        //when
+        updateArticle(1L, "안녕히가세요", "디디", "이 바보야");
+        updateArticle(2L, "갑수목장", "노루", "싫어요");
+
+        //then
+        ArticleResponse response3 = getArticle(1L);
+        ArticleResponse response4 = getArticle(2L);
+
+        assertThat(response3.getTitle()).isEqualTo("안녕히가세요");
+        assertThat(response3.getUserName()).isEqualTo("디디");
+        assertThat(response3.getContent()).isEqualTo("이 바보야");
+        assertThat(response4.getTitle()).isEqualTo("갑수목장");
+        assertThat(response4.getUserName()).isEqualTo("노루");
+        assertThat(response4.getContent()).isEqualTo("싫어요");
+
+        //when
+        deleteArticle(1L);
+
+        //then
+        List<ArticleResponse> articles1 = getArticles();
+        assertThat(articles1.size()).isEqualTo(1);
+
+        //when
+        deleteArticle(2L);
+
+        //then
+        List<ArticleResponse> articles2 = getArticles();
+        assertThat(articles2.size()).isEqualTo(0);
+
+    }
+
+    private void deleteArticle(Long id) {
+        given().when().
+            delete("/articles/" + id).
+            then().
+            statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    private void updateArticle(Long id, String title, String userName, String content) {
+        Map<String, String> param = new HashMap<>();
+        param.put("title", title);
+        param.put("userName", userName);
+        param.put("content", content);
+
+        given().
+            body(param).
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+            accept(MediaType.APPLICATION_JSON_VALUE).
+            when().
+            put("/articles/" + id).
+            then().
+            statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     private ArticleResponse getArticle(Long id) {
