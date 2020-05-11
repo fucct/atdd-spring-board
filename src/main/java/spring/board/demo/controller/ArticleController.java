@@ -21,33 +21,35 @@ import org.springframework.web.bind.annotation.RestController;
 import spring.board.demo.domain.Article;
 import spring.board.demo.dto.ArticleCreateRequest;
 import spring.board.demo.dto.ArticleResponse;
+import spring.board.demo.repository.ArticleRepository;
+import spring.board.demo.service.ArticleService;
 
 @RestController
 @RequestMapping("/articles")
 public class ArticleController {
 
-    private static Map<Long, Article> articleRepository = new HashMap<>();
-    private static Long currentId = 1L;
+    private final ArticleService articleService;
+
+    public ArticleController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
 
     @PostMapping
     public ResponseEntity<Object> create(@Valid @RequestBody ArticleCreateRequest request) {
-        articleRepository.put(currentId, request.toArticle());
-        return ResponseEntity.created(URI.create("/articles/" + currentId++)).build();
+        ArticleResponse response = articleService.save(request);
+        return ResponseEntity.created(URI.create("/articles/" + response.getId())).build();
     }
 
     @GetMapping
     public ResponseEntity<List<ArticleResponse>> getArticles() {
-        List<ArticleResponse> articles = articleRepository.values()
-            .stream()
-            .map(ArticleResponse::of)
-            .collect(Collectors.toList());
+        List<ArticleResponse> articles = articleService.getArticles();
 
         return ResponseEntity.ok(articles);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ArticleResponse> getArticle(@PathVariable Long id) {
-        ArticleResponse article = ArticleResponse.of(articleRepository.get(id));
+        ArticleResponse article = articleService.getArticleById(id);
 
         return ResponseEntity.ok(article);
     }
@@ -55,14 +57,15 @@ public class ArticleController {
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable Long id,
         @Valid @RequestBody ArticleCreateRequest request) {
-        Article article = request.toArticle();
-        articleRepository.put(id, article);
+        articleService.updateById(id, request);
+
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
-        articleRepository.remove(id);
+        articleService.deleteById(id);
+
         return ResponseEntity.noContent().build();
     }
 }

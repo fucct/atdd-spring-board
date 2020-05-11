@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import spring.board.demo.dto.ArticleCreateRequest;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,5 +29,10 @@ public class Article {
         this.title = title;
         this.userName = userName;
         this.content = content;
+    }
+
+    public void update(ArticleCreateRequest request) {
+        this.title = request.getTitle();
+        this.content = request.getContent();
     }
 }
