@@ -1,10 +1,7 @@
 package spring.board.demo.controller;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -18,10 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import spring.board.demo.domain.Article;
 import spring.board.demo.dto.ArticleCreateRequest;
 import spring.board.demo.dto.ArticleResponse;
-import spring.board.demo.repository.ArticleRepository;
 import spring.board.demo.service.ArticleService;
 
 @RestController
@@ -35,9 +30,10 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@Valid @RequestBody ArticleCreateRequest request) {
+    public ResponseEntity<ArticleResponse> create(@Valid @RequestBody ArticleCreateRequest request) {
         ArticleResponse response = articleService.save(request);
-        return ResponseEntity.created(URI.create("/articles/" + response.getId())).build();
+
+        return ResponseEntity.created(URI.create("/articles/" + response.getId())).body(response);
     }
 
     @GetMapping

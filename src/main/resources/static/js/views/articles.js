@@ -4,12 +4,11 @@ import { listItemTemplate } from "../../utils/templates.js";
 function Articles() {
   const $articleInput = document.querySelector("#article-input");
   const $articleList = document.querySelector("#article-list");
-  const $articleAddBtn = document.querySelector("#station-add-btn")
+  const $articleAddBtn = document.querySelector("#article-add-btn")
   const onAddStationHandler = event => {
     if (event.key !== KEY_TYPE.ENTER && event.type !== EVENT_TYPE.CLICK ) {
       return;
     }
-
 
     event.preventDefault();
     const $titleInput = document.querySelector("#title");
@@ -28,10 +27,16 @@ function Articles() {
       content: content
     };
 
-    $titleInput.value = "";
-    $userNameInput.value = "";
-    $contentInput.value = "";
-    $articleList.insertAdjacentHTML("beforeend", listItemTemplate(article));
+    fetch('/articles', {
+      method:'POST',
+      headers:{
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(article)
+    }).then(response => response.headers)
+    .then(jsonResponse=>{
+      const uri = jsonResponse.get("Location");
+    });
   };
 
   const onRemoveStationHandler = event => {
@@ -44,6 +49,7 @@ function Articles() {
 
   const initEventListeners = () => {
     $articleInput.addEventListener(EVENT_TYPE.KEY_PRESS, onAddStationHandler);
+    $articleAddBtn.addEventListener(EVENT_TYPE.CLICK, onAddStationHandler);
   };
 
   const init = () => {
@@ -53,6 +59,14 @@ function Articles() {
   return {
     init
   };
+}
+
+function getLines(){
+  fetch('/articles', {
+    method: 'GET'
+  }.then(response=>response.json()))
+  .then(jsonResponse)
+
 }
 
 const adminStation = new Articles();

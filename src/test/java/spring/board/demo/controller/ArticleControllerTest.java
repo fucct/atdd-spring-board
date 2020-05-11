@@ -39,15 +39,18 @@ class ArticleControllerTest {
         // given
 
         // when
-        createArticle("안녕하세요", "디디", "안녕하세요 좋은하루 되세요");
-        createArticle("반갑습니다", "노루", "아이구 졸려라");
+        ArticleResponse response1 = createArticle("안녕하세요", "디디", "안녕하세요 좋은하루 되세요");
+        ArticleResponse response2 = createArticle("반갑습니다", "노루", "아이구 졸려라");
         // then
         List<ArticleResponse> articles = getArticles();
         assertThat(articles.size()).isEqualTo(2);
 
+        assertThat(response1.getId()).isEqualTo(1L);
+        assertThat(response2.getId()).isEqualTo(2L);
+
         //when
-        ArticleResponse response1 = getArticle(1L);
-        ArticleResponse response2 = getArticle(2L);
+        response1 = getArticle(1L);
+        response2 = getArticle(2L);
 
         //then
         assertThat(response1.getTitle()).isEqualTo("안녕하세요");
@@ -130,20 +133,21 @@ class ArticleControllerTest {
             jsonPath().getList(".", ArticleResponse.class);
     }
 
-    private void createArticle(String title, String userName, String content) {
+    private ArticleResponse createArticle(String title, String userName, String content) {
         Map<String, String> param = new HashMap<>();
         param.put("title", title);
         param.put("userName", userName);
         param.put("content", content);
 
-        given().
+        return given().
             body(param).
             contentType(MediaType.APPLICATION_JSON_VALUE).
-            accept(MediaType.APPLICATION_JSON_VALUE).
             when().
             post("/articles").
             then().
             log().all().
-            statusCode(HttpStatus.CREATED.value());
+            statusCode(HttpStatus.CREATED.value()).
+            extract().
+            jsonPath().getObject(".", ArticleResponse.class);
     }
 }
