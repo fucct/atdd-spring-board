@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.board.demo.domain.Article;
 import spring.board.demo.dto.ArticleCreateRequest;
 import spring.board.demo.dto.ArticleResponse;
-import spring.board.demo.exception.IllegalIdException;
+import spring.board.demo.exception.IdNotFoundException;
 import spring.board.demo.repository.ArticleRepository;
 
 @Service
@@ -37,13 +37,15 @@ public class ArticleService {
 
     @Transactional(readOnly = true)
     public ArticleResponse getArticleById(Long id) {
-        Article article = articleRepository.findById(id).orElseThrow(IllegalIdException::new);
+        Article article = articleRepository.findById(id)
+            .orElseThrow(() -> new IdNotFoundException(id));
 
         return ArticleResponse.of(article);
     }
 
     public void updateById(Long id, ArticleCreateRequest request) {
-        Article article = articleRepository.findById(id).orElseThrow(IllegalIdException::new);
+        Article article = articleRepository.findById(id)
+            .orElseThrow(() -> new IdNotFoundException(id));
         article.update(request);
         articleRepository.save(article);
     }

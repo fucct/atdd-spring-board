@@ -28,7 +28,7 @@ class IndexControllerTest {
     void index() {
         given().when().
             get("/").
-        then().
+            then().
             statusCode(HttpStatus.OK.value());
     }
 }

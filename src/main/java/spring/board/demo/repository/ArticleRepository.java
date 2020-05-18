@@ -1,8 +1,11 @@
 package spring.board.demo.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+import org.springframework.data.repository.CrudRepository;
 
 import spring.board.demo.domain.Article;
 
-public interface ArticleRepository extends JpaRepository<Article, Long> {
+public interface ArticleRepository extends CrudRepository<Article, Long> {
+    List<Article> findAll();
 }

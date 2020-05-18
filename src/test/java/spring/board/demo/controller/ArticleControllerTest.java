@@ -13,12 +13,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import spring.board.demo.dto.ArticleResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Sql("/truncate.sql")
 class ArticleControllerTest {
 
     @LocalServerPort
@@ -33,9 +35,9 @@ class ArticleControllerTest {
         return RestAssured.given().log().all();
     }
 
-    @DisplayName("게시글 관리 테스트")
+    @DisplayName("게시글을 관리한다")
     @Test
-    public void manageArticle() throws Exception {
+    public void manageArticle() {
         // given
 
         // when
@@ -43,14 +45,16 @@ class ArticleControllerTest {
         ArticleResponse response2 = createArticle("반갑습니다", "노루", "아이구 졸려라");
         // then
         List<ArticleResponse> articles = getArticles();
-        assertThat(articles.size()).isEqualTo(2);
-
-        assertThat(response1.getId()).isEqualTo(1L);
-        assertThat(response2.getId()).isEqualTo(2L);
+        assertThat(articles).hasSize(2)
+            .extracting(ArticleResponse::getTitle)
+            .containsExactly("안녕하세요", "반갑습니다");
+        assertThat(articles).extracting(ArticleResponse::getUserName).containsExactly("디디", "노루");
+        assertThat(articles).extracting(ArticleResponse::getContent)
+            .containsExactly("안녕하세요 좋은하루 되세요", "아이구 졸려라");
 
         //when
-        response1 = getArticle(1L);
-        response2 = getArticle(2L);
+        response1 = getArticle(response1.getId());
+        response2 = getArticle(response2.getId());
 
         //then
         assertThat(response1.getTitle()).isEqualTo("안녕하세요");
@@ -61,12 +65,12 @@ class ArticleControllerTest {
         assertThat(response2.getContent()).isEqualTo("아이구 졸려라");
 
         //when
-        updateArticle(1L, "안녕히가세요", "디디", "이 바보야");
-        updateArticle(2L, "갑수목장", "노루", "싫어요");
+        updateArticle(response1.getId(), "안녕히가세요", "디디", "이 바보야");
+        updateArticle(response2.getId(), "갑수목장", "노루", "싫어요");
 
         //then
-        ArticleResponse response3 = getArticle(1L);
-        ArticleResponse response4 = getArticle(2L);
+        ArticleResponse response3 = getArticle(response1.getId());
+        ArticleResponse response4 = getArticle(response2.getId());
 
         assertThat(response3.getTitle()).isEqualTo("안녕히가세요");
         assertThat(response3.getUserName()).isEqualTo("디디");
@@ -76,19 +80,18 @@ class ArticleControllerTest {
         assertThat(response4.getContent()).isEqualTo("싫어요");
 
         //when
-        deleteArticle(1L);
+        deleteArticle(response1.getId());
 
         //then
         List<ArticleResponse> articles1 = getArticles();
         assertThat(articles1.size()).isEqualTo(1);
 
         //when
-        deleteArticle(2L);
+        deleteArticle(response2.getId());
 
         //then
         List<ArticleResponse> articles2 = getArticles();
         assertThat(articles2.size()).isEqualTo(0);
-
     }
 
     private void deleteArticle(Long id) {
