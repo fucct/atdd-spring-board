@@ -1,8 +1,10 @@
 package spring.board.demo.domain;
 
+import java.util.Objects;
+
 import org.springframework.data.annotation.Id;
 
-import spring.board.demo.dto.ArticleCreateRequest;
+import spring.board.demo.dto.ArticleUpdateRequest;
 
 public class Article extends BaseTime {
 
@@ -26,9 +28,13 @@ public class Article extends BaseTime {
         return new Article(null, title, userName, content);
     }
 
-    public void update(ArticleCreateRequest request) {
-        this.title = request.getTitle();
-        this.content = request.getContent();
+    public void update(ArticleUpdateRequest request) {
+        if (Objects.nonNull(request.getTitle())) {
+            this.title = request.getTitle();
+        }
+        if (Objects.nonNull(request.getContent())) {
+            this.content = request.getContent();
+        }
     }
 
     public Long getId() {

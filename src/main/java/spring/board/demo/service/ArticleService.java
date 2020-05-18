@@ -3,12 +3,14 @@ package spring.board.demo.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import spring.board.demo.domain.Article;
 import spring.board.demo.dto.ArticleCreateRequest;
 import spring.board.demo.dto.ArticleResponse;
+import spring.board.demo.dto.ArticleUpdateRequest;
 import spring.board.demo.exception.IdNotFoundException;
 import spring.board.demo.repository.ArticleRepository;
 
@@ -22,10 +24,10 @@ public class ArticleService {
         this.articleRepository = articleRepository;
     }
 
-    public ArticleResponse save(ArticleCreateRequest request) {
+    public Long save(ArticleCreateRequest request) {
         Article persistArticle = articleRepository.save(request.toArticle());
 
-        return ArticleResponse.of(persistArticle);
+        return persistArticle.getId();
     }
 
     @Transactional(readOnly = true)
@@ -43,7 +45,7 @@ public class ArticleService {
         return ArticleResponse.of(article);
     }
 
-    public void updateById(Long id, ArticleCreateRequest request) {
+    public void updateById(Long id, ArticleUpdateRequest request) {
         Article article = articleRepository.findById(id)
             .orElseThrow(() -> new IdNotFoundException(id));
         article.update(request);

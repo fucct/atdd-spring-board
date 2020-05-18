@@ -3,8 +3,6 @@ package spring.board.demo.controller;
 import java.net.URI;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import spring.board.demo.dto.ArticleCreateRequest;
 import spring.board.demo.dto.ArticleResponse;
+import spring.board.demo.dto.ArticleUpdateRequest;
 import spring.board.demo.service.ArticleService;
 
 @RestController
@@ -31,11 +30,11 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ResponseEntity<ArticleResponse> create(
+    public ResponseEntity<Long> create(
         @Validated @RequestBody ArticleCreateRequest request) {
-        ArticleResponse response = articleService.save(request);
+        Long id = articleService.save(request);
 
-        return ResponseEntity.created(URI.create("/articles/" + response.getId())).body(response);
+        return ResponseEntity.created(URI.create("/articles/" + id)).body(id);
     }
 
     @GetMapping
@@ -53,8 +52,8 @@ public class ArticleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Long id,
-        @Valid @RequestBody ArticleCreateRequest request) {
+    public ResponseEntity<Void> update(@PathVariable Long id,
+        @Validated @RequestBody ArticleUpdateRequest request) {
         articleService.updateById(id, request);
 
         return ResponseEntity.noContent().build();
