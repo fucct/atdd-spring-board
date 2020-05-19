@@ -6,6 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import spring.board.demo.domain.Article;
 
-public interface ArticleRepository extends CrudRepository<Article, Long> {
+public interface
+ArticleRepository extends CrudRepository<Article, Long> {
     List<Article> findAll();
+
 }

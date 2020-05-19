@@ -1,52 +1,58 @@
 package spring.board.demo.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import spring.board.demo.BaseTimeEntity;
+@Table(value = "comments")
+public class Comment extends BaseTime{
 
-@Getter @Setter
-@Entity(name = "comment")
-@NoArgsConstructor
-public class Comment extends BaseTimeEntity {
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
+    @Id
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id")
-    private Article article;
+    private Long article;
 
-    @Column(name = "comment_nickname")
-    private String nickName;
-    @Column(name = "comment_password")
-    private String password;
-    @Column(name = "comment_content")
+    @Column(value = "comment_user_name")
+    private String userName;
+
+    @Column(value = "comment_content")
     private String content;
 
-    public void setArticle(Article article){
-        this.article = article;
-        article.getComments().add(this);
+    public static Comment of(String userName, String content) {
+        return new Comment(null, null, userName, content);
     }
 
-    public static Comment createComment(Article article, String content, String nickName, String password){
-        Comment comment = new Comment();
-        comment.setArticle(article);
-        comment.setNickName(nickName);
-        comment.setPassword(password);
-        comment.setContent(content);
+    public static Comment of(Long id, String userName, String content) {
+        return new Comment(id, null, userName, content);
+    }
 
-        return comment;
+    public Comment() {
+    }
+
+    public Comment(Long id, Long article, String userName, String content) {
+        this.id = id;
+        this.article = article;
+        this.userName = userName;
+        this.content = content;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Long getArticle() {
+        return article;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setArticle(Long article){
+        this.article = article;
     }
 }
