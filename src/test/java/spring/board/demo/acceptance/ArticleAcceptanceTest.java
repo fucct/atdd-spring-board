@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import spring.board.demo.dto.ArticleResponse;
 
-class ArticleControllerTest extends AcceptanceTest {
+class ArticleAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("게시글을 관리한다")
     @Test

@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.util.Sets;
@@ -19,6 +20,7 @@ import spring.board.demo.domain.Comment;
 import spring.board.demo.dto.ArticleCreateRequest;
 import spring.board.demo.dto.ArticleDetailResponse;
 import spring.board.demo.dto.ArticleResponse;
+import spring.board.demo.dto.ArticleUpdateRequest;
 import spring.board.demo.dto.CommentRequest;
 import spring.board.demo.repository.ArticleRepository;
 
@@ -52,17 +54,50 @@ class ArticleServiceTest {
         comment2 = Comment.of(2L, "호돌", "잘부탁드립니다");
         comment3 = Comment.of(3L, "디디", "네 안녕하세요");
 
-        article3 = new Article(3L, "여어", "호돌", "히사시부리", Sets.newLinkedHashSet(comment1, comment2, comment3));
+        article3 = new Article(3L, "여어", "호돌", "히사시부리",
+            Sets.newLinkedHashSet(comment1, comment2, comment3));
 
     }
 
     @Test
+    @DisplayName("게시글을 저장한다")
     void createArticle() {
+        when(articleRepository.save(any(Article.class))).thenReturn(article1);
         ArticleCreateRequest request1 = new ArticleCreateRequest("안녕하세요", "디디",
             "우아한 테크코스 2기 디디 김태헌입니다.");
-        ArticleCreateRequest request2 = new ArticleCreateRequest("반갑습니다", "카일",
-            "우아한 테크코스 2기 카일 김시영입니다.");
-        ArticleCreateRequest request3 = new ArticleCreateRequest("여어", "호돌", "히사시부리");
+
+        assertThat(articleService.save(request1)).isEqualTo(1L);
+    }
+
+    @Test
+    @DisplayName("댓글을 포함하지 않은 게시글들을 가져온다")
+    void getArticles() {
+        List<Article> articles = Arrays.asList(article1, article2, article3);
+        List<ArticleResponse> responses = ArticleResponse.listOf(
+            articles);
+
+        when(articleRepository.findAll()).thenReturn(articles);
+
+        assertThat(articleService.getArticles())
+            .usingFieldByFieldElementComparator()
+            .containsExactlyInAnyOrderElementsOf(responses);
+    }
+
+    @Test
+    @DisplayName("아이디에 해당하는 게시글을 가져온다")
+    void getArticle() {
+        when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article1));
+        assertThat(articleService.getArticleById(article1.getId())).isEqualToComparingFieldByField(
+            ArticleResponse.of(article1));
+    }
+
+    @Test
+    @DisplayName("게시글을 수정한다")
+    void updateArticle() {
+        when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article1));
+        articleService.updateById(article1.getId(), new ArticleUpdateRequest("바보", "ㅋㅋ"));
+        assertThat(article1.getTitle()).isEqualTo("바보");
+        assertThat(article1.getContent()).isEqualTo("ㅋㅋ");
     }
 
     @Test

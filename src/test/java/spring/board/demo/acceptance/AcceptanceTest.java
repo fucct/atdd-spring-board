@@ -13,6 +13,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
+import spring.board.demo.dto.ArticleDetailResponse;
 import spring.board.demo.dto.ArticleResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -87,5 +88,31 @@ public class AcceptanceTest {
             log().all().
             statusCode(HttpStatus.CREATED.value()).
             extract().as(Long.class);
+    }
+
+    protected Long addComment(Long articleId, String userName, String content) {
+        Map<String, String> params = new HashMap<>();
+        params.put("userName", userName);
+        params.put("content", content);
+
+        return given().
+            body(params).
+            contentType(MediaType.APPLICATION_JSON_VALUE).
+            accept(MediaType.APPLICATION_JSON_VALUE).
+            when().
+            post("/articles/" + articleId + "/comments").
+            then().
+            log().all().
+            statusCode(HttpStatus.CREATED.value()).
+            extract().as(Long.class);
+    }
+
+    protected ArticleDetailResponse getDetailArticle(Long articleId) {
+        return given().when().
+            get("/articles/detail/" + articleId).
+            then().
+            log().all().
+            statusCode(HttpStatus.OK.value()).
+            extract().as(ArticleDetailResponse.class);
     }
 }

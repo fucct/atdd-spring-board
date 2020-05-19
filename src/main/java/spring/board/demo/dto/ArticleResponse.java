@@ -1,5 +1,8 @@
 package spring.board.demo.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import spring.board.demo.domain.Article;
 
 public class ArticleResponse {
@@ -17,6 +20,10 @@ public class ArticleResponse {
         this.title = title;
         this.userName = userName;
         this.content = content;
+    }
+
+    public static List<ArticleResponse> listOf(List<Article> articles) {
+        return articles.stream().map(ArticleResponse::of).collect(Collectors.toList());
     }
 
     public static ArticleResponse of(Article article) {

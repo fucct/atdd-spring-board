@@ -37,9 +37,8 @@ public class ArticleService {
 
     @Transactional(readOnly = true)
     public List<ArticleResponse> getArticles() {
-        return articleRepository.findAll().stream()
-            .map(ArticleResponse::of)
-            .collect(Collectors.toList());
+        List<Article> articles = articleRepository.findAll();
+        return ArticleResponse.listOf(articles);
     }
 
     @Transactional(readOnly = true)

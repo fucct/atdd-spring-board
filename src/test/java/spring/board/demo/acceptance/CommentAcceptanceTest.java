@@ -51,30 +51,5 @@ public class CommentAcceptanceTest extends AcceptanceTest {
             .containsExactly("디디님, 안녕하세요", "어, 디디, 하이");
     }
 
-    private Long addComment(Long articleId, String userName, String content) {
-        Map<String, String> params = new HashMap<>();
-        params.put("userName", userName);
-        params.put("content", content);
-
-        return given().
-            body(params).
-            contentType(MediaType.APPLICATION_JSON_VALUE).
-            accept(MediaType.APPLICATION_JSON_VALUE).
-            when().
-            post("/articles/" + articleId + "/comments").
-            then().
-            log().all().
-            statusCode(HttpStatus.CREATED.value()).
-            extract().as(Long.class);
-    }
-
-    private ArticleDetailResponse getDetailArticle(Long articleId) {
-        return given().when().
-            get("/articles/detail/" + articleId).
-            then().
-            log().all().
-            statusCode(HttpStatus.OK.value()).
-            extract().as(ArticleDetailResponse.class);
-    }
 
 }
