@@ -54,7 +54,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
     private CommentResponse getComment(Long articleId, Long commentId) {
         return given()
             .when()
-            .get("/articles/" + articleId + "/comments" + commentId)
+            .get("/articles/" + articleId + "/comments/" + commentId)
             .then()
             .statusCode(HttpStatus.OK.value())
             .extract().as(CommentResponse.class);
