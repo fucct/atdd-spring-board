@@ -1,7 +1,6 @@
 package spring.board.demo.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +12,8 @@ import spring.board.demo.dto.ArticleDetailResponse;
 import spring.board.demo.dto.ArticleResponse;
 import spring.board.demo.dto.ArticleUpdateRequest;
 import spring.board.demo.dto.CommentRequest;
-import spring.board.demo.exception.IdNotFoundException;
+import spring.board.demo.dto.CommentResponse;
+import spring.board.demo.exception.ArticleNotFoundException;
 import spring.board.demo.repository.ArticleRepository;
 
 @Service
@@ -44,14 +44,14 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public ArticleResponse getArticleById(Long id) {
         Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new IdNotFoundException(id));
+            .orElseThrow(() -> new ArticleNotFoundException(id));
 
         return ArticleResponse.of(article);
     }
 
     public void updateById(Long id, ArticleUpdateRequest request) {
         Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new IdNotFoundException(id));
+            .orElseThrow(() -> new ArticleNotFoundException(id));
         article.update(request);
         articleRepository.save(article);
     }
@@ -62,18 +62,26 @@ public class ArticleService {
 
     public ArticleDetailResponse getDetailArticleById(Long id) {
         Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new IdNotFoundException(id));
+            .orElseThrow(() -> new ArticleNotFoundException(id));
         List<Comment> comments = commentService.findAllById(article.getCommentIds());
         return ArticleDetailResponse.of(article, comments);
     }
 
     public Long addComment(Long id, CommentRequest commentRequest) {
         Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new IdNotFoundException(id));
+            .orElseThrow(() -> new ArticleNotFoundException(id));
         Comment comment = commentRequest.toComment();
         article.addComment(comment);
         articleRepository.save(article);
 
         return comment.getId();
+    }
+
+    public CommentResponse getComment(Long articleId, Long commentId) {
+        Article article = articleRepository.findById(articleId)
+            .orElseThrow(() -> new ArticleNotFoundException
+                (articleId));
+
+        return article.findComment(commentId);
     }
 }

@@ -2,20 +2,17 @@ package spring.board.demo.acceptance;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import spring.board.demo.domain.Comment;
 import spring.board.demo.dto.ArticleDetailResponse;
+import spring.board.demo.dto.CommentResponse;
 
 public class CommentAcceptanceTest extends AcceptanceTest {
 
@@ -43,6 +40,9 @@ public class CommentAcceptanceTest extends AcceptanceTest {
         Long commentId1 = addComment(articleId, "카일", "디디님, 안녕하세요");
         Long commentId2 = addComment(articleId, "히로", "어, 디디, 하이");
 
+        CommentResponse response1 = getComment(articleId, commentId1);
+        CommentResponse response2 = getComment(articleId, commentId2);
+
         ArticleDetailResponse article2 = getDetailArticle(articleId);
         assertThat(article2.getComments()).hasSize(2);
         assertThat(article2.getComments()).extracting(Comment::getUserName)
@@ -51,5 +51,13 @@ public class CommentAcceptanceTest extends AcceptanceTest {
             .containsExactly("디디님, 안녕하세요", "어, 디디, 하이");
     }
 
+    private CommentResponse getComment(Long articleId, Long commentId) {
+        return given()
+            .when()
+            .get("/articles/" + articleId + "/comments" + commentId)
+            .then()
+            .statusCode(HttpStatus.OK.value())
+            .extract().as(CommentResponse.class);
+    }
 
 }

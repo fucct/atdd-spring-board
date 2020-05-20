@@ -20,6 +20,7 @@ import spring.board.demo.dto.ArticleDetailResponse;
 import spring.board.demo.dto.ArticleResponse;
 import spring.board.demo.dto.ArticleUpdateRequest;
 import spring.board.demo.dto.CommentRequest;
+import spring.board.demo.dto.CommentResponse;
 import spring.board.demo.service.ArticleService;
 
 @RestController
@@ -81,5 +82,12 @@ public class ArticleController {
         Long commentId = articleService.addComment(id, commentRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(commentId);
+    }
+
+    @GetMapping("/{articleId}/comments/{commentId}")
+    public ResponseEntity<CommentResponse> getComment(@PathVariable Long articleId, @PathVariable Long commentId) {
+        CommentResponse comment = articleService.getComment(articleId, commentId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(comment);
     }
 }

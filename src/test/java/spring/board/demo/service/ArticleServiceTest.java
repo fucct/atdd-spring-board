@@ -22,6 +22,7 @@ import spring.board.demo.dto.ArticleDetailResponse;
 import spring.board.demo.dto.ArticleResponse;
 import spring.board.demo.dto.ArticleUpdateRequest;
 import spring.board.demo.dto.CommentRequest;
+import spring.board.demo.dto.CommentResponse;
 import spring.board.demo.repository.ArticleRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -130,5 +131,14 @@ class ArticleServiceTest {
 
         assertThat(article1.getComments()).extracting(Comment::getContent)
             .containsExactly("반갑습니다", "잘부탁드립니다", "네 안녕하세요");
+    }
+
+    @Test
+    @DisplayName("댓글을 가져온다")
+    void getComment() {
+        when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article3));
+
+        assertThat(articleService.getComment(article3.getId(),
+            comment1.getId())).isEqualToComparingFieldByField(comment1);
     }
 }

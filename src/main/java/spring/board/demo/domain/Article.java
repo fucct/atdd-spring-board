@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 import org.springframework.data.annotation.Id;
 
 import spring.board.demo.dto.ArticleUpdateRequest;
+import spring.board.demo.dto.CommentResponse;
+import spring.board.demo.exception.CommentNotFoundException;
 
 public class Article extends BaseTime {
 
@@ -80,5 +82,14 @@ public class Article extends BaseTime {
     public void addComment(Comment comment) {
         comment.setArticle(this.id);
         this.comments.add(comment);
+    }
+
+    public CommentResponse findComment(Long commentId) {
+        Comment response = comments.stream()
+            .filter(comment -> comment.getId().equals(commentId))
+            .findAny()
+            .orElseThrow(() -> new CommentNotFoundException(commentId));
+
+        return CommentResponse.of(response);
     }
 }
