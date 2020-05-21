@@ -84,4 +84,11 @@ public class ArticleService {
 
         return article.findComment(commentId);
     }
+
+    public void updateCommentById(Long articleId, Long commentId, String content) {
+        Article article = articleRepository.findById(articleId)
+            .orElseThrow(() -> new ArticleNotFoundException(articleId));
+        Article updatedArticle = article.updateComment(commentId, content);
+        articleRepository.save(updatedArticle);
+    }
 }

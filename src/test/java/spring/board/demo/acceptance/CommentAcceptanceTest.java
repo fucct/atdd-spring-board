@@ -2,11 +2,16 @@ package spring.board.demo.acceptance;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
@@ -40,15 +45,43 @@ public class CommentAcceptanceTest extends AcceptanceTest {
         Long commentId1 = addComment(articleId, "카일", "디디님, 안녕하세요");
         Long commentId2 = addComment(articleId, "히로", "어, 디디, 하이");
 
-        CommentResponse response1 = getComment(articleId, commentId1);
-        CommentResponse response2 = getComment(articleId, commentId2);
+        CommentResponse commentResponse1 = getComment(articleId, commentId1);
+        CommentResponse commentResponse2 = getComment(articleId, commentId2);
 
-        ArticleDetailResponse article2 = getDetailArticle(articleId);
-        assertThat(article2.getComments()).hasSize(2);
-        assertThat(article2.getComments()).extracting(Comment::getUserName)
+        ArticleDetailResponse articleResponse1 = getDetailArticle(articleId);
+        List<Comment> comments1 = articleResponse1.getComments();
+        assertThat(comments1).hasSize(2);
+        assertThat(comments1).extracting(Comment::getUserName)
+            .containsExactly(commentResponse1.getUserName(), commentResponse2.getUserName());
+        assertThat(comments1).extracting(Comment::getContent)
+            .containsExactly(commentResponse1.getContent(), commentResponse2.getContent());
+
+        updateComment(articleId, commentId1, commentResponse1.getUserName(), "디디야 왔냐");
+        updateComment(articleId, commentId2, commentResponse2.getUserName(), "흠");
+
+        ArticleDetailResponse articleResponse2 = getDetailArticle(articleId);
+        List<Comment> comments2 = articleResponse2.getComments();
+
+        assertThat(comments2).extracting(Comment::getUserName)
             .containsExactly("카일", "히로");
-        assertThat(article2.getComments()).extracting(Comment::getContent)
-            .containsExactly("디디님, 안녕하세요", "어, 디디, 하이");
+        assertThat(comments2).extracting(Comment::getContent)
+            .containsExactly("디디야 왔냐", "흠");
+    }
+
+    private void updateComment(Long articleId, Long commentId, String userName, String content) {
+        Map<String, String> params = new HashMap<>();
+        params.put("userName", userName);
+        params.put("content", content);
+
+        given()
+            .contentType(MediaType.APPLICATION_JSON_VALUE)
+            .accept(MediaType.APPLICATION_JSON_VALUE)
+            .body(params)
+            .when()
+            .put("/articles/" + articleId + "/comments/" + commentId)
+            .then()
+            .log().all()
+            .statusCode(HttpStatus.OK.value());
     }
 
     private CommentResponse getComment(Long articleId, Long commentId) {
@@ -59,5 +92,4 @@ public class CommentAcceptanceTest extends AcceptanceTest {
             .statusCode(HttpStatus.OK.value())
             .extract().as(CommentResponse.class);
     }
-
 }

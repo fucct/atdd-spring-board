@@ -92,4 +92,11 @@ public class Article extends BaseTime {
 
         return CommentResponse.of(response);
     }
+
+    public Article updateComment(Long commentId, String content) {
+        comments.stream().filter(comment -> comment.isEqualIdTo(commentId))
+            .findFirst()
+            .ifPresent(comment-> comment.setContent(content));
+        return this;
+    }
 }

@@ -1,5 +1,7 @@
 package spring.board.demo.domain;
 
+import java.util.Objects;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -54,5 +56,13 @@ public class Comment extends BaseTime{
 
     public void setArticle(Long article){
         this.article = article;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public boolean isEqualIdTo(Long id) {
+        return Objects.equals(this.id, id);
     }
 }

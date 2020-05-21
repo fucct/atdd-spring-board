@@ -3,6 +3,8 @@ package spring.board.demo.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -78,16 +80,27 @@ public class ArticleController {
     }
 
     @PostMapping("/{id}/comments")
-    public ResponseEntity<Long> addComment(@PathVariable Long id, @Validated @RequestBody CommentRequest commentRequest) {
+    public ResponseEntity<Long> addComment(@PathVariable Long id,
+        @Validated @RequestBody CommentRequest commentRequest) {
         Long commentId = articleService.addComment(id, commentRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(commentId);
     }
 
     @GetMapping("/{articleId}/comments/{commentId}")
-    public ResponseEntity<CommentResponse> getComment(@PathVariable Long articleId, @PathVariable Long commentId) {
+    public ResponseEntity<CommentResponse> getComment(@PathVariable Long articleId,
+        @PathVariable Long commentId) {
         CommentResponse comment = articleService.getComment(articleId, commentId);
 
         return ResponseEntity.status(HttpStatus.OK).body(comment);
     }
+
+    @PutMapping("/{articleId}/comments/{commentId}")
+    public ResponseEntity<Void> updateComment(@PathVariable Long articleId,
+        @PathVariable Long commentId, @Valid @RequestBody CommentRequest commentRequest) {
+        articleService.updateCommentById(articleId, commentId, commentRequest.getContent());
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }
