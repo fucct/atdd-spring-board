@@ -93,10 +93,17 @@ public class Article extends BaseTime {
         return CommentResponse.of(response);
     }
 
-    public Article updateComment(Long commentId, String content) {
-        comments.stream().filter(comment -> comment.isEqualIdTo(commentId))
+    public void updateComment(Long commentId, String content) {
+        Comment targetComment = comments.stream().filter(comment -> comment.isEqualIdTo(commentId))
             .findFirst()
-            .ifPresent(comment-> comment.setContent(content));
-        return this;
+            .orElseThrow(() -> new CommentNotFoundException(commentId));
+        targetComment.setContent(content);
+    }
+
+    public void deleteComment(Long commentId) {
+        Comment targetComment = comments.stream().filter(comment -> comment.isEqualIdTo(commentId))
+            .findFirst()
+            .orElseThrow(() -> new CommentNotFoundException(commentId));
+        comments.remove(targetComment);
     }
 }

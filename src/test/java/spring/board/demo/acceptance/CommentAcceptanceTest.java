@@ -66,6 +66,22 @@ public class CommentAcceptanceTest extends AcceptanceTest {
             .containsExactly("카일", "히로");
         assertThat(comments2).extracting(Comment::getContent)
             .containsExactly("디디야 왔냐", "흠");
+
+        deleteComment(articleId, commentId1);
+
+        ArticleDetailResponse articleResponse3 = getDetailArticle(articleId);
+        List<Comment> comments3 = articleResponse3.getComments();
+        assertThat(comments3).hasSize(1);
+        assertThat(comments3).extracting(Comment::getUserName).containsExactly("히로");
+        assertThat(comments3).extracting(Comment::getContent).containsExactly("흠");
+    }
+
+    private void deleteComment(Long articleId, Long commentId) {
+        given().when()
+            .delete("/articles/" + articleId + "/comments/" + commentId)
+            .then()
+            .log().all()
+            .statusCode(HttpStatus.OK.value());
     }
 
     private void updateComment(Long articleId, Long commentId, String userName, String content) {

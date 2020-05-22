@@ -103,4 +103,11 @@ public class ArticleController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @DeleteMapping("/{articleId}/comments/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long articleId,
+        @PathVariable Long commentId) {
+        articleService.deleteCommentById(articleId, commentId);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

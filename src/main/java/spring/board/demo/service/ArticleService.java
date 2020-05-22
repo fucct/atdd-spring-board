@@ -88,7 +88,14 @@ public class ArticleService {
     public void updateCommentById(Long articleId, Long commentId, String content) {
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new ArticleNotFoundException(articleId));
-        Article updatedArticle = article.updateComment(commentId, content);
-        articleRepository.save(updatedArticle);
+        article.updateComment(commentId, content);
+        articleRepository.save(article);
+    }
+
+    public void deleteCommentById(Long articleId, Long commentId) {
+        Article article = articleRepository.findById(articleId)
+            .orElseThrow(() -> new ArticleNotFoundException(articleId));
+        article.deleteComment(commentId);
+        articleRepository.save(article);
     }
 }
