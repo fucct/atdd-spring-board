@@ -22,7 +22,6 @@ import spring.board.demo.dto.ArticleDetailResponse;
 import spring.board.demo.dto.ArticleResponse;
 import spring.board.demo.dto.ArticleUpdateRequest;
 import spring.board.demo.dto.CommentRequest;
-import spring.board.demo.dto.CommentResponse;
 import spring.board.demo.repository.ArticleRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -140,5 +139,28 @@ class ArticleServiceTest {
 
         assertThat(articleService.getComment(article3.getId(),
             comment1.getId())).isEqualToComparingFieldByField(comment1);
+    }
+
+    @Test
+    @DisplayName("댓글을 수정한다")
+    void updateComment() {
+        when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article3));
+        articleService.updateCommentById(article3.getId(), comment1.getId(), "안녕히가세요");
+        Comment comment4 = article3.getComments()
+            .stream()
+            .filter(comment -> comment.isEqualIdTo(comment1.getId()))
+            .findFirst()
+            .orElse(null);
+        assertThat(comment4).extracting(Comment::getContent).isEqualTo("안녕히가세요");
+    }
+
+    @Test
+    @DisplayName("댓글을 삭제한다")
+    void deleteComment() {
+        when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article3));
+        articleService.deleteCommentById(article3.getId(), comment1.getId());
+        assertThat(article3.getComments()).hasSize(2);
+        assertThat(article3.getComments()).extracting(Comment::getContent)
+            .containsExactly("잘부탁드립니다", "네 안녕하세요");
     }
 }
