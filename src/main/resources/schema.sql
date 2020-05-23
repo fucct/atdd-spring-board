@@ -1,4 +1,4 @@
-drop table if exists article;
+drop table if exists article cascade ;
 drop table if exists comments;
 
 create table if not exists article

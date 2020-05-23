@@ -6,12 +6,14 @@ import org.assertj.core.util.Sets;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import spring.board.demo.domain.Article;
 import spring.board.demo.domain.Comment;
 import spring.board.demo.repository.ArticleRepository;
 
 @SpringBootTest
+@Sql("/truncate.sql")
 class BoardApplicationTests {
 
     @Autowired

@@ -1,0 +1,14 @@
+ifndef::snippets[]
+:snippets: ../../../build/generated-snippets
+endif::[]
+
+[[resources]]
+= Resources
+
+[[resources-members]]
+== Article
+
+[[resources-articles-create]]
+=== 글 작성
+
+operation::articles/create[snippets='http-request,http-response,request-body,response-body']
