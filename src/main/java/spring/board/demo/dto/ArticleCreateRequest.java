@@ -2,8 +2,14 @@ package spring.board.demo.dto;
 
 import javax.validation.constraints.NotBlank;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import spring.board.demo.domain.Article;
 
+@Getter
+@NoArgsConstructor
 public class ArticleCreateRequest {
 
     @NotBlank(message = "제목은 필수 입력 요소입니다.")
@@ -15,9 +21,7 @@ public class ArticleCreateRequest {
     @NotBlank(message = "내용은 필수 입력 요소입니다.")
     private String content;
 
-    public ArticleCreateRequest() {
-    }
-
+    @Builder
     public ArticleCreateRequest(String title, String userName, String content) {
         this.title = title;
         this.userName = userName;

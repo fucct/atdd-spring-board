@@ -11,10 +11,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.annotation.Id;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import spring.board.demo.dto.ArticleUpdateRequest;
 import spring.board.demo.dto.CommentResponse;
 import spring.board.demo.exception.CommentNotFoundException;
 
+@NoArgsConstructor
+@Getter
 public class Article extends BaseTime {
 
     @Id
@@ -24,9 +29,7 @@ public class Article extends BaseTime {
     private String content;
     private Set<Comment> comments;
 
-    public Article() {
-    }
-
+    @Builder
     public Article(Long id, String title, String userName, String content, Set<Comment> comments) {
         this.id = id;
         this.title = title;
@@ -50,26 +53,6 @@ public class Article extends BaseTime {
         if (Objects.nonNull(request.getContent())) {
             this.content = request.getContent();
         }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public Set<Comment> getComments() {
-        return comments;
     }
 
     public List<Long> getCommentIds() {

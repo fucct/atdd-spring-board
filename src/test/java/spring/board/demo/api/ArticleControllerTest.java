@@ -22,7 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import spring.board.demo.controller.ArticleController;
-import spring.board.demo.docs.MemberDocumentation;
+import spring.board.demo.docs.ArticleDocumentation;
 import spring.board.demo.domain.Article;
 import spring.board.demo.service.ArticleService;
 
@@ -51,7 +51,12 @@ public class ArticleControllerTest {
             .apply(documentationConfiguration(restDocumentation))
             .build();
 
-        article = Article.of(1L, TEST_ARTICLE_TITLE, TEST_USER_NAME, TEST_ARTICLE_CONTENT);
+        article = Article.builder()
+            .id(1L)
+            .title(TEST_ARTICLE_TITLE)
+            .userName(TEST_USER_NAME)
+            .content(TEST_ARTICLE_CONTENT)
+            .build();
     }
 
     @Test
@@ -70,6 +75,6 @@ public class ArticleControllerTest {
             .andExpect(header().exists("location"))
             .andExpect(content().string("1"))
             .andDo(print())
-            .andDo(MemberDocumentation.createArticle());
+            .andDo(ArticleDocumentation.createArticle());
     }
 }
