@@ -1,4 +1,4 @@
-package spring.board.demo.dto;
+package spring.board.demo.domain.article.dto;
 
 public class ArticleUpdateRequest {
 

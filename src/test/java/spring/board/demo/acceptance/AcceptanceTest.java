@@ -13,12 +13,19 @@ import org.springframework.test.context.jdbc.Sql;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
-import spring.board.demo.dto.ArticleDetailResponse;
-import spring.board.demo.dto.ArticleResponse;
+import spring.board.demo.domain.article.dto.ArticleDetailResponse;
+import spring.board.demo.domain.article.dto.ArticleResponse;
+import spring.board.demo.domain.user.User;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql("/truncate.sql")
 public class AcceptanceTest {
+    protected static final String TEST_USER_ID = "fucct";
+    protected static final String TEST_OTHER_USER_ID = "dqrd123";
+    protected static final String TEST_USER_NAME = "DD";
+    protected static final String TEST_OTHER_USER_NAME = "TAEHEON";
+    protected static final String TEST_USER_PASSWORD = "1234";
+    protected static final String TEST_OTHER_USER_PASSWORD = "qwer";
 
     @LocalServerPort
     int port;

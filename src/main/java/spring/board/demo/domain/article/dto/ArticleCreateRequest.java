@@ -1,12 +1,11 @@
-package spring.board.demo.dto;
+package spring.board.demo.domain.article.dto;
 
 import javax.validation.constraints.NotBlank;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import spring.board.demo.domain.Article;
+import spring.board.demo.domain.article.Article;
 
 @Getter
 @NoArgsConstructor

@@ -1,9 +1,9 @@
-package spring.board.demo.dto;
+package spring.board.demo.domain.article.dto;
 
 import java.util.List;
 
-import spring.board.demo.domain.Article;
-import spring.board.demo.domain.Comment;
+import spring.board.demo.domain.article.Article;
+import spring.board.demo.domain.comment.Comment;
 
 public class ArticleDetailResponse {
 

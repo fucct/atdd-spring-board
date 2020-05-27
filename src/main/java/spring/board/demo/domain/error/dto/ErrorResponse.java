@@ -1,4 +1,4 @@
-package spring.board.demo.dto;
+package spring.board.demo.domain.error.dto;
 
 public class ErrorResponse {
 

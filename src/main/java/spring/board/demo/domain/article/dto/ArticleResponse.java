@@ -1,9 +1,9 @@
-package spring.board.demo.dto;
+package spring.board.demo.domain.article.dto;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import spring.board.demo.domain.Article;
+import spring.board.demo.domain.article.Article;
 
 public class ArticleResponse {
 

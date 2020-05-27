@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import spring.board.demo.domain.Comment;
-import spring.board.demo.repository.CommentRepository;
+import spring.board.demo.domain.comment.Comment;
+import spring.board.demo.domain.comment.CommentRepository;
 
 @Service
 public class CommentService {
