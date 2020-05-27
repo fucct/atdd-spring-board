@@ -1,6 +1,7 @@
 package spring.board.demo.service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class UserService {
     }
 
     public TokenResponse login(LoginRequest request) {
-        User user = userRepository.findByUserId(request.getUserId())
+        User user = findByUserId(request.getUserId())
             .orElseThrow(() -> new NotFoundUserException(request.getUserId()));
         validatePassword(request, user);
         Token token = tokenProvider.createToken(request.getUserId());
@@ -44,5 +45,9 @@ public class UserService {
             return;
         }
         throw new NotMatchPasswordException();
+    }
+
+    public Optional<User> findByUserId(String userId) {
+        return userRepository.findByUserId(userId);
     }
 }

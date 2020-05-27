@@ -1,125 +1,74 @@
-import { ERROR_MESSAGE, EVENT_TYPE, KEY_TYPE } from "../../utils/constants.js";
-import { listItemTemplate } from "../../utils/templates.js";
+import { ERROR_MESSAGE, EVENT_TYPE, KEY_TYPE } from '../../utils/constants.js'
+import { listItemTemplate } from '../../utils/templates.js'
+import api from '../../api/index.js'
 
 function AdminStation() {
-  const $stationInput = document.querySelector("#station-name");
-  const $stationInputButton = document.querySelector("#station-add-btn");
-  const $stationList = document.querySelector("#station-list");
-  const $errorMessage = document.querySelector("#error-message")
+  const $stationInput = document.querySelector('#station-name')
+  const $stationList = document.querySelector('#station-list')
+  const $stationAddButton = document.querySelector('#station-add-btn')
 
   const onAddStationHandler = event => {
-    if (event.key !== KEY_TYPE.ENTER && event.type !== EVENT_TYPE.CLICK) {
-      return;
+    if (event.key && event.key !== KEY_TYPE.ENTER) {
+      return
     }
-    event.preventDefault();
-    const $stationNameInput = document.querySelector("#station-name");
-    const stationName = $stationNameInput.value;
-
-    validate(stationName);
-
-    let data = {
-      name: stationName
-    };
-    let statusCode;
-
-    fetch("/stations", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    }).then(response => {
-      if (!response.ok) {
-        throw response;
-      }
-      return response.json();
-    })
-    .then(response => {
-      $stationNameInput.value = "";
-      $stationList.insertAdjacentHTML("beforeend", listItemTemplate(response));
-    }).catch(error => error.json()).then(error => alert(error.errorMessage));
-  };
-
-  function validate(stationName) {
+    event.preventDefault()
+    const stationName = $stationInput.value
     if (!stationName) {
-      alert(ERROR_MESSAGE.NOT_EMPTY);
-      throw new Error();
+      alert(ERROR_MESSAGE.NOT_EMPTY)
+      return
     }
-    if (stationName.includes(" ")) {
-      alert(ERROR_MESSAGE.NOT_BLANK);
-      throw new Error();
+    const newStation = {
+      name: stationName
     }
-    //myCode
-    if (/\d/.test(stationName)) {
-      alert(ERROR_MESSAGE.CONTAIN_NUMBER);
-      throw new Error();
-    }
-    //myCode
-    if (duplicatedName(stationName)) {
-      alert(ERROR_MESSAGE.DUPLICATED);
-      throw new Error();
-    }
+    api.station
+      .create(newStation)
+      .then(data => {
+        $stationInput.value = ''
+        $stationList.insertAdjacentHTML('beforeend', listItemTemplate(data))
+      })
+      .catch(() => {
+        alert('에러가 발생했습니다.')
+      })
   }
 
-  function duplicatedName(input) {
-    const names = document.querySelectorAll(".list-item");
-    const namesArr = Array.from(names);
-    return namesArr.some(element => {
-      return element.innerText === input;
-    });
+  const onDeleteStationHandler = event => {
+    const $target = event.target
+    const isDeleteButton = $target.classList.contains('mdi-delete')
+    if (!isDeleteButton) {
+      return
+    }
+    api.station
+      .delete($target.closest('.list-item').dataset.id)
+      .then(() => {
+        $target.closest('.list-item').remove()
+      })
+      .catch(() => alert(ERROR_MESSAGE.COMMON))
   }
 
-  const onRemoveStationHandler = event => {
-    const $target = event.target;
-    const isDeleteButton = $target.classList.contains("mdi-delete");
-    let statusCode;
-
-    if (isDeleteButton) {
-      const deleteId = $target.closest(".list-item").dataset.stationId;
-      fetch('/stations/' + deleteId, {
-        method: 'DELETE'
-      }).then(response => {
-        if (response.status >= 400) {
-          statusCode = 500;
-          return response.json();
-        }
-        $target.closest(".list-item").remove();
-      }).then(jsonResponse => {
-        $errorMessage.innerText = jsonResponse.message;
-      }).catch(error => {
-        alert(error);
-        throw new Error();
-      });
-    }
-  };
+  const initStations = () => {
+    api.station
+      .getAll()
+      .then(stations => {
+        $stationList.innerHTML = stations.map(station => listItemTemplate(station)).join('')
+      })
+      .catch(() => alert(ERROR_MESSAGE.COMMON))
+  }
 
   const initEventListeners = () => {
-    $stationInput.addEventListener(EVENT_TYPE.KEY_PRESS, onAddStationHandler);
-    $stationList.addEventListener(EVENT_TYPE.CLICK, onRemoveStationHandler);
-    $stationInputButton.addEventListener(EVENT_TYPE.CLICK, onAddStationHandler);
-  };
+    $stationAddButton.addEventListener(EVENT_TYPE.CLICK, onAddStationHandler)
+    $stationInput.addEventListener(EVENT_TYPE.KEY_PRESS, onAddStationHandler)
+    $stationList.addEventListener(EVENT_TYPE.CLICK, onDeleteStationHandler)
+  }
 
   const init = () => {
-    initEventListeners();
-  };
+    initEventListeners()
+    initStations()
+  }
 
   return {
     init
-  };
+  }
 }
 
-const adminStation = new AdminStation();
-const $stationList = document.querySelector("#station-list");
-adminStation.init();
-window.onload = async function (event) {
-  const response = await fetch("/stations", {
-    method: "GET",
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-  const jsonResponse = await response.json();
-  for (const station of jsonResponse) {
-    $stationList.insertAdjacentHTML("beforeend", listItemTemplate(station));
-  }
-};
+const adminStation = new AdminStation()
+adminStation.init()

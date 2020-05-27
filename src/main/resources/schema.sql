@@ -1,6 +1,9 @@
 drop table if exists user;
 drop table if exists article;
 drop table if exists comments;
+drop table if exists user_comment;
+drop table if exists article_comment;
+drop table if exists user_article;
 
 create table if not exists user
 (

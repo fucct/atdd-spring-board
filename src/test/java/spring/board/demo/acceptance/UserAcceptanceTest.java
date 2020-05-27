@@ -11,9 +11,8 @@ import org.junit.jupiter.api.TestFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import spring.board.demo.domain.token.dto.TokenResponse;
+import spring.board.demo.domain.user.User;
 
 public class UserAcceptanceTest extends AcceptanceTest {
     @TestFactory
@@ -27,15 +26,23 @@ public class UserAcceptanceTest extends AcceptanceTest {
                 TokenResponse tokenResponse = login(TEST_USER_ID, TEST_USER_PASSWORD);
                 assertThat(tokenResponse).isNotNull();
             }),
-            DynamicTest.dynamicTest("BearerTokenProvider Test", () -> {
-                // String jwtString = Jwts.builder()
-                //     .setHeaderParam("type", "JWT")
-                //     .setHeaderParam("issueDate", System.currentTimeMillis())
-                //     .setSubject("디디")
-                //     .signWith(SignatureAlgorithm.HS512, "aaaa")
-                //     .compact();
+            DynamicTest.dynamicTest("My page", () -> {
+                TokenResponse token = login(TEST_USER_ID, TEST_USER_PASSWORD);
+                User user = getUser(token);
+                assertThat(user).isNotNull();
             })
         );
+    }
+
+    private User getUser(TokenResponse token) {
+        //@formatter:off
+        return given().
+                cookie("token", token.getAccessToken()).
+            when().
+                get("/users/mypage")
+            .then()
+                .statusCode(HttpStatus.OK.value())
+                .extract().as(User.class);
     }
 
     private Long createUser(String userID, String name, String password) {
@@ -64,15 +71,15 @@ public class UserAcceptanceTest extends AcceptanceTest {
 
         //@formatter:off
         return given().
-            body(params).
-            contentType(MediaType.APPLICATION_JSON_VALUE).
-            accept(MediaType.APPLICATION_JSON_VALUE).
+                body(params).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
             when().
-            post("/users/login").
+                post("/users/login").
             then().
-            log().all().
-            statusCode(HttpStatus.OK.value()).
-            extract().as(TokenResponse.class);
+                log().all().
+                statusCode(HttpStatus.OK.value()).
+                extract().as(TokenResponse.class);
     }
 
 

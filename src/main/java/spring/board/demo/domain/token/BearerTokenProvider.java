@@ -39,20 +39,20 @@ public class BearerTokenProvider {
             .build();
     }
 
-    public String getSubject(Token token) {
-        if (validateAccessToken(token)) {
+    public String getSubject(String accessToken) {
+        if (validateAccessToken(accessToken)) {
             return Jwts.parser()
                 .setSigningKey(ACCESS_SECRET_KEY)
-                .parseClaimsJws(token.getAccessToken())
+                .parseClaimsJws(accessToken)
                 .getBody().getSubject();
         }
         throw new InvalidAccessTokenException();
     }
 
-    private boolean validateAccessToken(Token token) {
+    private boolean validateAccessToken(String token) {
         JwsHeader header = Jwts.parser()
             .setSigningKey(ACCESS_SECRET_KEY)
-            .parseClaimsJws(token.getAccessToken())
+            .parseClaimsJws(token)
             .getHeader();
         return System.currentTimeMillis() - (Long)header.get("issueDate") < ACCESS_EXPIRE_PERIOD;
     }
