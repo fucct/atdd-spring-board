@@ -1,37 +1,51 @@
 package spring.board.demo.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
+import spring.board.demo.domain.ArticleRef;
 import spring.board.demo.domain.article.Article;
-import spring.board.demo.domain.comment.Comment;
-import spring.board.demo.domain.article.dto.ArticleCreateRequest;
-import spring.board.demo.domain.article.dto.ArticleDetailResponse;
-import spring.board.demo.domain.article.dto.ArticleResponse;
-import spring.board.demo.domain.article.dto.ArticleUpdateRequest;
-import spring.board.demo.exception.ArticleNotFoundException;
 import spring.board.demo.domain.article.ArticleRepository;
+import spring.board.demo.domain.article.dto.ArticleCreateRequest;
+import spring.board.demo.domain.article.dto.ArticleCreateResponse;
+import spring.board.demo.domain.article.dto.ArticleResponse;
+import spring.board.demo.domain.user.User;
 
 @Service
+@Slf4j
 @Transactional
 public class ArticleService {
-    //
-    // private final ArticleRepository articleRepository;
-    // private final CommentService commentService;
-    //
-    // public ArticleService(ArticleRepository articleRepository,
-    //     CommentService commentService) {
-    //     this.articleRepository = articleRepository;
-    //     this.commentService = commentService;
-    // }
-    //
-    // public Long save(ArticleCreateRequest request) {
-    //     Article persistArticle = articleRepository.save(request.toArticle());
-    //
-    //     return persistArticle.getId();
-    // }
+    private final UserService userService;
+    private final ArticleRepository articleRepository;
+    private final CommentService commentService;
+
+    public ArticleService(UserService userService,
+        ArticleRepository articleRepository, CommentService commentService) {
+        this.userService = userService;
+        this.articleRepository = articleRepository;
+        this.commentService = commentService;
+    }
+
+    public ArticleCreateResponse save(User user, ArticleCreateRequest request) {
+        Article article = request.toArticle();
+        Article persistArticle = articleRepository.save(article);
+        user.addArticle(article);
+        userService.save(user);
+        return ArticleCreateResponse.of(persistArticle);
+    }
+
+    public List<ArticleResponse> getArticles(User user) {
+        List<Long> articleIds = user.getArticles()
+            .stream()
+            .map(ArticleRef::getArticle)
+            .collect(Collectors.toList());
+        List<Article> articles = articleRepository.findAllById(articleIds);
+        return ArticleResponse.listOf(articles, user.getName());
+    }
     //
     // @Transactional(readOnly = true)
     // public List<ArticleResponse> getArticles() {

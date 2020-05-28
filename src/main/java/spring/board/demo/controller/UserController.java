@@ -35,6 +35,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    @AuthorizeCheck(check=true)
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> responses = userService.getAll();
@@ -69,8 +70,8 @@ public class UserController {
         return ResponseEntity.ok(token);
     }
 
-    @GetMapping("/mypage")
     @AuthorizeCheck(check = true)
+    @GetMapping("/mypage")
     public ResponseEntity<UserResponse> getInfo(@LoginUser User user) {
         return ResponseEntity.ok(UserResponse.of(user));
     }

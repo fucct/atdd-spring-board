@@ -13,4 +13,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     @Override
     List<User> findAll();
+
+    @Query("select * from user where article_user.article in (:ids)")
+    List<User> findAllByArticleIds(@Param("ids") List<Long> ids);
 }

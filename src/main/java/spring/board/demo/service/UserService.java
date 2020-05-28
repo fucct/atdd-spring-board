@@ -34,6 +34,10 @@ public class UserService {
         return new UserCreateResponse(save.getId());
     }
 
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
     public TokenResponse login(LoginRequest request) {
         User user = findByUserId(request.getUserId())
             .orElseThrow(() -> new NotFoundUserException(request.getUserId()));

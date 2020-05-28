@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import spring.board.demo.domain.ArticleRef;
 import spring.board.demo.domain.BaseTime;
 import spring.board.demo.domain.UserCommentRef;
+import spring.board.demo.domain.article.Article;
 import spring.board.demo.domain.user.dto.UserUpdateRequest;
 import spring.board.demo.exception.NotMatchPasswordException;
 
@@ -54,5 +55,9 @@ public class User extends BaseTime {
         if (!Objects.equals(this.password, password)) {
             throw new NotMatchPasswordException();
         }
+    }
+
+    public void addArticle(Article article) {
+        this.articles.add(new ArticleRef(article.getId()));
     }
 }
