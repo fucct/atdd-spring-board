@@ -35,7 +35,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> responses = userService.getAll();
@@ -43,14 +42,16 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserCreateResponse> create(@Valid @RequestBody UserCreateRequest request) {
+    public ResponseEntity<UserCreateResponse> create(
+        @Valid @RequestBody UserCreateRequest request) {
         UserCreateResponse response = userService.create(request);
         return ResponseEntity.created(URI.create("/users/" + response.getId())).body(response);
     }
 
     @AuthorizeCheck
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest request) {
+    public ResponseEntity<Void> update(@PathVariable Long id,
+        @Valid @RequestBody UserUpdateRequest request) {
         userService.update(id, request);
         return ResponseEntity.noContent().build();
     }
@@ -61,6 +62,7 @@ public class UserController {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
         TokenResponse token = userService.login(request);
@@ -69,7 +71,7 @@ public class UserController {
 
     @GetMapping("/mypage")
     @AuthorizeCheck(check = true)
-    public ResponseEntity<User> getInfo(@LoginUser User user) {
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserResponse> getInfo(@LoginUser User user) {
+        return ResponseEntity.ok(UserResponse.of(user));
     }
 }

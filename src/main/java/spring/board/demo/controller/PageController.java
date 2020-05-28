@@ -3,14 +3,23 @@ package spring.board.demo.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class PageController {
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public String index(Model model) {
         return "service/index";
+    }
+
+    @GetMapping("/board")
+    public String board(Model model) {
+        return "/service/board";
+    }
+
+    @GetMapping("/write")
+    public String write(Model model) {
+        return "/service/write";
     }
 
     @GetMapping("/join")

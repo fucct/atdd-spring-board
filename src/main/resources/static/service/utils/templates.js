@@ -10,13 +10,13 @@ export const navTemplate = `<nav class="flex items-center justify-between flex-w
       </a>
     <div class="flex justify-start">
       <div class="hover:bg-yellow-400 px-2 py-1 rounded">
-         <a href="/map" class="block inline-block lg:mt-0 text-gray-800 text-sm">
-          노선도
+         <a href="/board" class="block inline-block lg:mt-0 text-gray-800 text-sm">
+          게시판
           </a>
       </div>
       <div class="hover:bg-yellow-400 px-2 py-1 rounded">
-         <a href="/search" class="block inline-block lg:mt-0 text-gray-800 text-sm">
-          경로 조회
+         <a href="/write" class="block inline-block lg:mt-0 text-gray-800 text-sm">
+          글쓰기
           </a>
       </div>
       <div class="hover:bg-yellow-400 px-2 py-1 rounded">
@@ -32,20 +32,20 @@ export const navTemplate = `<nav class="flex items-center justify-between flex-w
     </div>
 </nav>`
 
-export const navLoginTemplate = `<nav class="flex items-center justify-between flex-wrap bg-yellow-500 p-4 relative">
+export const navLoginTemplate = (name) => `<nav class="flex items-center justify-between flex-wrap bg-yellow-500 p-4 relative">
   <div class="flex items-center flex-shrink-0 text-gray-800 w-full">
       <a href="/" class="mr-2">
         <img src="/service/images/logo_small.png" class="w-6">
       </a>
-    <div class="flex justify-start">
+    <div class="flex justify-start w-full">
       <div class="hover:bg-yellow-400 px-2 py-1 rounded">
-         <a href="/map" class="block inline-block lg:mt-0 text-gray-800 text-sm">
-          노선도
+         <a href="/board" class="block inline-block lg:mt-0 text-gray-800 text-sm">
+          게시판
           </a>
       </div>
       <div class="hover:bg-yellow-400 px-2 py-1 rounded">
-         <a href="/search" class="block inline-block lg:mt-0 text-gray-800 text-sm">
-          경로 조회
+         <a href="/write" class="block inline-block lg:mt-0 text-gray-800 text-sm">
+          글쓰기
           </a>
       </div>
       <div class="hover:bg-yellow-400 px-2 py-1 rounded">
@@ -61,6 +61,11 @@ export const navLoginTemplate = `<nav class="flex items-center justify-between f
       <div class="hover:bg-yellow-400 px-2 py-1 rounded">
          <a href="/favorites" class="block inline-block lg:mt-0 text-gray-800 text-sm">
           즐겨 찾기
+          </a>
+      </div>
+      <div class="hover:bg-yellow-400 px-2 py-1 rounded ml-auto">
+         <a href="/mypage" class="block inline-block lg:mt-0 text-gray-800 text-sm mr-1">
+          ${name}
           </a>
       </div>
     </div>
@@ -122,8 +127,8 @@ export const initNavigation = () => {
   document.querySelector('body').insertAdjacentHTML('afterBegin', navTemplate)
 }
 
-export const initLoginNavigation = () => {
-  document.querySelector('body').insertAdjacentHTML('afterBegin', navLoginTemplate)
+export const initLoginNavigation = (name) => {
+  document.querySelector('body').insertAdjacentHTML('afterBegin', navLoginTemplate(name))
 }
 
 export const edgeItemTemplate = edge => {
