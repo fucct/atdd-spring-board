@@ -34,7 +34,6 @@ public class UserInterceptor implements HandlerInterceptor {
         AuthorizeCheck annotation = getCheckAnnotation((HandlerMethod)handler,
             AuthorizeCheck.class);
         if (Objects.isNull(annotation) || !annotation.check()) {
-            request.setAttribute("loginUserId", null);
             return true;
         }
         if (annotation.check()) {

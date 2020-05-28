@@ -1,5 +1,6 @@
 package spring.board.demo.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import spring.board.demo.domain.user.UserRepository;
 import spring.board.demo.domain.user.dto.LoginRequest;
 import spring.board.demo.domain.user.dto.UserCreateRequest;
 import spring.board.demo.domain.user.dto.UserCreateResponse;
+import spring.board.demo.domain.user.dto.UserResponse;
 import spring.board.demo.domain.user.dto.UserUpdateRequest;
 import spring.board.demo.exception.NotFoundUserException;
 
@@ -50,5 +52,14 @@ public class UserService {
         user.checkPassword(request.getOldPassword());
         user.update(request);
         userRepository.save(user);
+    }
+
+    public void delete(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public List<UserResponse> getAll() {
+        List<User> users = userRepository.findAll();
+        return UserResponse.listOf(users);
     }
 }

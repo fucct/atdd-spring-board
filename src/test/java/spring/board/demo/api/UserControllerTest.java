@@ -81,4 +81,9 @@ public class UserControllerTest {
             .andDo(print())
             .andDo(UserDocumentation.create());
     }
+
+    @Test
+    void name() {
+
+    }
 }
