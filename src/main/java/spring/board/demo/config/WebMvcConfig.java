@@ -24,7 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(userInterceptor)
-            .addPathPatterns("/users", "/users/**");
+            .addPathPatterns("/users/mypage", "/users/mypage-edit");
     }
 
     @Override

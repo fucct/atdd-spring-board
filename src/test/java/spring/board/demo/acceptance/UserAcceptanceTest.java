@@ -9,14 +9,15 @@ import org.junit.jupiter.api.TestFactory;
 
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.user.dto.UserCreateResponse;
 
 public class UserAcceptanceTest extends AcceptanceTest {
     @TestFactory
     Stream<DynamicTest> manageUser() {
         return Stream.of(
             DynamicTest.dynamicTest("Create user test", () -> {
-                Long user = createUser(TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD);
-                assertThat(user).isEqualTo(1L);
+                UserCreateResponse user = createUser(TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD);
+                assertThat(user).extracting(UserCreateResponse::getId).isEqualTo(1L);
             }),
             DynamicTest.dynamicTest("Login user test", () -> {
                 TokenResponse tokenResponse = login(TEST_USER_ID, TEST_USER_PASSWORD);

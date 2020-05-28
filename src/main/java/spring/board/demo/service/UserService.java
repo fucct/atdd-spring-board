@@ -11,6 +11,7 @@ import spring.board.demo.domain.user.User;
 import spring.board.demo.domain.user.UserRepository;
 import spring.board.demo.domain.user.dto.LoginRequest;
 import spring.board.demo.domain.user.dto.UserCreateRequest;
+import spring.board.demo.domain.user.dto.UserCreateResponse;
 import spring.board.demo.domain.user.dto.UserUpdateRequest;
 import spring.board.demo.exception.NotFoundUserException;
 
@@ -26,9 +27,9 @@ public class UserService {
         this.tokenProvider = tokenProvider;
     }
 
-    public Long create(UserCreateRequest request) {
+    public UserCreateResponse create(UserCreateRequest request) {
         User save = userRepository.save(request.toUser());
-        return save.getId();
+        return new UserCreateResponse(save.getId());
     }
 
     public TokenResponse login(LoginRequest request) {

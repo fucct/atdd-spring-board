@@ -18,6 +18,7 @@ import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.user.User;
 import spring.board.demo.domain.user.dto.LoginRequest;
 import spring.board.demo.domain.user.dto.UserCreateRequest;
+import spring.board.demo.domain.user.dto.UserCreateResponse;
 import spring.board.demo.domain.user.dto.UserUpdateRequest;
 import spring.board.demo.service.UserService;
 
@@ -32,9 +33,9 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> create(@Valid @RequestBody UserCreateRequest request) {
-        Long id = userService.create(request);
-        return ResponseEntity.created(URI.create("/users/" + id)).body(id);
+    public ResponseEntity<UserCreateResponse> create(@Valid @RequestBody UserCreateRequest request) {
+        UserCreateResponse response = userService.create(request);
+        return ResponseEntity.created(URI.create("/users/" + response.getId())).body(response);
     }
 
     @PutMapping("/{id}")

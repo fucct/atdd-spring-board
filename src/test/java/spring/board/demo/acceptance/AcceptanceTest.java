@@ -19,6 +19,7 @@ import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.user.dto.UserCreateResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql("/truncate.sql")
@@ -137,7 +138,7 @@ public class AcceptanceTest {
             .extract().as(User.class);
     }
 
-    protected Long createUser(String userID, String name, String password) {
+    protected UserCreateResponse createUser(String userID, String name, String password) {
         Map<String, String> params = new HashMap<>();
         params.put("userId", userID);
         params.put("name", name);
@@ -153,7 +154,7 @@ public class AcceptanceTest {
             then().
             log().all().
             statusCode(HttpStatus.CREATED.value()).
-            extract().as(Long.class);
+            extract().as(UserCreateResponse.class);
     }
 
     protected TokenResponse login(String userId, String password) {
