@@ -4,12 +4,13 @@ import { getCookie } from '../../utils/loginUtils.js';
 function MyPage() {
 
   this.init = () => {
-    const $email = document.querySelector("#email");
+    const $id = document.querySelector("#userId");
     const $name = document.querySelector("#name");
 
     if(getCookie()) {
       api.member.myPage().then(response => {
-        $email.innerText = response.email;
+        console.log(response);
+        $id.innerText = response.userId;
         $name.innerText = response.name;
       });
     } else{

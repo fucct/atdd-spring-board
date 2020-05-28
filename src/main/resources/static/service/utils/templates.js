@@ -49,7 +49,7 @@ export const navLoginTemplate = `<nav class="flex items-center justify-between f
           </a>
       </div>
       <div class="hover:bg-yellow-400 px-2 py-1 rounded">
-         <a href="/my-page" class="block inline-block lg:mt-0 text-gray-800 text-sm">
+         <a href="/mypage" class="block inline-block lg:mt-0 text-gray-800 text-sm">
           마이 페이지
           </a>
       </div>

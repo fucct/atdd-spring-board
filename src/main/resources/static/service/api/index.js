@@ -55,10 +55,10 @@ const api = (() => {
       return request(`/users/login`, METHOD.POST(loginForm));
     },
     myPage(){
-      return requestWithJsonData(`/me`);
+      return requestWithJsonData(`/users/mypage`);
     },
     update(id, updateForm){
-      return request(`/members/`+id, METHOD.PUT(updateForm));
+      return request(`/users/`+id, METHOD.PUT(updateForm));
     },
     delete(id){
       return request(`/members/`+id, METHOD.DELETE());

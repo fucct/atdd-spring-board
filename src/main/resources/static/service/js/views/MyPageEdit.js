@@ -4,7 +4,7 @@ import { deleteCookie, getCookie } from '../../utils/loginUtils.js';
 
 function MyPageEdit() {
   const $id = document.querySelector('#id');
-  const $email = document.querySelector('#email');
+  const $email = document.querySelector('#userId');
   const $name = document.querySelector('#name');
   const $oldPassword = document.querySelector('#old-password');
   const $password = document.querySelector('#password');
@@ -31,7 +31,7 @@ function MyPageEdit() {
       if (!response.ok) {
         throw response;
       }
-      window.location = "/my-page";
+      window.location = "/mypage";
     }).catch(response => response.json())
     .then(errorResponse => {
       if (errorResponse) {
@@ -44,7 +44,7 @@ function MyPageEdit() {
     event.preventDefault();
 
     if (!confirm("정말로 회원 탈퇴를 하실겁니까? 😳")) {
-      window.location = "/my-page"
+      window.location = "/mypage"
       return;
     }
     api.member.delete($id.dataset.id, $oldPassword.value)
@@ -72,7 +72,7 @@ function MyPageEdit() {
     if(getCookie()) {
       api.member.myPage().then(response => {
         $id.dataset.id = response.id;
-        $email.value = response.email;
+        $email.value = response.userId;
         $name.value = response.name;
       }).catch(alert);
       initEventListener();

@@ -1,1 +1,1 @@
-insert into article (title, content) VALUES ('하이', '바보');
+insert into user (user_id, name, password) VALUES ('fucct', 'TAEHEON', 'qwer');

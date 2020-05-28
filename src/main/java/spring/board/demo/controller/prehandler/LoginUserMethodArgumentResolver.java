@@ -39,7 +39,7 @@ public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentRes
             return new User();
         }
         try {
-            return userService.findByUserId(userId);
+            return userService.findByUserId(userId).orElseThrow(() -> new NotFoundUserException(userId));
         } catch (NotFoundUserException e) {
             throw new AuthenticationException("비정상적인 접근입니다. 다시 로그인해주세요");
         }

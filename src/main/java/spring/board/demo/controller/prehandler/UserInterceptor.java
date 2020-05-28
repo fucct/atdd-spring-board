@@ -21,9 +21,6 @@ public class UserInterceptor implements HandlerInterceptor {
     private BearerTokenProvider tokenProvider;
     private TokenExtractor extractor;
 
-    public UserInterceptor() {
-    }
-
     public UserInterceptor(BearerTokenProvider tokenProvider,
         TokenExtractor extractor) {
         this.tokenProvider = tokenProvider;
@@ -33,9 +30,7 @@ public class UserInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
-        if (!(handler instanceof HandlerMethod)) {
-            return true;
-        }
+
         AuthorizeCheck annotation = getCheckAnnotation((HandlerMethod)handler,
             AuthorizeCheck.class);
         if (Objects.isNull(annotation) || !annotation.check()) {

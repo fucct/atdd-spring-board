@@ -1,6 +1,7 @@
 package spring.board.demo.domain.user;
 
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
@@ -11,6 +12,8 @@ import lombok.NoArgsConstructor;
 import spring.board.demo.domain.ArticleRef;
 import spring.board.demo.domain.BaseTime;
 import spring.board.demo.domain.UserCommentRef;
+import spring.board.demo.domain.user.dto.UserUpdateRequest;
+import spring.board.demo.exception.NotMatchPasswordException;
 
 @Getter
 @NoArgsConstructor
@@ -40,5 +43,16 @@ public class User extends BaseTime {
         this.password = password;
         this.articles = articles;
         this.comments = comments;
+    }
+
+    public void update(UserUpdateRequest request) {
+        this.name = request.getName();
+        this.password = request.getNewPassword();
+    }
+
+    public void checkPassword(String password) {
+        if (!Objects.equals(this.password, password)) {
+            throw new NotMatchPasswordException();
+        }
     }
 }

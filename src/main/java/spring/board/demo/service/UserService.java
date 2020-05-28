@@ -1,6 +1,5 @@
 package spring.board.demo.service;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -12,8 +11,8 @@ import spring.board.demo.domain.user.User;
 import spring.board.demo.domain.user.UserRepository;
 import spring.board.demo.domain.user.dto.LoginRequest;
 import spring.board.demo.domain.user.dto.UserCreateRequest;
+import spring.board.demo.domain.user.dto.UserUpdateRequest;
 import spring.board.demo.exception.NotFoundUserException;
-import spring.board.demo.exception.NotMatchPasswordException;
 
 @Service
 public class UserService {
@@ -35,19 +34,20 @@ public class UserService {
     public TokenResponse login(LoginRequest request) {
         User user = findByUserId(request.getUserId())
             .orElseThrow(() -> new NotFoundUserException(request.getUserId()));
-        validatePassword(request, user);
+        user.checkPassword(request.getPassword());
         Token token = tokenProvider.createToken(request.getUserId());
         return TokenResponse.of(token);
     }
 
-    private void validatePassword(LoginRequest request, User user) {
-        if (Objects.equals(user.getPassword(), request.getPassword())) {
-            return;
-        }
-        throw new NotMatchPasswordException();
-    }
-
     public Optional<User> findByUserId(String userId) {
         return userRepository.findByUserId(userId);
+    }
+
+    public void update(Long id, UserUpdateRequest request) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new NotFoundUserException(request.getName()));
+        user.checkPassword(request.getOldPassword());
+        user.update(request);
+        userRepository.save(user);
     }
 }
