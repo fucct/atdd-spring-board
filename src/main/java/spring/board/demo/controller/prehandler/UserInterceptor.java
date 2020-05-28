@@ -18,13 +18,13 @@ import spring.board.demo.domain.token.BearerTokenProvider;
 @Component
 public class UserInterceptor implements HandlerInterceptor {
 
-    private BearerTokenProvider tokenProvider;
-    private TokenExtractor extractor;
+    private BearerTokenProvider bearerTokenProvider;
+    private TokenExtractor tokenExtractor;
 
-    public UserInterceptor(BearerTokenProvider tokenProvider,
-        TokenExtractor extractor) {
-        this.tokenProvider = tokenProvider;
-        this.extractor = extractor;
+    public UserInterceptor(BearerTokenProvider bearerTokenProvider,
+        TokenExtractor tokenExtractor) {
+        this.bearerTokenProvider = bearerTokenProvider;
+        this.tokenExtractor = tokenExtractor;
     }
 
     @Override
@@ -38,8 +38,8 @@ public class UserInterceptor implements HandlerInterceptor {
             return true;
         }
         if (annotation.check()) {
-            String accessToken = extractor.extract(request);
-            String userId = tokenProvider.getSubject(accessToken);
+            String accessToken = tokenExtractor.extract(request);
+            String userId = bearerTokenProvider.getSubject(accessToken);
             request.setAttribute("loginUserId", userId);
             return true;
         }

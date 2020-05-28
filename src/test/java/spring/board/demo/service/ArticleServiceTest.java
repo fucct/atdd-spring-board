@@ -1,29 +1,5 @@
 package spring.board.demo.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import org.assertj.core.util.Sets;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import spring.board.demo.domain.article.Article;
-import spring.board.demo.domain.comment.Comment;
-import spring.board.demo.domain.article.dto.ArticleCreateRequest;
-import spring.board.demo.domain.article.dto.ArticleDetailResponse;
-import spring.board.demo.domain.article.dto.ArticleResponse;
-import spring.board.demo.domain.article.dto.ArticleUpdateRequest;
-import spring.board.demo.domain.article.ArticleRepository;
-
-@ExtendWith(MockitoExtension.class)
 class ArticleServiceTest {
 
     // @Mock

@@ -4,6 +4,7 @@ import static org.springframework.web.context.request.RequestAttributes.*;
 
 import java.util.Objects;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -18,6 +19,7 @@ import spring.board.demo.service.UserService;
 
 
 @Component
+@Qualifier("loginUser")
 public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final UserService userService;

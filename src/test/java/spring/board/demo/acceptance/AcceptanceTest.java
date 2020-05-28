@@ -1,5 +1,7 @@
 package spring.board.demo.acceptance;
 
+import static org.springframework.http.MediaType.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,12 +23,12 @@ import spring.board.demo.domain.user.User;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql("/truncate.sql")
 public class AcceptanceTest {
-    protected static final String TEST_USER_ID = "fucct";
-    protected static final String TEST_OTHER_USER_ID = "dqrd123";
-    protected static final String TEST_USER_NAME = "DD";
-    protected static final String TEST_OTHER_USER_NAME = "TAEHEON";
-    protected static final String TEST_USER_PASSWORD = "1234";
-    protected static final String TEST_OTHER_USER_PASSWORD = "qwer";
+    public static final String TEST_USER_ID = "fucct";
+    public static final String TEST_OTHER_USER_ID = "dqrd123";
+    public static final String TEST_USER_NAME = "DD";
+    public static final String TEST_OTHER_USER_NAME = "TAEHEON";
+    public static final String TEST_USER_PASSWORD = "1234";
+    public static final String TEST_OTHER_USER_PASSWORD = "qwer";
 
     @LocalServerPort
     int port;
@@ -170,5 +172,23 @@ public class AcceptanceTest {
             log().all().
             statusCode(HttpStatus.OK.value()).
             extract().as(TokenResponse.class);
+    }
+
+    protected void updateUser(Long id, String name, String oldPassword, String newPassword, TokenResponse token) {
+        Map<String, String> params = new HashMap<>();
+        params.put("name", name);
+        params.put("oldPassword", oldPassword);
+        params.put("newPassword", newPassword);
+
+        given()
+            .cookie("token", token.getAccessToken())
+            .contentType(APPLICATION_JSON_VALUE)
+            .accept(APPLICATION_JSON_VALUE)
+            .body(params)
+            .when()
+            .put("/users/"+id)
+            .then()
+            .log().all()
+            .statusCode(HttpStatus.NO_CONTENT.value());
     }
 }
