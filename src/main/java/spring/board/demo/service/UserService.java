@@ -1,6 +1,7 @@
 package spring.board.demo.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import spring.board.demo.domain.user.dto.UserCreateResponse;
 import spring.board.demo.domain.user.dto.UserResponse;
 import spring.board.demo.domain.user.dto.UserUpdateRequest;
 import spring.board.demo.exception.NotFoundUserException;
+import spring.board.demo.exception.NotMatchUserIdException;
 
 @Service
 public class UserService {
@@ -58,7 +60,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void delete(Long id) {
+    public void delete(User user, Long id) {
+        if (!Objects.equals(user.getId(), id)) {
+            throw new NotMatchUserIdException();
+        }
         userRepository.deleteById(id);
     }
 

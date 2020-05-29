@@ -27,7 +27,6 @@ public class ArticleController {
     public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
     }
-    //
 
     @AuthorizeCheck(check = true)
     @PostMapping
@@ -38,10 +37,9 @@ public class ArticleController {
         return ResponseEntity.created(URI.create("/board/" + response.getId())).body(response);
     }
 
-    @AuthorizeCheck(check = true)
     @GetMapping
-    public ResponseEntity<List<ArticleResponse>> getArticle(@LoginUser User user) {
-        List<ArticleResponse> responses = articleService.getArticles(user);
+    public ResponseEntity<List<ArticleResponse>> getArticle() {
+        List<ArticleResponse> responses = articleService.getArticles();
         return ResponseEntity.ok(responses);
     }
 }

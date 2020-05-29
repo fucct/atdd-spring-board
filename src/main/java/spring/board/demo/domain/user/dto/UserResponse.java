@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import spring.board.demo.domain.ArticleRef;
+import spring.board.demo.domain.user.ArticleRef;
 import spring.board.demo.domain.user.User;
 
 @Getter

@@ -9,7 +9,6 @@ import org.springframework.data.annotation.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import spring.board.demo.domain.ArticleRef;
 import spring.board.demo.domain.BaseTime;
 import spring.board.demo.domain.UserCommentRef;
 import spring.board.demo.domain.article.Article;

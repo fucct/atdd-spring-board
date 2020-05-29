@@ -46,7 +46,16 @@ class ArticleAcceptanceTest extends AcceptanceTest {
     }
 
     private List<ArticleResponse> getAllArticles() {
-        return null;
+        //@formatter:off
+        return given().
+                accept(APPLICATION_JSON_VALUE).
+            when().
+                get("/articles").
+            then().
+                log().all().
+            statusCode(HttpStatus.OK.value()).
+            extract().jsonPath().
+            getList(".", ArticleResponse.class);
     }
 
     private List<ArticleResponse> getArticles(TokenResponse token) {

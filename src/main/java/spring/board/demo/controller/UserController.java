@@ -35,7 +35,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @AuthorizeCheck(check=true)
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> responses = userService.getAll();
@@ -57,10 +56,10 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @AuthorizeCheck
+    @AuthorizeCheck(check = true)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        userService.delete(id);
+    public ResponseEntity<Void> delete(@LoginUser User user, @PathVariable Long id) {
+        userService.delete(user, id);
         return ResponseEntity.noContent().build();
     }
 

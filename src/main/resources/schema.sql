@@ -1,9 +1,10 @@
-drop table if exists user cascade ;
-drop table if exists article cascade ;
-drop table if exists comments cascade ;
+drop table if exists user cascade;
+drop table if exists article cascade;
+drop table if exists comments cascade;
 drop table if exists user_comment;
 drop table if exists article_comment;
 drop table if exists user_article;
+drop table if exists article_user;
 
 create table if not exists user
 (
@@ -51,7 +52,16 @@ create table if not exists article_comment
 create table if not exists user_article
 (
     user    bigint not null,
-    article bigint not null
+    article bigint not null,
+    primary key (user, article)
+);
+
+create table if not exists article_user
+(
+    article   bigint       not null,
+    user      bigint       not null,
+    user_name varchar(255) not null,
+    primary key (user, article)
 );
 
 

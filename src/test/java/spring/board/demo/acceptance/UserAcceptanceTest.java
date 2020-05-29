@@ -35,12 +35,11 @@ public class UserAcceptanceTest extends AcceptanceTest {
                     token);
                 UserResponse user = getUser(token);
                 assertThat(user)
-                    .hasFieldOrPropertyWithValue("name", TEST_OTHER_USER_NAME)
-                    .hasFieldOrPropertyWithValue("password", TEST_OTHER_USER_PASSWORD);
+                    .hasFieldOrPropertyWithValue("name", TEST_OTHER_USER_NAME);
             }),
             DynamicTest.dynamicTest("Sign out user test", () -> {
                 TokenResponse tokenResponse = login(TEST_USER_ID, TEST_OTHER_USER_PASSWORD);
-                deleteUser(1L);
+                deleteUser(tokenResponse, 1L);
                 assertThat(getAll()).hasSize(0);
             })
         );

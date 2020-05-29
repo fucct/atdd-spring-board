@@ -1,7 +1,7 @@
 package spring.board.demo.domain.article.dto;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,10 +17,12 @@ public class ArticleResponse {
     private String content;
     private String userName;
 
-    public static List<ArticleResponse> listOf(List<Article> articles, String userName) {
-        return articles.stream()
-            .map(article -> ArticleResponse.of(article, userName))
-            .collect(Collectors.toList());
+    public static List<ArticleResponse> listOf(List<Article> articles, List<String> userNames) {
+        List<ArticleResponse> responses = new ArrayList<>();
+        for (int i = 0; i < articles.size(); i++) {
+            responses.add(ArticleResponse.of(articles.get(i), userNames.get(i)));
+        }
+        return responses;
     }
 
     public static ArticleResponse of(Article article, String userName) {

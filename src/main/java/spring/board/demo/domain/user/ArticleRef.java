@@ -1,4 +1,4 @@
-package spring.board.demo.domain;
+package spring.board.demo.domain.user;
 
 import org.springframework.data.relational.core.mapping.Table;
 

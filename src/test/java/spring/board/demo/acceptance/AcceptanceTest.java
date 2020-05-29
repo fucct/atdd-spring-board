@@ -146,8 +146,9 @@ public class AcceptanceTest {
             getList(".", UserResponse.class);
     }
 
-    protected void deleteUser(Long id) {
+    protected void deleteUser(TokenResponse tokenResponse, Long id) {
         given().
+            cookie("token", tokenResponse.getAccessToken()).
             when().
             delete("/users/" + id).
             then().
