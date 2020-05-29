@@ -13,8 +13,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import spring.board.demo.domain.user.User;
-import spring.board.demo.exception.AuthenticationException;
-import spring.board.demo.exception.NotFoundUserException;
+import spring.board.demo.exception.AccessDeniedException;
+import spring.board.demo.exception.UserNotFoundException;
 import spring.board.demo.service.UserService;
 
 
@@ -41,9 +41,10 @@ public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentRes
             return new User();
         }
         try {
-            return userService.findByUserId(userId).orElseThrow(() -> new NotFoundUserException(userId));
-        } catch (NotFoundUserException e) {
-            throw new AuthenticationException("비정상적인 접근입니다. 다시 로그인해주세요");
+            return userService.findByUserId(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        } catch (UserNotFoundException e) {
+            throw new AccessDeniedException("비정상적인 접근입니다. 다시 로그인해주세요");
         }
     }
 }

@@ -14,7 +14,7 @@ import spring.board.demo.domain.article.dto.ArticleCreateResponse;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.article.dto.ArticleUpdateRequest;
 import spring.board.demo.domain.user.User;
-import spring.board.demo.exception.NotFoundArticleException;
+import spring.board.demo.exception.ArticleNotFoundException;
 
 @Service
 @Slf4j
@@ -49,7 +49,7 @@ public class ArticleService {
 
     public ArticleResponse getArticle(Long id) {
         Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundArticleException(id));
+            .orElseThrow(() -> new ArticleNotFoundException(id));
         String userName = article.getUserRef().getUserName();
         return ArticleResponse.of(article, userName);
     }
@@ -57,7 +57,7 @@ public class ArticleService {
     public void update(User user, Long id, ArticleUpdateRequest request) {
         user.validateArticle(id);
         Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new NotFoundArticleException(id));
+            .orElseThrow(() -> new ArticleNotFoundException(id));
         article.update(request);
         articleRepository.save(article);
     }

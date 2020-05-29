@@ -13,7 +13,7 @@ import spring.board.demo.domain.BaseTime;
 import spring.board.demo.domain.UserCommentRef;
 import spring.board.demo.domain.article.Article;
 import spring.board.demo.domain.user.dto.UserUpdateRequest;
-import spring.board.demo.exception.ForbiddenUserException;
+import spring.board.demo.exception.AccessDeniedException;
 import spring.board.demo.exception.NotMatchPasswordException;
 
 @Getter
@@ -65,14 +65,14 @@ public class User extends BaseTime {
         articles.stream()
             .filter(article -> article.hasSameId(id))
             .findFirst()
-            .orElseThrow(ForbiddenUserException::new);
+            .orElseThrow(AccessDeniedException::new);
     }
 
     public void deleteArticle(Long id) {
         ArticleRef articleRef = articles.stream()
             .filter(article -> article.hasSameId(id))
             .findFirst()
-            .orElseThrow(ForbiddenUserException::new);
+            .orElseThrow(AccessDeniedException::new);
         articles.remove(articleRef);
     }
 }

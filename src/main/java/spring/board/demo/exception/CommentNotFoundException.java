@@ -1,6 +1,6 @@
 package spring.board.demo.exception;
 
-public class CommentNotFoundException extends BusinessException {
+public class CommentNotFoundException extends EntityNotFoundException {
     private static final String ERROR_MESSAGE = " 번 Comment를 찾을수 없습니다.";
 
     public CommentNotFoundException() {

@@ -16,8 +16,8 @@ import spring.board.demo.domain.user.dto.UserCreateRequest;
 import spring.board.demo.domain.user.dto.UserCreateResponse;
 import spring.board.demo.domain.user.dto.UserResponse;
 import spring.board.demo.domain.user.dto.UserUpdateRequest;
-import spring.board.demo.exception.NotFoundUserException;
-import spring.board.demo.exception.NotMatchUserIdException;
+import spring.board.demo.exception.AccessDeniedException;
+import spring.board.demo.exception.UserNotFoundException;
 
 @Service
 public class UserService {
@@ -42,7 +42,7 @@ public class UserService {
 
     public TokenResponse login(LoginRequest request) {
         User user = findByUserId(request.getUserId())
-            .orElseThrow(() -> new NotFoundUserException(request.getUserId()));
+            .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
         user.checkPassword(request.getPassword());
         Token token = tokenProvider.createToken(request.getUserId());
         return TokenResponse.of(token);
@@ -54,7 +54,7 @@ public class UserService {
 
     public void update(Long id, UserUpdateRequest request) {
         User user = userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundUserException(request.getName()));
+            .orElseThrow(() -> new UserNotFoundException(request.getName()));
         user.checkPassword(request.getOldPassword());
         user.update(request);
         userRepository.save(user);
@@ -62,7 +62,7 @@ public class UserService {
 
     public void delete(User user, Long id) {
         if (!Objects.equals(user.getId(), id)) {
-            throw new NotMatchUserIdException();
+            throw new AccessDeniedException();
         }
         userRepository.deleteById(id);
     }

@@ -1,14 +1,7 @@
 package spring.board.demo.exception;
 
-public class ArticleNotFoundException extends BusinessException {
-    private static final String ERROR_MESSAGE = " 번 Article을 찾을수 없습니다.";
-
-    public ArticleNotFoundException() {
-        super(ERROR_MESSAGE);
-    }
-
+public class ArticleNotFoundException extends EntityNotFoundException {
     public ArticleNotFoundException(Long id) {
-        super(id + ERROR_MESSAGE);
+        super(id + "번 글을 찾을 수 없습니다.");
     }
-
 }
