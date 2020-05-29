@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.board.demo.domain.ArticleCommentRef;
 import spring.board.demo.domain.BaseTime;
+import spring.board.demo.domain.article.dto.ArticleUpdateRequest;
 import spring.board.demo.domain.user.User;
 
 @NoArgsConstructor
@@ -51,5 +52,10 @@ public class Article extends BaseTime {
             .content(content)
             .comments(new LinkedHashSet<>())
             .build();
+    }
+
+    public void update(ArticleUpdateRequest request) {
+        this.title = request.getTitle();
+        this.content = request.getContent();
     }
 }

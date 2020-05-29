@@ -12,7 +12,9 @@ import spring.board.demo.domain.article.ArticleRepository;
 import spring.board.demo.domain.article.dto.ArticleCreateRequest;
 import spring.board.demo.domain.article.dto.ArticleCreateResponse;
 import spring.board.demo.domain.article.dto.ArticleResponse;
+import spring.board.demo.domain.article.dto.ArticleUpdateRequest;
 import spring.board.demo.domain.user.User;
+import spring.board.demo.exception.NotFoundArticleException;
 
 @Service
 @Slf4j
@@ -43,5 +45,26 @@ public class ArticleService {
             .map(article -> article.getUserRef().getUserName())
             .collect(Collectors.toList());
         return ArticleResponse.listOf(articles, users);
+    }
+
+    public ArticleResponse getArticle(Long id) {
+        Article article = articleRepository.findById(id)
+            .orElseThrow(() -> new NotFoundArticleException(id));
+        String userName = article.getUserRef().getUserName();
+        return ArticleResponse.of(article, userName);
+    }
+
+    public void update(User user, Long id, ArticleUpdateRequest request) {
+        user.validateArticle(id);
+        Article article = articleRepository.findById(id)
+            .orElseThrow(() -> new NotFoundArticleException(id));
+        article.update(request);
+        articleRepository.save(article);
+    }
+
+    public void delete(User user, Long id) {
+        articleRepository.deleteById(id);
+        user.deleteArticle(id);
+        userService.save(user);
     }
 }

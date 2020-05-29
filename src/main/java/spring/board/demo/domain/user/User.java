@@ -13,6 +13,7 @@ import spring.board.demo.domain.BaseTime;
 import spring.board.demo.domain.UserCommentRef;
 import spring.board.demo.domain.article.Article;
 import spring.board.demo.domain.user.dto.UserUpdateRequest;
+import spring.board.demo.exception.ForbiddenUserException;
 import spring.board.demo.exception.NotMatchPasswordException;
 
 @Getter
@@ -58,5 +59,20 @@ public class User extends BaseTime {
 
     public void addArticle(Article article) {
         this.articles.add(new ArticleRef(article.getId()));
+    }
+
+    public void validateArticle(Long id) {
+        articles.stream()
+            .filter(article -> article.hasSameId(id))
+            .findFirst()
+            .orElseThrow(ForbiddenUserException::new);
+    }
+
+    public void deleteArticle(Long id) {
+        ArticleRef articleRef = articles.stream()
+            .filter(article -> article.hasSameId(id))
+            .findFirst()
+            .orElseThrow(ForbiddenUserException::new);
+        articles.remove(articleRef);
     }
 }

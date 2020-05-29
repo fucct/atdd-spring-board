@@ -16,7 +16,7 @@ import org.springframework.test.context.jdbc.Sql;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import spring.board.demo.domain.article.dto.ArticleCreateResponse;
-import spring.board.demo.domain.article.dto.ArticleDetailResponse;
+import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.user.dto.UserCreateResponse;
 import spring.board.demo.domain.user.dto.UserResponse;
@@ -43,43 +43,6 @@ public class AcceptanceTest {
         return RestAssured.given().log().all();
     }
 
-    protected Long addComment(Long articleId, String userName, String content) {
-        Map<String, String> params = new HashMap<>();
-        params.put("userName", userName);
-        params.put("content", content);
-
-        return given().
-            body(params).
-            contentType(MediaType.APPLICATION_JSON_VALUE).
-            accept(MediaType.APPLICATION_JSON_VALUE).
-            when().
-            post("/articles/" + articleId + "/comments").
-            then().
-            log().all().
-            statusCode(HttpStatus.CREATED.value()).
-            extract().as(Long.class);
-    }
-
-    protected ArticleDetailResponse getDetailArticle(Long articleId) {
-        return given().when().
-            get("/articles/detail/" + articleId).
-            then().
-            log().all().
-            statusCode(HttpStatus.OK.value()).
-            extract().as(ArticleDetailResponse.class);
-    }
-
-    protected UserResponse getUser(TokenResponse token) {
-        //@formatter:off
-        return given().
-            cookie("token", token.getAccessToken()).
-            when().
-            get("/users/mypage")
-            .then()
-            .statusCode(HttpStatus.OK.value())
-            .extract().as(UserResponse.class);
-    }
-
     protected UserCreateResponse createUser(String userID, String name, String password) {
         Map<String, String> params = new HashMap<>();
         params.put("userId", userID);
@@ -87,16 +50,29 @@ public class AcceptanceTest {
         params.put("password", password);
 
         //@formatter:off
-        return given().
-            body(params).
-            contentType(MediaType.APPLICATION_JSON_VALUE).
-            accept(MediaType.APPLICATION_JSON_VALUE).
+        return
+            given().
+                body(params).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
             when().
-            post("/users").
+                post("/users").
             then().
-            log().all().
-            statusCode(HttpStatus.CREATED.value()).
-            extract().as(UserCreateResponse.class);
+                log().all().
+                statusCode(HttpStatus.CREATED.value()).
+                extract().as(UserCreateResponse.class);
+    }
+
+    protected UserResponse getUser(TokenResponse token) {
+        //@formatter:off
+        return
+            given().
+                cookie("token", token.getAccessToken()).
+            when().
+                get("/users/mypage").
+            then().
+                statusCode(HttpStatus.OK.value()).
+                extract().as(UserResponse.class);
     }
 
     protected TokenResponse login(String userId, String password) {
@@ -105,16 +81,17 @@ public class AcceptanceTest {
         params.put("password", password);
 
         //@formatter:off
-        return given().
-            body(params).
-            contentType(MediaType.APPLICATION_JSON_VALUE).
-            accept(MediaType.APPLICATION_JSON_VALUE).
+        return
+            given().
+                body(params).
+                contentType(MediaType.APPLICATION_JSON_VALUE).
+                accept(MediaType.APPLICATION_JSON_VALUE).
             when().
-            post("/users/login").
+                post("/users/login").
             then().
-            log().all().
-            statusCode(HttpStatus.OK.value()).
-            extract().as(TokenResponse.class);
+                log().all().
+                statusCode(HttpStatus.OK.value()).
+                extract().as(TokenResponse.class);
     }
 
     protected void updateUser(Long id, String name, String oldPassword, String newPassword, TokenResponse token) {
@@ -123,35 +100,39 @@ public class AcceptanceTest {
         params.put("oldPassword", oldPassword);
         params.put("newPassword", newPassword);
 
+        //@formatter:off
         given()
             .cookie("token", token.getAccessToken())
             .contentType(APPLICATION_JSON_VALUE)
             .accept(APPLICATION_JSON_VALUE)
             .body(params)
-            .when()
+        .when()
             .put("/users/"+id)
-            .then()
+        .then()
             .log().all()
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
     protected List<UserResponse> getAll() {
-        return given().
+        //@formatter:off
+        return
+            given().
             when().
-            get("/users").
+                get("/users").
             then().
-            log().all().
-            statusCode(HttpStatus.OK.value()).
-            extract().jsonPath().
-            getList(".", UserResponse.class);
+                log().all().
+                statusCode(HttpStatus.OK.value()).
+                extract().jsonPath().
+                getList(".", UserResponse.class);
     }
 
     protected void deleteUser(TokenResponse tokenResponse, Long id) {
+        //@formatter:off
         given().
             cookie("token", tokenResponse.getAccessToken()).
-            when().
+        when().
             delete("/users/" + id).
-            then().
+        then().
             log().all().
             statusCode(HttpStatus.NO_CONTENT.value());
     }
@@ -162,16 +143,82 @@ public class AcceptanceTest {
         params.put("content", content);
 
         //@formatter:off
-        return given().
-            cookie("token", token.getAccessToken()).
-            contentType(APPLICATION_JSON_VALUE).
-            accept(APPLICATION_JSON_VALUE).
-            body(params).
+        return
+            given().
+                cookie("token", token.getAccessToken()).
+                contentType(APPLICATION_JSON_VALUE).
+                accept(APPLICATION_JSON_VALUE).
+                body(params).
             when().
-            post("/articles").
+                post("/articles").
+            then().
+                log().all().
+                statusCode(HttpStatus.CREATED.value()).
+                extract().as(ArticleCreateResponse.class);
+    }
+
+    protected void deleteArticle(TokenResponse token, Long articleId) {
+        given().
+            cookie("token", token.getAccessToken()).
+            when().
+            delete("/articles/" + articleId).
             then().
             log().all().
-            statusCode(HttpStatus.CREATED.value()).
-            extract().as(ArticleCreateResponse.class);
+            statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    protected void updateArticle(TokenResponse token, Long articleId, String title, String content) {
+        //@formatter:off
+        Map<String, String> params = new HashMap<>();
+        params.put("title", title);
+        params.put("content", content);
+
+        given().
+            body(params).
+            cookie("token", token.getAccessToken()).
+            contentType(APPLICATION_JSON_VALUE).
+            when().
+            put("/articles/"+articleId).
+            then().
+            log().all().
+            statusCode(HttpStatus.NO_CONTENT.value());
+    }
+
+    protected ArticleResponse getArticle(Long id) {
+        //@formatter:off
+        return given().
+            accept(APPLICATION_JSON_VALUE).
+            when().
+            get("/articles/"+id).
+            then().
+            log().all().
+            statusCode(HttpStatus.OK.value()).
+            extract().as(ArticleResponse.class);
+    }
+
+    protected List<ArticleResponse> getAllArticles() {
+        //@formatter:off
+        return given().
+            accept(APPLICATION_JSON_VALUE).
+            when().
+            get("/articles").
+            then().
+            log().all().
+            statusCode(HttpStatus.OK.value()).
+            extract().jsonPath().
+            getList(".", ArticleResponse.class);
+    }
+
+    protected List<ArticleResponse> getArticles() {
+        //@formatter:off
+        return given().
+            accept(APPLICATION_JSON_VALUE).
+            when().
+            get("/articles").
+            then().
+            log().all().
+            statusCode(HttpStatus.OK.value()).
+            extract().jsonPath().
+            getList(".", ArticleResponse.class);
     }
 }

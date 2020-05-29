@@ -14,4 +14,8 @@ public class ArticleRef {
     public ArticleRef(Long article) {
         this.article = article;
     }
+
+    public boolean hasSameId(Long id) {
+        return article.equals(id);
+    }
 }

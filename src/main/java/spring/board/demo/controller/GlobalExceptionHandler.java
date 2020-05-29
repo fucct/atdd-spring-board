@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import spring.board.demo.domain.error.dto.ErrorResponse;
+import spring.board.demo.exception.ForbiddenException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -27,7 +28,11 @@ public class GlobalExceptionHandler {
         StringBuilder builder = new StringBuilder();
         messages.forEach(message -> builder.append(message).append("\n"));
         return ResponseEntity.badRequest().body(new ErrorResponse(builder.toString()));
+    }
 
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ErrorResponse> handleForbiddenException(ForbiddenException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse(e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)

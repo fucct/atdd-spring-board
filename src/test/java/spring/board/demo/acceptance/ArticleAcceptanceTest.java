@@ -1,7 +1,6 @@
 package spring.board.demo.acceptance;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.springframework.http.MediaType.*;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -9,10 +8,10 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
-import org.springframework.http.HttpStatus;
 
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
+import spring.board.demo.domain.user.dto.UserCreateResponse;
 import spring.board.demo.domain.user.dto.UserResponse;
 
 class ArticleAcceptanceTest extends AcceptanceTest {
@@ -23,53 +22,49 @@ class ArticleAcceptanceTest extends AcceptanceTest {
     @DisplayName("게시글을 관리한다")
     @TestFactory
     public Stream<DynamicTest> manageArticle() {
-        createUser(TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD);
-        TokenResponse token = login(TEST_USER_ID, TEST_USER_PASSWORD);
+        UserCreateResponse user1 = createUser(TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD);
+        UserCreateResponse user2 = createUser(TEST_OTHER_USER_ID, TEST_OTHER_USER_NAME,
+            TEST_OTHER_USER_PASSWORD);
+        TokenResponse token1 = login(TEST_USER_ID, TEST_USER_PASSWORD);
+        TokenResponse token2 = login(TEST_OTHER_USER_ID, TEST_OTHER_USER_PASSWORD);
 
         return Stream.of(
-            DynamicTest.dynamicTest("Create Article", () -> {
-                createArticle(token, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
-                UserResponse user = getUser(token);
+            DynamicTest.dynamicTest("Create user's article", () -> {
+                createArticle(token1, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
+                UserResponse user = getUser(token1);
                 assertThat(user.getArticles()).hasSize(1);
-            }),
-            DynamicTest.dynamicTest("Get User's Articles", () -> {
-                List<ArticleResponse> articles = getArticles(token);
-                assertThat(articles).hasSize(1)
-                    .extracting(ArticleResponse::getUserName)
+                assertThat(getArticles()).extracting(ArticleResponse::getUserName)
                     .containsExactly(TEST_USER_NAME);
+            }),
+            DynamicTest.dynamicTest("Create another user's article", () -> {
+                    createArticle(token2, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
+                    UserResponse user = getUser(token2);
+                    assertThat(user.getArticles()).hasSize(1);
+                    assertThat(getArticles()).extracting(ArticleResponse::getUserName)
+                        .containsExactly(TEST_USER_NAME, TEST_OTHER_USER_NAME);
+                }
+            ),
+            DynamicTest.dynamicTest("Get a Article", () -> {
+                ArticleResponse article = getArticle(1L);
+                assertThat(article.getTitle()).isEqualTo(TEST_ARTICLE_TITLE);
+                assertThat(article.getContent()).isEqualTo(TEST_ARTICLE_CONTENT);
+                assertThat(article.getUserName()).isEqualTo(TEST_USER_NAME);
             }),
             DynamicTest.dynamicTest("Get All Articles", () -> {
                 List<ArticleResponse> articles = getAllArticles();
-                assertThat(articles).hasSize(1);
+                assertThat(articles).hasSize(2);
+            }),
+            DynamicTest.dynamicTest("Update Article", () -> {
+                updateArticle(token1, 1L, "NEW_" + TEST_ARTICLE_TITLE,
+                    "NEW_" + TEST_ARTICLE_CONTENT);
+                ArticleResponse articleResponse = getArticle(1L);
+                assertThat(articleResponse.getTitle()).isEqualTo("NEW_" + TEST_ARTICLE_TITLE);
+                assertThat(articleResponse.getContent()).isEqualTo("NEW_" + TEST_ARTICLE_CONTENT);
+            }),
+            DynamicTest.dynamicTest("Delete Article", () -> {
+                deleteArticle(token1, 1L);
+                assertThat(getUser(token1).getArticles()).hasSize(0);
             })
         );
     }
-
-    private List<ArticleResponse> getAllArticles() {
-        //@formatter:off
-        return given().
-                accept(APPLICATION_JSON_VALUE).
-            when().
-                get("/articles").
-            then().
-                log().all().
-            statusCode(HttpStatus.OK.value()).
-            extract().jsonPath().
-            getList(".", ArticleResponse.class);
-    }
-
-    private List<ArticleResponse> getArticles(TokenResponse token) {
-        //@formatter:off
-        return given().
-                cookie("token", token.getAccessToken()).
-                accept(APPLICATION_JSON_VALUE).
-            when().
-                get("/articles").
-            then().
-                log().all().
-                statusCode(HttpStatus.OK.value()).
-                extract().jsonPath().
-                getList(".", ArticleResponse.class);
-    }
-
 }
