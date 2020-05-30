@@ -2,12 +2,13 @@ spring:
   datasource:
     username: sa
     password:
-    driver-class-name: org.h2.Driver
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     data:
+    url: jdbc:log4jdbc:h2:mem:testdb
 
 logging:
     level:
-      root: info
+      root: debug
       test: debug
 
 

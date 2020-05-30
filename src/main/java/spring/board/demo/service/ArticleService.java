@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
 import spring.board.demo.domain.article.Article;
 import spring.board.demo.domain.article.ArticleRepository;
 import spring.board.demo.domain.article.dto.ArticleRequest;
@@ -14,14 +13,12 @@ import spring.board.demo.domain.user.User;
 import spring.board.demo.exception.ArticleNotFoundException;
 
 @Service
-@Slf4j
 @Transactional
 public class ArticleService {
     private final UserService userService;
     private final ArticleRepository articleRepository;
 
-    public ArticleService(UserService userService,
-        ArticleRepository articleRepository) {
+    public ArticleService(UserService userService, ArticleRepository articleRepository) {
         this.userService = userService;
         this.articleRepository = articleRepository;
     }
@@ -34,6 +31,7 @@ public class ArticleService {
         return ArticleResponse.of(persistArticle);
     }
 
+    @Transactional(readOnly = true)
     public List<ArticleResponse> getArticles() {
         List<Article> articles = articleRepository.findAll();
         return ArticleResponse.listOf(articles);

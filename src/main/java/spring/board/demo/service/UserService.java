@@ -3,6 +3,7 @@ package spring.board.demo.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import spring.board.demo.domain.token.BearerTokenProvider;
 import spring.board.demo.domain.token.Token;
@@ -15,6 +16,7 @@ import spring.board.demo.domain.user.dto.UserCreateResponse;
 import spring.board.demo.domain.user.dto.UserUpdateRequest;
 import spring.board.demo.exception.UserNotFoundException;
 
+@Transactional
 @Service
 public class UserService {
 
@@ -36,6 +38,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
     public TokenResponse login(LoginRequest request) {
         User user = findByUserId(request.getUserId())
             .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
@@ -54,6 +57,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public Optional<User> findByUserId(String userId) {
         return userRepository.findByUserId(userId);
     }
