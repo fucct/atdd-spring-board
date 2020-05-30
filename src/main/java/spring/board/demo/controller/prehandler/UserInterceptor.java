@@ -18,8 +18,8 @@ import spring.board.demo.domain.token.BearerTokenProvider;
 @Component
 public class UserInterceptor implements HandlerInterceptor {
 
-    private BearerTokenProvider bearerTokenProvider;
-    private TokenExtractor tokenExtractor;
+    private final BearerTokenProvider bearerTokenProvider;
+    private final TokenExtractor tokenExtractor;
 
     public UserInterceptor(BearerTokenProvider bearerTokenProvider,
         TokenExtractor tokenExtractor) {

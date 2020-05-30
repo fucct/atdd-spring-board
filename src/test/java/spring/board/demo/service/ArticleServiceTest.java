@@ -38,7 +38,7 @@ class ArticleServiceTest {
     // @DisplayName("게시글을 저장한다")
     // void createArticle() {
     //     when(articleRepository.save(any(Article.class))).thenReturn(article1);
-    //     ArticleCreateRequest request1 = new ArticleCreateRequest("안녕하세요", "디디",
+    //     ArticleRequest request1 = new ArticleRequest("안녕하세요", "디디",
     //         "우아한 테크코스 2기 디디 김태헌입니다.");
     //
     //     assertThat(articleService.save(request1)).isEqualTo(1L);

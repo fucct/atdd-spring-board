@@ -1,7 +1,6 @@
 package spring.board.demo.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,10 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import spring.board.demo.domain.article.Article;
 import spring.board.demo.domain.article.ArticleRepository;
-import spring.board.demo.domain.article.dto.ArticleCreateRequest;
-import spring.board.demo.domain.article.dto.ArticleCreateResponse;
+import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.article.dto.ArticleResponse;
-import spring.board.demo.domain.article.dto.ArticleUpdateRequest;
 import spring.board.demo.domain.user.User;
 import spring.board.demo.exception.ArticleNotFoundException;
 
@@ -22,39 +19,33 @@ import spring.board.demo.exception.ArticleNotFoundException;
 public class ArticleService {
     private final UserService userService;
     private final ArticleRepository articleRepository;
-    private final CommentService commentService;
 
     public ArticleService(UserService userService,
-        ArticleRepository articleRepository, CommentService commentService) {
+        ArticleRepository articleRepository) {
         this.userService = userService;
         this.articleRepository = articleRepository;
-        this.commentService = commentService;
     }
 
-    public ArticleCreateResponse save(User user, ArticleCreateRequest request) {
+    public ArticleResponse save(User user, ArticleRequest request) {
         Article article = request.toArticle(user);
         Article persistArticle = articleRepository.save(article);
         user.addArticle(article);
         userService.save(user);
-        return ArticleCreateResponse.of(persistArticle);
+        return ArticleResponse.of(persistArticle);
     }
 
     public List<ArticleResponse> getArticles() {
         List<Article> articles = articleRepository.findAll();
-        List<String> users = articles.stream()
-            .map(article -> article.getUserRef().getUserName())
-            .collect(Collectors.toList());
-        return ArticleResponse.listOf(articles, users);
+        return ArticleResponse.listOf(articles);
     }
 
     public ArticleResponse getArticle(Long id) {
         Article article = articleRepository.findById(id)
             .orElseThrow(() -> new ArticleNotFoundException(id));
-        String userName = article.getUserRef().getUserName();
-        return ArticleResponse.of(article, userName);
+        return ArticleResponse.of(article);
     }
 
-    public void update(User user, Long id, ArticleUpdateRequest request) {
+    public void update(Long id, User user, ArticleRequest request) {
         user.validateArticle(id);
         Article article = articleRepository.findById(id)
             .orElseThrow(() -> new ArticleNotFoundException(id));
@@ -62,7 +53,7 @@ public class ArticleService {
         articleRepository.save(article);
     }
 
-    public void delete(User user, Long id) {
+    public void delete(Long id, User user) {
         articleRepository.deleteById(id);
         user.deleteArticle(id);
         userService.save(user);

@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.board.demo.domain.ArticleCommentRef;
 import spring.board.demo.domain.BaseTime;
-import spring.board.demo.domain.article.dto.ArticleUpdateRequest;
+import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.user.User;
 
 @NoArgsConstructor
@@ -34,16 +34,6 @@ public class Article extends BaseTime {
         this.comments = comments;
     }
 
-    public static Article of(Long id, String title, User user, String content) {
-        return Article.builder()
-            .id(id)
-            .title(title)
-            .content(content)
-            .userRef(UserRef.of(user))
-            .comments(new LinkedHashSet<>())
-            .build();
-    }
-
     public static Article of(String title, User user, String content) {
         return Article.builder()
             .id(null)
@@ -54,8 +44,12 @@ public class Article extends BaseTime {
             .build();
     }
 
-    public void update(ArticleUpdateRequest request) {
+    public void update(ArticleRequest request) {
         this.title = request.getTitle();
         this.content = request.getContent();
+    }
+
+    public String getUserName() {
+        return userRef.getUserName();
     }
 }

@@ -31,14 +31,14 @@ class ArticleAcceptanceTest extends AcceptanceTest {
         return Stream.of(
             DynamicTest.dynamicTest("Create user's article", () -> {
                 createArticle(token1, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
-                UserResponse user = getUser(token1);
+                UserResponse user = getUser(user1.getId(), token1);
                 assertThat(user.getArticles()).hasSize(1);
                 assertThat(getArticles()).extracting(ArticleResponse::getUserName)
                     .containsExactly(TEST_USER_NAME);
             }),
             DynamicTest.dynamicTest("Create another user's article", () -> {
                     createArticle(token2, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
-                    UserResponse user = getUser(token2);
+                UserResponse user = getUser(user2.getId(), token2);
                     assertThat(user.getArticles()).hasSize(1);
                     assertThat(getArticles()).extracting(ArticleResponse::getUserName)
                         .containsExactly(TEST_USER_NAME, TEST_OTHER_USER_NAME);
@@ -63,7 +63,7 @@ class ArticleAcceptanceTest extends AcceptanceTest {
             }),
             DynamicTest.dynamicTest("Delete Article", () -> {
                 deleteArticle(token1, 1L);
-                assertThat(getUser(token1).getArticles()).hasSize(0);
+                assertThat(getUser(user1.getId(), token1).getArticles()).hasSize(0);
             })
         );
     }

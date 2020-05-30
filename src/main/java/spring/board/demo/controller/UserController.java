@@ -1,7 +1,6 @@
 package spring.board.demo.controller;
 
 import java.net.URI;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -35,12 +34,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> responses = userService.getAll();
-        return ResponseEntity.ok(responses);
-    }
-
     @PostMapping
     public ResponseEntity<UserCreateResponse> create(
         @Valid @RequestBody UserCreateRequest request) {
@@ -48,11 +41,18 @@ public class UserController {
         return ResponseEntity.created(URI.create("/users/" + response.getId())).body(response);
     }
 
-    @AuthorizeCheck
+    @AuthorizeCheck(check = true)
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getUser(@PathVariable("id") Long id, @LoginUser User user) {
+        user.validateId(id);
+        return ResponseEntity.ok(UserResponse.of(user));
+    }
+
+    @AuthorizeCheck(check = true)
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id,
+    public ResponseEntity<Void> update(@LoginUser User user, @PathVariable Long id,
         @Valid @RequestBody UserUpdateRequest request) {
-        userService.update(id, request);
+        userService.update(id, user, request);
         return ResponseEntity.noContent().build();
     }
 
@@ -67,11 +67,5 @@ public class UserController {
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
         TokenResponse token = userService.login(request);
         return ResponseEntity.ok(token);
-    }
-
-    @AuthorizeCheck(check = true)
-    @GetMapping("/mypage")
-    public ResponseEntity<UserResponse> getInfo(@LoginUser User user) {
-        return ResponseEntity.ok(UserResponse.of(user));
     }
 }

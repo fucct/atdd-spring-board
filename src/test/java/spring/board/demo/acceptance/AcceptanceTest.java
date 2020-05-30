@@ -15,7 +15,6 @@ import org.springframework.test.context.jdbc.Sql;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
-import spring.board.demo.domain.article.dto.ArticleCreateResponse;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.user.dto.UserCreateResponse;
@@ -63,13 +62,15 @@ public class AcceptanceTest {
                 extract().as(UserCreateResponse.class);
     }
 
-    protected UserResponse getUser(TokenResponse token) {
+    protected UserResponse getUser(Long id, TokenResponse token) {
         //@formatter:off
         return
             given().
                 cookie("token", token.getAccessToken()).
+                contentType(APPLICATION_JSON_VALUE).
+                accept(APPLICATION_JSON_VALUE).
             when().
-                get("/users/mypage").
+                get("/users/"+ id).
             then().
                 statusCode(HttpStatus.OK.value()).
                 extract().as(UserResponse.class);
@@ -113,20 +114,7 @@ public class AcceptanceTest {
             .statusCode(HttpStatus.NO_CONTENT.value());
     }
 
-    protected List<UserResponse> getAll() {
-        //@formatter:off
-        return
-            given().
-            when().
-                get("/users").
-            then().
-                log().all().
-                statusCode(HttpStatus.OK.value()).
-                extract().jsonPath().
-                getList(".", UserResponse.class);
-    }
-
-    protected void deleteUser(TokenResponse tokenResponse, Long id) {
+    protected void deleteUser(Long id, TokenResponse tokenResponse) {
         //@formatter:off
         given().
             cookie("token", tokenResponse.getAccessToken()).
@@ -137,7 +125,7 @@ public class AcceptanceTest {
             statusCode(HttpStatus.NO_CONTENT.value());
     }
 
-    protected ArticleCreateResponse createArticle(TokenResponse token, String title, String content) {
+    protected ArticleResponse createArticle(TokenResponse token, String title, String content) {
         Map<String, String> params = new HashMap<>();
         params.put("title", title);
         params.put("content", content);
@@ -154,7 +142,7 @@ public class AcceptanceTest {
             then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value()).
-                extract().as(ArticleCreateResponse.class);
+                extract().as(ArticleResponse.class);
     }
 
     protected void deleteArticle(TokenResponse token, Long articleId) {
@@ -177,9 +165,9 @@ public class AcceptanceTest {
             body(params).
             cookie("token", token.getAccessToken()).
             contentType(APPLICATION_JSON_VALUE).
-            when().
+        when().
             put("/articles/"+articleId).
-            then().
+        then().
             log().all().
             statusCode(HttpStatus.NO_CONTENT.value());
     }

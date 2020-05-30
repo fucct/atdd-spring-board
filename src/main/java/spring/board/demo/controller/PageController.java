@@ -28,17 +28,17 @@ public class PageController {
     }
 
     @GetMapping("/login")
-    public String login(Model model){
+    public String login(Model model) {
         return "service/login";
     }
 
     @GetMapping("/mypage")
-    public String mypage(Model model){
+    public String mypage(Model model) {
         return "service/mypage";
     }
 
     @GetMapping("/mypage-edit")
-    public String mypageEdit(Model model){
+    public String mypageEdit(Model model) {
         return "service/mypage-edit";
     }
 }

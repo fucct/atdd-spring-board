@@ -6,7 +6,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,10 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import spring.board.demo.controller.prehandler.LoginUser;
-import spring.board.demo.domain.article.dto.ArticleCreateRequest;
-import spring.board.demo.domain.article.dto.ArticleCreateResponse;
+import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.article.dto.ArticleResponse;
-import spring.board.demo.domain.article.dto.ArticleUpdateRequest;
 import spring.board.demo.domain.user.User;
 import spring.board.demo.service.ArticleService;
 
@@ -36,11 +33,13 @@ public class ArticleController {
 
     @AuthorizeCheck(check = true)
     @PostMapping
-    public ResponseEntity<ArticleCreateResponse> create(@LoginUser User user,
-        @Validated @RequestBody ArticleCreateRequest request) {
-        ArticleCreateResponse response = articleService.save(user, request);
+    public ResponseEntity<ArticleResponse> create(@LoginUser User user,
+        @Valid @RequestBody ArticleRequest request) {
+        ArticleResponse response = articleService.save(user, request);
 
-        return ResponseEntity.created(URI.create("/board/" + response.getId())).body(response);
+        return ResponseEntity
+            .created(URI.create("/board/" + response.getId()))
+            .body(response);
     }
 
     @GetMapping
@@ -57,16 +56,16 @@ public class ArticleController {
 
     @AuthorizeCheck(check = true)
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateArticle(@LoginUser User user, @PathVariable("id") Long id,
-        @Valid @RequestBody ArticleUpdateRequest request) {
-        articleService.update(user, id, request);
+    public ResponseEntity<Void> updateArticle(@PathVariable("id") Long id, @LoginUser User user,
+        @Valid @RequestBody ArticleRequest request) {
+        articleService.update(id, user, request);
         return ResponseEntity.noContent().build();
     }
 
     @AuthorizeCheck(check = true)
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteArticle(@LoginUser User user, @PathVariable("id") Long id) {
-        articleService.delete(user, id);
+    public ResponseEntity<Void> deleteArticle(@PathVariable("id") Long id, @LoginUser User user) {
+        articleService.delete(id, user);
         return ResponseEntity.noContent().build();
     }
 }

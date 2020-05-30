@@ -16,10 +16,11 @@ public class ArticleDetailResponse {
     private Long id;
     private String title;
     private String content;
+    private String userName;
     private List<Comment> comments;
 
     public static ArticleDetailResponse of(Article article, List<Comment> comments) {
         return new ArticleDetailResponse(article.getId(), article.getTitle(),
-            article.getContent(), comments);
+            article.getUserRef().getUserName(), article.getContent(), comments);
     }
 }

@@ -46,7 +46,9 @@ public class User extends BaseTime {
         this.comments = comments;
     }
 
-    public void update(UserUpdateRequest request) {
+    public void update(Long id, UserUpdateRequest request) {
+        validateId(id);
+        checkPassword(request.getOldPassword());
         this.name = request.getName();
         this.password = request.getNewPassword();
     }
@@ -74,5 +76,11 @@ public class User extends BaseTime {
             .findFirst()
             .orElseThrow(AccessDeniedException::new);
         articles.remove(articleRef);
+    }
+
+    public void validateId(Long id) {
+        if (!this.id.equals(id)) {
+            throw new AccessDeniedException();
+        }
     }
 }

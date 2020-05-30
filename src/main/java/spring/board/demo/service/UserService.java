@@ -1,7 +1,5 @@
 package spring.board.demo.service;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -14,9 +12,7 @@ import spring.board.demo.domain.user.UserRepository;
 import spring.board.demo.domain.user.dto.LoginRequest;
 import spring.board.demo.domain.user.dto.UserCreateRequest;
 import spring.board.demo.domain.user.dto.UserCreateResponse;
-import spring.board.demo.domain.user.dto.UserResponse;
 import spring.board.demo.domain.user.dto.UserUpdateRequest;
-import spring.board.demo.exception.AccessDeniedException;
 import spring.board.demo.exception.UserNotFoundException;
 
 @Service
@@ -48,27 +44,17 @@ public class UserService {
         return TokenResponse.of(token);
     }
 
-    public Optional<User> findByUserId(String userId) {
-        return userRepository.findByUserId(userId);
-    }
-
-    public void update(Long id, UserUpdateRequest request) {
-        User user = userRepository.findById(id)
-            .orElseThrow(() -> new UserNotFoundException(request.getName()));
-        user.checkPassword(request.getOldPassword());
-        user.update(request);
+    public void update(Long id, User user, UserUpdateRequest request) {
+        user.update(id, request);
         userRepository.save(user);
     }
 
     public void delete(User user, Long id) {
-        if (!Objects.equals(user.getId(), id)) {
-            throw new AccessDeniedException();
-        }
+        user.validateId(id);
         userRepository.deleteById(id);
     }
 
-    public List<UserResponse> getAll() {
-        List<User> users = userRepository.findAll();
-        return UserResponse.listOf(users);
+    public Optional<User> findByUserId(String userId) {
+        return userRepository.findByUserId(userId);
     }
 }
