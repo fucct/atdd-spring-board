@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import spring.board.demo.domain.token.BearerTokenProvider;
 import spring.board.demo.domain.token.Token;
+import spring.board.demo.domain.token.TokenProvider;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.user.User;
 import spring.board.demo.domain.user.UserRepository;
@@ -21,10 +21,10 @@ import spring.board.demo.exception.UserNotFoundException;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final BearerTokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
     public UserService(UserRepository userRepository,
-        BearerTokenProvider tokenProvider) {
+        TokenProvider tokenProvider) {
         this.userRepository = userRepository;
         this.tokenProvider = tokenProvider;
     }

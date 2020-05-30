@@ -1,14 +1,16 @@
-package spring.board.demo.domain.token;
+package spring.board.demo.infra;
 
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import spring.board.demo.domain.token.Token;
+import spring.board.demo.domain.token.TokenProvider;
 import spring.board.demo.exception.InvalidAccessTokenException;
 
 @Component
-public class BearerTokenProvider {
+public class BearerTokenProvider implements TokenProvider {
     private static final SignatureAlgorithm ACCESS_SIGNATURE = SignatureAlgorithm.HS512;
     private static final SignatureAlgorithm REFRESH_SIGNATURE = SignatureAlgorithm.HS256;
     private static final String TOKEN_TYPE = "bearer";
@@ -49,7 +51,7 @@ public class BearerTokenProvider {
         throw new InvalidAccessTokenException();
     }
 
-    private boolean validateAccessToken(String token) {
+    public boolean validateAccessToken(String token) {
         JwsHeader header = Jwts.parser()
             .setSigningKey(ACCESS_SECRET_KEY)
             .parseClaimsJws(token)

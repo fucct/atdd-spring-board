@@ -13,7 +13,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import spring.board.demo.controller.AuthorizeCheck;
-import spring.board.demo.domain.token.BearerTokenProvider;
+import spring.board.demo.infra.BearerTokenProvider;
 
 @Component
 public class UserInterceptor implements HandlerInterceptor {

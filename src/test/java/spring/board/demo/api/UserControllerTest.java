@@ -33,9 +33,9 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import spring.board.demo.controller.prehandler.TokenExtractor;
 import spring.board.demo.docs.UserDocumentation;
-import spring.board.demo.domain.token.BearerTokenProvider;
 import spring.board.demo.domain.user.User;
 import spring.board.demo.domain.user.dto.UserCreateResponse;
+import spring.board.demo.infra.BearerTokenProvider;
 import spring.board.demo.service.UserService;
 
 @ExtendWith(RestDocumentationExtension.class)

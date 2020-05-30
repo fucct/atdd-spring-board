@@ -38,7 +38,7 @@ class ArticleAcceptanceTest extends AcceptanceTest {
             }),
             DynamicTest.dynamicTest("Create another user's article", () -> {
                     createArticle(token2, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
-                UserResponse user = getUser(user2.getId(), token2);
+                    UserResponse user = getUser(user2.getId(), token2);
                     assertThat(user.getArticles()).hasSize(1);
                     assertThat(getArticles()).extracting(ArticleResponse::getUserName)
                         .containsExactly(TEST_USER_NAME, TEST_OTHER_USER_NAME);
