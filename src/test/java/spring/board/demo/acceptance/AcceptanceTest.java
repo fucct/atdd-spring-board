@@ -29,6 +29,8 @@ public class AcceptanceTest {
     public static final String TEST_OTHER_USER_NAME = "TAEHEON";
     public static final String TEST_USER_PASSWORD = "1234";
     public static final String TEST_OTHER_USER_PASSWORD = "qwer";
+    public static final String TEST_USER_TOKEN = "testToken";
+    public static final String TEST_OTHER_USER_TOKEN = "otherTestToken";
 
     @LocalServerPort
     int port;

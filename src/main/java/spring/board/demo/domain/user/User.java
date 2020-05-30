@@ -27,6 +27,15 @@ public class User extends BaseTime {
     private Set<ArticleRef> articles = new LinkedHashSet<>();
     private Set<UserCommentRef> comments = new LinkedHashSet<>();
 
+    public static User of(Long id, String userId, String name, String password) {
+        return User.builder()
+            .id(id)
+            .userId(userId)
+            .name(name)
+            .password(password)
+            .build();
+    }
+
     public static User of(String userId, String name, String password) {
         return User.builder()
             .userId(userId)

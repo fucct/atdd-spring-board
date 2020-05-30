@@ -25,6 +25,27 @@ endif::[]
 ==== 성공
 operation::users/create[snippets='http-request,http-response,request-fields,response-fields']
 
+[[resources-users-get]]
+=== 회원 정보 보기
+
+[[resources-users-get-successful]]
+==== 성공
+operation::users/get[snippets='http-request,http-response,response-fields']
+
+[[resources-users-update]]
+=== 회원 정보 수정
+
+[[resources-users-update-successful]]
+==== 성공
+operation::users/update[snippets='http-request,http-response,request-fields']
+
+[[resources-users-delete]]
+=== 회원 탈퇴
+
+[[resources-users-delete-successful]]
+==== 성공
+operation::users/delete[snippets='http-request,http-response']
+
 [[resources-articles]]
 == Article
 
