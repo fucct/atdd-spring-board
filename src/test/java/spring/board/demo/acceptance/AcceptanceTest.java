@@ -23,6 +23,8 @@ import spring.board.demo.domain.user.dto.UserResponse;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql("/truncate.sql")
 public class AcceptanceTest {
+    public static final Long TEST_ID = 1L;
+    public static final Long TEST_OTHER_ID = 2L;
     public static final String TEST_USER_ID = "fucct";
     public static final String TEST_OTHER_USER_ID = "dqrd123";
     public static final String TEST_USER_NAME = "DD";

@@ -45,7 +45,7 @@ class ArticleAcceptanceTest extends AcceptanceTest {
                 }
             ),
             DynamicTest.dynamicTest("Get a Article", () -> {
-                ArticleResponse article = getArticle(1L);
+                ArticleResponse article = getArticle(TEST_ID);
                 assertThat(article.getTitle()).isEqualTo(TEST_ARTICLE_TITLE);
                 assertThat(article.getContent()).isEqualTo(TEST_ARTICLE_CONTENT);
                 assertThat(article.getUserName()).isEqualTo(TEST_USER_NAME);
@@ -55,14 +55,14 @@ class ArticleAcceptanceTest extends AcceptanceTest {
                 assertThat(articles).hasSize(2);
             }),
             DynamicTest.dynamicTest("Update Article", () -> {
-                updateArticle(token1, 1L, "NEW_" + TEST_ARTICLE_TITLE,
+                updateArticle(token1, TEST_ID, "NEW_" + TEST_ARTICLE_TITLE,
                     "NEW_" + TEST_ARTICLE_CONTENT);
-                ArticleResponse articleResponse = getArticle(1L);
+                ArticleResponse articleResponse = getArticle(TEST_ID);
                 assertThat(articleResponse.getTitle()).isEqualTo("NEW_" + TEST_ARTICLE_TITLE);
                 assertThat(articleResponse.getContent()).isEqualTo("NEW_" + TEST_ARTICLE_CONTENT);
             }),
             DynamicTest.dynamicTest("Delete Article", () -> {
-                deleteArticle(token1, 1L);
+                deleteArticle(token1, TEST_ID);
                 assertThat(getUser(user1.getId(), token1).getArticles()).hasSize(0);
             })
         );

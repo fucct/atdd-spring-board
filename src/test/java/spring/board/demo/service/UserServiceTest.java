@@ -39,7 +39,7 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = User.of(1L, TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD);
+        user = User.of(TEST_ID, TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD);
         token = Token.builder()
             .accessToken(TEST_USER_TOKEN)
             .refreshToken(TEST_OTHER_USER_TOKEN)
@@ -77,7 +77,7 @@ class UserServiceTest {
     @Test
     @DisplayName("업데이트 시 정보 변경")
     void update() {
-        userService.update(1L, user, UserUpdateRequest.builder()
+        userService.update(TEST_ID, user, UserUpdateRequest.builder()
             .name(TEST_OTHER_USER_NAME)
             .oldPassword(TEST_USER_PASSWORD)
             .newPassword(TEST_OTHER_USER_PASSWORD)

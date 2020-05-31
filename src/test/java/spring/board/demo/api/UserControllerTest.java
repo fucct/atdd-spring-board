@@ -70,7 +70,7 @@ public class UserControllerTest {
             .apply(documentationConfiguration(restDocumentation))
             .build();
 
-        user = User.of(1L, TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD);
+        user = User.of(TEST_ID, TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD);
         cookie = new Cookie("token", TEST_USER_TOKEN);
     }
 
