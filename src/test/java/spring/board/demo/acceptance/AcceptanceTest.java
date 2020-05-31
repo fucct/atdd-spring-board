@@ -33,6 +33,8 @@ public class AcceptanceTest {
     public static final String TEST_OTHER_USER_PASSWORD = "qwer";
     public static final String TEST_USER_TOKEN = "testToken";
     public static final String TEST_OTHER_USER_TOKEN = "otherTestToken";
+    public static final String TEST_ARTICLE_TITLE = "안녕하세요";
+    public static final String TEST_ARTICLE_CONTENT = "안녕하십니까. 우아한 테크코스 2기 디디 김태헌입니다.";
 
     @LocalServerPort
     int port;

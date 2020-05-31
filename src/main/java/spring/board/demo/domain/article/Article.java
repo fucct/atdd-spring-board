@@ -34,6 +34,16 @@ public class Article extends BaseTime {
         this.comments = comments;
     }
 
+    public static Article of(Long id, String title, User user, String content) {
+        return Article.builder()
+            .id(id)
+            .title(title)
+            .userRef(UserRef.of(user))
+            .content(content)
+            .comments(new LinkedHashSet<>())
+            .build();
+    }
+
     public static Article of(String title, User user, String content) {
         return Article.builder()
             .id(null)

@@ -13,17 +13,17 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import spring.board.demo.controller.AuthorizeCheck;
-import spring.board.demo.infra.BearerTokenProvider;
+import spring.board.demo.domain.token.TokenProvider;
 
 @Component
 public class UserInterceptor implements HandlerInterceptor {
 
-    private final BearerTokenProvider bearerTokenProvider;
+    private final TokenProvider tokenProvider;
     private final TokenExtractor tokenExtractor;
 
-    public UserInterceptor(BearerTokenProvider bearerTokenProvider,
+    public UserInterceptor(TokenProvider tokenProvider,
         TokenExtractor tokenExtractor) {
-        this.bearerTokenProvider = bearerTokenProvider;
+        this.tokenProvider = tokenProvider;
         this.tokenExtractor = tokenExtractor;
     }
 
@@ -38,14 +38,15 @@ public class UserInterceptor implements HandlerInterceptor {
         }
         if (annotation.check()) {
             String accessToken = tokenExtractor.extract(request);
-            String userId = bearerTokenProvider.getSubject(accessToken);
+            String userId = tokenProvider.getSubject(accessToken);
             request.setAttribute("loginUserId", userId);
             return true;
         }
         return false;
     }
 
-    private <T extends Annotation> T getCheckAnnotation(HandlerMethod handler, Class<T> annotationType) {
+    private <T extends Annotation> T getCheckAnnotation(HandlerMethod handler,
+        Class<T> annotationType) {
         return Optional.ofNullable(handler.getMethodAnnotation(annotationType))
             .orElse(handler.getBeanType().getAnnotation(annotationType));
     }

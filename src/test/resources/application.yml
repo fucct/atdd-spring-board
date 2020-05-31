@@ -8,8 +8,8 @@ spring:
 
 logging:
     level:
-      root: debug
-      test: debug
+      root: info
+      test: info
 
 
 

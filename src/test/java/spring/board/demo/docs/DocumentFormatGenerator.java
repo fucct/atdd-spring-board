@@ -9,5 +9,9 @@ public interface DocumentFormatGenerator {
     static Attributes.Attribute getPasswordFormat() {
         return key("format").value("1글자 이상");
     }
+
+    static Attributes.Attribute getNotBlankFormat() {
+        return key("format").value("Not Blank");
+    }
 }
 

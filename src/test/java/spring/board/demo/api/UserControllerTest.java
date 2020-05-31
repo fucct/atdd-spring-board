@@ -33,9 +33,9 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import spring.board.demo.controller.prehandler.TokenExtractor;
 import spring.board.demo.docs.UserDocumentation;
+import spring.board.demo.domain.token.TokenProvider;
 import spring.board.demo.domain.user.User;
 import spring.board.demo.domain.user.dto.UserCreateResponse;
-import spring.board.demo.infra.BearerTokenProvider;
 import spring.board.demo.service.UserService;
 
 @ExtendWith(RestDocumentationExtension.class)
@@ -48,7 +48,7 @@ public class UserControllerTest {
     private UserService userService;
 
     @MockBean
-    private BearerTokenProvider bearerTokenProvider;
+    private TokenProvider tokenProvider;
 
     @MockBean
     private TokenExtractor tokenExtractor;
@@ -97,7 +97,7 @@ public class UserControllerTest {
     void getUser() throws Exception {
         when(userService.findByUserId(anyString())).thenReturn(Optional.of(user));
         when(tokenExtractor.extract(any())).thenReturn(TEST_USER_TOKEN);
-        when(bearerTokenProvider.getSubject(any())).thenReturn(TEST_USER_ID);
+        when(tokenProvider.getSubject(any())).thenReturn(TEST_USER_ID);
 
         mockMvc.perform(get("/users/" + user.getId())
             .cookie(cookie)
@@ -114,7 +114,7 @@ public class UserControllerTest {
     void update() throws Exception{
         when(userService.findByUserId(anyString())).thenReturn(Optional.of(user));
         when(tokenExtractor.extract(any())).thenReturn(TEST_USER_TOKEN);
-        when(bearerTokenProvider.getSubject(any())).thenReturn(TEST_USER_ID);
+        when(tokenProvider.getSubject(any())).thenReturn(TEST_USER_ID);
 
         Map<String, String> params = new HashMap<>();
         params.put("name", TEST_OTHER_USER_NAME);
@@ -134,7 +134,7 @@ public class UserControllerTest {
     void deleteUser() throws Exception {
         when(userService.findByUserId(anyString())).thenReturn(Optional.of(user));
         when(tokenExtractor.extract(any())).thenReturn(TEST_USER_TOKEN);
-        when(bearerTokenProvider.getSubject(any())).thenReturn(TEST_USER_ID);
+        when(tokenProvider.getSubject(any())).thenReturn(TEST_USER_ID);
 
         mockMvc.perform(delete("/users/" + user.getId())
             .cookie(cookie))

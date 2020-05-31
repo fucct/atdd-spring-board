@@ -52,4 +52,32 @@ operation::users/delete[snippets='http-request,http-response']
 [[resources-articles-create]]
 === 글 작성
 
-operation::articles/create[snippets='http-request,http-response,request-fields']
+==== 성공
+operation::articles/create[snippets='http-request,http-response,request-fields,response-fields']
+
+[[resources-articles-get-all]]
+=== 글 목록
+
+==== 성공
+operation::articles/get-all[snippets='http-request,http-response']
+
+[[resources-articles-get]]
+=== 글 조회
+
+==== 성공
+operation::articles/get[snippets='http-request,http-response,response-fields']
+
+[[resources-articles-update]]
+=== 글 수정
+
+==== 성공
+operation::articles/update[snippets='http-request,http-response,request-fields']
+
+[[resources-articles-delete]]
+=== 글 삭제
+
+==== 성공
+operation::articles/delete[snippets='http-request,http-response']
+
+
+

@@ -16,9 +16,6 @@ import spring.board.demo.domain.user.dto.UserResponse;
 
 class ArticleAcceptanceTest extends AcceptanceTest {
 
-    private static final String TEST_ARTICLE_TITLE = "안녕하세요";
-    private static final String TEST_ARTICLE_CONTENT = "안녕하십니까. 우아한 테크코스 2기 디디 김태헌입니다.";
-
     @DisplayName("게시글을 관리한다")
     @TestFactory
     public Stream<DynamicTest> manageArticle() {
