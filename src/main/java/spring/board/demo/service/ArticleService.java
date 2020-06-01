@@ -26,7 +26,7 @@ public class ArticleService {
     public ArticleResponse save(User user, ArticleRequest request) {
         Article article = request.toArticle(user);
         Article persistArticle = articleRepository.save(article);
-        user.addArticle(article);
+        user.addArticle(persistArticle);
         userService.save(user);
         return ArticleResponse.of(persistArticle);
     }

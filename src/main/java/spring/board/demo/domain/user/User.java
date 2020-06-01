@@ -24,8 +24,8 @@ public class User extends BaseTime {
     private String userId;
     private String name;
     private String password;
-    private Set<ArticleRef> articles = new LinkedHashSet<>();
-    private Set<UserCommentRef> comments = new LinkedHashSet<>();
+    private Set<ArticleRef> articles;
+    private Set<UserCommentRef> comments;
 
     public static User of(Long id, String userId, String name, String password) {
         return User.builder()
@@ -33,6 +33,8 @@ public class User extends BaseTime {
             .userId(userId)
             .name(name)
             .password(password)
+            .articles(new LinkedHashSet<>())
+            .comments(new LinkedHashSet<>())
             .build();
     }
 
@@ -41,6 +43,8 @@ public class User extends BaseTime {
             .userId(userId)
             .name(name)
             .password(password)
+            .articles(new LinkedHashSet<>())
+            .comments(new LinkedHashSet<>())
             .build();
     }
 
