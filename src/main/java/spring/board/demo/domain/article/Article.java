@@ -1,14 +1,10 @@
 package spring.board.demo.domain.article;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import org.springframework.data.annotation.Id;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import spring.board.demo.domain.ArticleCommentRef;
 import spring.board.demo.domain.BaseTime;
 import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.user.User;
@@ -22,16 +18,13 @@ public class Article extends BaseTime {
     private String title;
     private String content;
     private UserRef userRef;
-    private Set<ArticleCommentRef> comments = new LinkedHashSet<>();
 
     @Builder
-    public Article(Long id, String title, UserRef userRef, String content,
-        Set<ArticleCommentRef> comments) {
+    public Article(Long id, String title, UserRef userRef, String content) {
         this.id = id;
         this.title = title;
         this.userRef = userRef;
         this.content = content;
-        this.comments = comments;
     }
 
     public static Article of(Long id, String title, User user, String content) {
@@ -40,7 +33,6 @@ public class Article extends BaseTime {
             .title(title)
             .userRef(UserRef.of(user))
             .content(content)
-            .comments(new LinkedHashSet<>())
             .build();
     }
 
@@ -50,7 +42,6 @@ public class Article extends BaseTime {
             .title(title)
             .userRef(UserRef.of(user))
             .content(content)
-            .comments(new LinkedHashSet<>())
             .build();
     }
 

@@ -23,7 +23,7 @@ class ArticleTest {
     @Test
     void create() {
         assertThat(Article.of(TEST_ID, TEST_ARTICLE_TITLE, user, TEST_ARTICLE_CONTENT))
-            .isInstanceOf(User.class);
+            .isInstanceOf(Article.class);
     }
 
     @Test

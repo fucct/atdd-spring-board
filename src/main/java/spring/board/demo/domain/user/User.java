@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.board.demo.domain.BaseTime;
-import spring.board.demo.domain.UserCommentRef;
 import spring.board.demo.domain.article.Article;
 import spring.board.demo.domain.user.dto.UserUpdateRequest;
 import spring.board.demo.exception.AccessDeniedException;
@@ -25,7 +24,6 @@ public class User extends BaseTime {
     private String name;
     private String password;
     private Set<ArticleRef> articles;
-    private Set<UserCommentRef> comments;
 
     public static User of(Long id, String userId, String name, String password) {
         return User.builder()
@@ -34,7 +32,6 @@ public class User extends BaseTime {
             .name(name)
             .password(password)
             .articles(new LinkedHashSet<>())
-            .comments(new LinkedHashSet<>())
             .build();
     }
 
@@ -44,19 +41,16 @@ public class User extends BaseTime {
             .name(name)
             .password(password)
             .articles(new LinkedHashSet<>())
-            .comments(new LinkedHashSet<>())
             .build();
     }
 
     @Builder
-    public User(Long id, String userId, String name, String password, Set<ArticleRef> articles,
-        Set<UserCommentRef> comments) {
+    public User(Long id, String userId, String name, String password, Set<ArticleRef> articles) {
         this.id = id;
         this.userId = userId;
         this.name = name;
         this.password = password;
         this.articles = articles;
-        this.comments = comments;
     }
 
     public void update(Long id, UserUpdateRequest request) {

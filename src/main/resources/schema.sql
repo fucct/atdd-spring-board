@@ -37,18 +37,6 @@ create table if not exists comments
     primary key (id)
 );
 
-create table if not exists user_comment
-(
-    user    bigint not null,
-    comment bigint not null
-);
-
-create table if not exists article_comment
-(
-    article bigint not null,
-    comment bigint not null references comments (id)
-);
-
 create table if not exists user_article
 (
     user    bigint not null,
