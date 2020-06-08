@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import spring.board.demo.domain.article.dto.ArticleRequest;
-import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.users.User;
 
 class ArticleTest {
 

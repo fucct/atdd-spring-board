@@ -1,4 +1,4 @@
-package spring.board.demo.domain.user;
+package spring.board.demo.domain.users;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.board.demo.domain.BaseTime;
 import spring.board.demo.domain.article.Article;
-import spring.board.demo.domain.user.dto.UserUpdateRequest;
+import spring.board.demo.domain.users.dto.UserUpdateRequest;
 import spring.board.demo.exception.AccessDeniedException;
 import spring.board.demo.exception.NotMatchPasswordException;
 

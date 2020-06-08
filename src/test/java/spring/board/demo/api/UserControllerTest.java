@@ -35,8 +35,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import spring.board.demo.controller.prehandler.TokenExtractor;
 import spring.board.demo.docs.UserDocumentation;
 import spring.board.demo.domain.token.TokenProvider;
-import spring.board.demo.domain.user.User;
-import spring.board.demo.domain.user.dto.UserCreateResponse;
+import spring.board.demo.domain.users.User;
+import spring.board.demo.domain.users.dto.UserCreateResponse;
 import spring.board.demo.service.UserService;
 
 @ExtendWith(RestDocumentationExtension.class)

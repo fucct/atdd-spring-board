@@ -4,7 +4,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.users.User;
 
 @Getter
 @AllArgsConstructor

@@ -1,4 +1,4 @@
-package spring.board.demo.domain.user.dto;
+package spring.board.demo.domain.users.dto;
 
 import java.util.List;
 import java.util.Set;
@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import spring.board.demo.domain.user.ArticleRef;
-import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.users.ArticleRef;
+import spring.board.demo.domain.users.User;
 
 @Getter
 @NoArgsConstructor

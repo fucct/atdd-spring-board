@@ -11,8 +11,8 @@ import org.junit.jupiter.api.TestFactory;
 
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
-import spring.board.demo.domain.user.dto.UserCreateResponse;
-import spring.board.demo.domain.user.dto.UserResponse;
+import spring.board.demo.domain.users.dto.UserCreateResponse;
+import spring.board.demo.domain.users.dto.UserResponse;
 
 class ArticleAcceptanceTest extends AcceptanceTest {
 

@@ -7,9 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import spring.board.demo.domain.article.Article;
 import spring.board.demo.domain.article.ArticleRepository;
+import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.article.dto.ArticleResponse;
-import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.comment.Comment;
+import spring.board.demo.domain.comment.dto.CommentRequest;
+import spring.board.demo.domain.users.User;
 import spring.board.demo.exception.ArticleNotFoundException;
 
 @Service
@@ -18,7 +21,8 @@ public class ArticleService {
     private final UserService userService;
     private final ArticleRepository articleRepository;
 
-    public ArticleService(UserService userService, ArticleRepository articleRepository) {
+    public ArticleService(UserService userService,
+        ArticleRepository articleRepository) {
         this.userService = userService;
         this.articleRepository = articleRepository;
     }
@@ -55,5 +59,14 @@ public class ArticleService {
         articleRepository.deleteById(id);
         user.deleteArticle(id);
         userService.save(user);
+    }
+
+    public ArticleDetailResponse addComment(Long articleId, Long userId, CommentRequest request) {
+        Article article = articleRepository.findById(articleId)
+            .orElseThrow(() -> new ArticleNotFoundException(articleId));
+        Comment comment = request.toComment(userId);
+        article.addComment(comment);
+        Article persistArticle = articleRepository.save(article);
+        return ArticleDetailResponse.of(persistArticle);
     }
 }

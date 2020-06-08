@@ -1,12 +1,12 @@
 package spring.board.demo.domain.article.dto;
 
-import java.util.List;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.board.demo.domain.article.Article;
-import spring.board.demo.domain.comment.Comment;
+import spring.board.demo.domain.comment.dto.CommentResponse;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,10 +17,11 @@ public class ArticleDetailResponse {
     private String title;
     private String content;
     private String userName;
-    private List<Comment> comments;
+    private Set<CommentResponse> comments;
 
-    public static ArticleDetailResponse of(Article article, List<Comment> comments) {
+    public static ArticleDetailResponse of(Article article) {
         return new ArticleDetailResponse(article.getId(), article.getTitle(),
-            article.getUserRef().getUserName(), article.getContent(), comments);
+            article.getUserRef().getUserName(), article.getContent(),
+            CommentResponse.setOf(article.getComments()));
     }
 }

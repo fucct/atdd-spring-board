@@ -1,10 +1,7 @@
 package spring.board.demo.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
-import spring.board.demo.domain.comment.Comment;
 import spring.board.demo.domain.comment.CommentRepository;
 
 @Service
@@ -15,10 +12,4 @@ public class CommentService {
     public CommentService(CommentRepository commentRepository) {
         this.commentRepository = commentRepository;
     }
-
-    public List<Comment> findAllById(List<Long> commentIds) {
-        return commentRepository.findAllById(commentIds);
-    }
-
-
 }

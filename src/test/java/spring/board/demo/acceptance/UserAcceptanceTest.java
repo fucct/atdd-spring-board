@@ -13,8 +13,8 @@ import org.springframework.http.HttpStatus;
 
 import spring.board.demo.domain.error.dto.ErrorResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
-import spring.board.demo.domain.user.dto.UserCreateResponse;
-import spring.board.demo.domain.user.dto.UserResponse;
+import spring.board.demo.domain.users.dto.UserCreateResponse;
+import spring.board.demo.domain.users.dto.UserResponse;
 
 public class UserAcceptanceTest extends AcceptanceTest {
     @TestFactory

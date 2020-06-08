@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import spring.board.demo.controller.prehandler.LoginUser;
+import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.article.dto.ArticleResponse;
-import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.comment.dto.CommentRequest;
+import spring.board.demo.domain.users.User;
 import spring.board.demo.service.ArticleService;
 
 @RestController
@@ -31,7 +33,7 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
-    @AuthorizeCheck(check = true)
+    @AuthorizeCheck
     @PostMapping
     public ResponseEntity<ArticleResponse> create(@LoginUser User user,
         @Valid @RequestBody ArticleRequest request) {
@@ -54,7 +56,7 @@ public class ArticleController {
         return ResponseEntity.ok(response);
     }
 
-    @AuthorizeCheck(check = true)
+    @AuthorizeCheck
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateArticle(@PathVariable("id") Long id, @LoginUser User user,
         @Valid @RequestBody ArticleRequest request) {
@@ -62,10 +64,17 @@ public class ArticleController {
         return ResponseEntity.noContent().build();
     }
 
-    @AuthorizeCheck(check = true)
+    @AuthorizeCheck
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteArticle(@PathVariable("id") Long id, @LoginUser User user) {
         articleService.delete(id, user);
         return ResponseEntity.noContent().build();
+    }
+
+    @AuthorizeCheck
+    @PostMapping("/{id}/comments")
+    public ResponseEntity<ArticleDetailResponse> addComment(@PathVariable("id") Long articleId,
+        @LoginUser User user, @Valid @RequestBody CommentRequest request) {
+        return ResponseEntity.ok(articleService.addComment(articleId, user.getId(), request));
     }
 }

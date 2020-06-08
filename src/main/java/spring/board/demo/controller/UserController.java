@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import spring.board.demo.controller.prehandler.LoginUser;
 import spring.board.demo.domain.token.dto.TokenResponse;
-import spring.board.demo.domain.user.User;
-import spring.board.demo.domain.user.dto.LoginRequest;
-import spring.board.demo.domain.user.dto.UserCreateRequest;
-import spring.board.demo.domain.user.dto.UserCreateResponse;
-import spring.board.demo.domain.user.dto.UserResponse;
-import spring.board.demo.domain.user.dto.UserUpdateRequest;
+import spring.board.demo.domain.users.User;
+import spring.board.demo.domain.users.dto.LoginRequest;
+import spring.board.demo.domain.users.dto.UserCreateRequest;
+import spring.board.demo.domain.users.dto.UserCreateResponse;
+import spring.board.demo.domain.users.dto.UserResponse;
+import spring.board.demo.domain.users.dto.UserUpdateRequest;
 import spring.board.demo.service.UserService;
 
 @RestController
@@ -41,20 +41,20 @@ public class UserController {
         return ResponseEntity.created(URI.create("/users/" + response.getId())).body(response);
     }
 
-    @AuthorizeCheck(check = true)
+    @AuthorizeCheck
     @GetMapping("/mypage")
     public ResponseEntity<UserResponse> getLoginMember(@LoginUser User user) {
         return ResponseEntity.ok(UserResponse.of(user));
     }
 
-    @AuthorizeCheck(check = true)
+    @AuthorizeCheck
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUser(@PathVariable("id") Long id, @LoginUser User user) {
         user.validateId(id);
         return ResponseEntity.ok(UserResponse.of(user));
     }
 
-    @AuthorizeCheck(check = true)
+    @AuthorizeCheck
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@LoginUser User user, @PathVariable Long id,
         @Valid @RequestBody UserUpdateRequest request) {
@@ -62,7 +62,7 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @AuthorizeCheck(check = true)
+    @AuthorizeCheck
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@LoginUser User user, @PathVariable Long id) {
         userService.delete(user, id);

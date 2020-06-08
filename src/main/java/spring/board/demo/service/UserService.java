@@ -8,12 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.board.demo.domain.token.Token;
 import spring.board.demo.domain.token.TokenProvider;
 import spring.board.demo.domain.token.dto.TokenResponse;
-import spring.board.demo.domain.user.User;
-import spring.board.demo.domain.user.UserRepository;
-import spring.board.demo.domain.user.dto.LoginRequest;
-import spring.board.demo.domain.user.dto.UserCreateRequest;
-import spring.board.demo.domain.user.dto.UserCreateResponse;
-import spring.board.demo.domain.user.dto.UserUpdateRequest;
+import spring.board.demo.domain.users.User;
+import spring.board.demo.domain.users.UserRepository;
+import spring.board.demo.domain.users.dto.LoginRequest;
+import spring.board.demo.domain.users.dto.UserCreateRequest;
+import spring.board.demo.domain.users.dto.UserCreateResponse;
+import spring.board.demo.domain.users.dto.UserUpdateRequest;
 import spring.board.demo.exception.UserNotFoundException;
 
 @Transactional

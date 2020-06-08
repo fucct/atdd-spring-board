@@ -1,4 +1,4 @@
-package spring.board.demo.domain.user.dto;
+package spring.board.demo.domain.users.dto;
 
 import javax.validation.constraints.NotBlank;
 

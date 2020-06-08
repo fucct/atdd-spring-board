@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.board.demo.domain.article.Article;
-import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.users.User;
 
 @Getter
 @NoArgsConstructor

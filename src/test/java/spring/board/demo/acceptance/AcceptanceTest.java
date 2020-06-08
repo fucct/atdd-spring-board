@@ -18,8 +18,8 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
-import spring.board.demo.domain.user.dto.UserCreateResponse;
-import spring.board.demo.domain.user.dto.UserResponse;
+import spring.board.demo.domain.users.dto.UserCreateResponse;
+import spring.board.demo.domain.users.dto.UserResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql("/truncate.sql")
@@ -37,6 +37,7 @@ public class AcceptanceTest {
     public static final String TEST_OTHER_USER_TOKEN = "otherTestToken";
     public static final String TEST_ARTICLE_TITLE = "안녕하세요";
     public static final String TEST_ARTICLE_CONTENT = "안녕하십니까. 우아한 테크코스 2기 디디 김태헌입니다.";
+    public static final String TEST_COMMENT_CONTENT = "안녕하세용";
 
     @LocalServerPort
     int port;

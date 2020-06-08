@@ -1,5 +1,8 @@
 package spring.board.demo.domain.article;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.springframework.data.annotation.Id;
 
 import lombok.Builder;
@@ -7,7 +10,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.board.demo.domain.BaseTime;
 import spring.board.demo.domain.article.dto.ArticleRequest;
-import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.comment.Comment;
+import spring.board.demo.domain.users.User;
 
 @NoArgsConstructor
 @Getter
@@ -18,13 +22,15 @@ public class Article extends BaseTime {
     private String title;
     private String content;
     private UserRef userRef;
+    private Set<Comment> comments;
 
     @Builder
-    public Article(Long id, String title, UserRef userRef, String content) {
+    public Article(Long id, String title, UserRef userRef, String content, Set<Comment> comments) {
         this.id = id;
         this.title = title;
         this.userRef = userRef;
         this.content = content;
+        this.comments = comments;
     }
 
     public static Article of(Long id, String title, User user, String content) {
@@ -33,6 +39,17 @@ public class Article extends BaseTime {
             .title(title)
             .userRef(UserRef.of(user))
             .content(content)
+            .comments(new LinkedHashSet<>())
+            .build();
+    }
+
+    public static Article of(String title, User user, String content,
+        Set<Comment> comments) {
+        return Article.builder()
+            .title(title)
+            .userRef(UserRef.of(user))
+            .content(content)
+            .comments(comments)
             .build();
     }
 
@@ -42,6 +59,7 @@ public class Article extends BaseTime {
             .title(title)
             .userRef(UserRef.of(user))
             .content(content)
+            .comments(new LinkedHashSet<>())
             .build();
     }
 
@@ -52,5 +70,9 @@ public class Article extends BaseTime {
 
     public String getUserName() {
         return userRef.getUserName();
+    }
+
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
     }
 }

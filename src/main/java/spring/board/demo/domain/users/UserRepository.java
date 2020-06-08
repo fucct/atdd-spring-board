@@ -1,4 +1,4 @@
-package spring.board.demo.domain.user;
+package spring.board.demo.domain.users;
 
 import java.util.List;
 import java.util.Optional;

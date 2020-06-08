@@ -1,4 +1,4 @@
-package spring.board.demo.domain.user;
+package spring.board.demo.domain.users;
 
 import static org.assertj.core.api.Assertions.*;
 import static spring.board.demo.acceptance.AcceptanceTest.*;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import spring.board.demo.domain.user.dto.UserUpdateRequest;
+import spring.board.demo.domain.users.dto.UserUpdateRequest;
 import spring.board.demo.exception.AccessDeniedException;
 import spring.board.demo.exception.NotMatchPasswordException;
 

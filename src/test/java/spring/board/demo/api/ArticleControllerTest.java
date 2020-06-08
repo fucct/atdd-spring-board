@@ -38,7 +38,7 @@ import spring.board.demo.domain.article.Article;
 import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.token.TokenProvider;
-import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.users.User;
 import spring.board.demo.service.ArticleService;
 import spring.board.demo.service.UserService;
 

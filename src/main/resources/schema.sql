@@ -30,7 +30,8 @@ create table if not exists article
 create table if not exists comments
 (
     id           bigint auto_increment not null,
-    user         bigint                not null,
+    article      bigint                not null,
+    user_id      bigint                not null,
     content      varchar(255)          not null,
     created_date datetime,
     updated_date datetime,

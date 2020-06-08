@@ -17,7 +17,7 @@ import spring.board.demo.domain.article.Article;
 import spring.board.demo.domain.article.ArticleRepository;
 import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.article.dto.ArticleResponse;
-import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.users.User;
 
 @ExtendWith(SpringExtension.class)
 class ArticleServiceTest {

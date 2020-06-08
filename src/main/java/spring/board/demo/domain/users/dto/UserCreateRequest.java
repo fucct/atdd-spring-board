@@ -1,11 +1,11 @@
-package spring.board.demo.domain.user.dto;
+package spring.board.demo.domain.users.dto;
 
 import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.users.User;
 
 @NoArgsConstructor
 @AllArgsConstructor

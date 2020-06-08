@@ -33,16 +33,13 @@ public class UserInterceptor implements HandlerInterceptor {
 
         AuthorizeCheck annotation = getCheckAnnotation((HandlerMethod)handler,
             AuthorizeCheck.class);
-        if (Objects.isNull(annotation) || !annotation.check()) {
+        if (Objects.isNull(annotation)) {
             return true;
         }
-        if (annotation.check()) {
-            String accessToken = tokenExtractor.extract(request);
-            String userId = tokenProvider.getSubject(accessToken);
-            request.setAttribute("loginUserId", userId);
-            return true;
-        }
-        return false;
+        String accessToken = tokenExtractor.extract(request);
+        String userId = tokenProvider.getSubject(accessToken);
+        request.setAttribute("loginUserId", userId);
+        return true;
     }
 
     private <T extends Annotation> T getCheckAnnotation(HandlerMethod handler,

@@ -12,7 +12,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import spring.board.demo.domain.user.User;
+import spring.board.demo.domain.users.User;
 import spring.board.demo.exception.AccessDeniedException;
 import spring.board.demo.exception.UserNotFoundException;
 import spring.board.demo.service.UserService;
