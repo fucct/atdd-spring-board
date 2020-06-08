@@ -22,10 +22,11 @@ public class Article extends BaseTime {
     private String title;
     private String content;
     private UserRef userRef;
-    private Set<Comment> comments;
+    private Set<CommentRef> comments;
 
     @Builder
-    public Article(Long id, String title, UserRef userRef, String content, Set<Comment> comments) {
+    public Article(Long id, String title, UserRef userRef, String content,
+        Set<CommentRef> comments) {
         this.id = id;
         this.title = title;
         this.userRef = userRef;
@@ -44,7 +45,7 @@ public class Article extends BaseTime {
     }
 
     public static Article of(String title, User user, String content,
-        Set<Comment> comments) {
+        Set<CommentRef> comments) {
         return Article.builder()
             .title(title)
             .userRef(UserRef.of(user))
@@ -73,6 +74,6 @@ public class Article extends BaseTime {
     }
 
     public void addComment(Comment comment) {
-        this.comments.add(comment);
+        this.comments.add(CommentRef.of(comment));
     }
 }

@@ -20,8 +20,6 @@ public class ArticleDetailResponse {
     private Set<CommentResponse> comments;
 
     public static ArticleDetailResponse of(Article article) {
-        return new ArticleDetailResponse(article.getId(), article.getTitle(),
-            article.getUserRef().getUserName(), article.getContent(),
-            CommentResponse.setOf(article.getComments()));
+        return null;
     }
 }

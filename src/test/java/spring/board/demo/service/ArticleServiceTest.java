@@ -17,6 +17,7 @@ import spring.board.demo.domain.article.Article;
 import spring.board.demo.domain.article.ArticleRepository;
 import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.article.dto.ArticleResponse;
+import spring.board.demo.domain.comment.CommentRepository;
 import spring.board.demo.domain.users.User;
 
 @ExtendWith(SpringExtension.class)
@@ -28,6 +29,9 @@ class ArticleServiceTest {
     @MockBean
     private ArticleRepository articleRepository;
 
+    @MockBean
+    private CommentRepository commentRepository;
+
     private ArticleService articleService;
 
     private User user;
@@ -35,7 +39,7 @@ class ArticleServiceTest {
 
     @BeforeEach
     void setUp() {
-        articleService = new ArticleService(userService, articleRepository);
+        articleService = new ArticleService(userService, articleRepository, commentRepository);
         user = User.of(TEST_ID, TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD);
         article = Article.of(TEST_ID, TEST_ARTICLE_TITLE, user, TEST_ARTICLE_CONTENT);
     }

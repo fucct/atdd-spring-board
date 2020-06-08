@@ -11,9 +11,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.springframework.http.HttpStatus;
 
-import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleResponse;
-import spring.board.demo.domain.comment.Comment;
 import spring.board.demo.domain.comment.dto.CommentResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.users.dto.UserCreateResponse;
@@ -32,32 +30,17 @@ public class CommentAcceptanceTest extends AcceptanceTest {
 
         return Stream.of(
             DynamicTest.dynamicTest("Create comment", () -> {
-                ArticleDetailResponse response = addComment(token2, article.getId(),
+                CommentResponse response = addComment(token2, article.getId(),
                     TEST_COMMENT_CONTENT);
-                assertThat(response.getComments()).hasSize(1);
-                assertThat(response.getComments())
-                    .usingRecursiveFieldByFieldElementComparator()
-                    .containsExactlyInAnyOrder(CommentResponse.of(Comment.builder()
-                        .id(1L)
-                        .userId(user2.getId())
-                        .content(TEST_COMMENT_CONTENT)
-                        .build()));
-            }),
-            DynamicTest.dynamicTest("Get Article with Comments", () -> {
-                ArticleDetailResponse response = getArticle(article.getId());
-                assertThat(response.getComments()).hasSize(1);
-                assertThat(response.getComments())
-                    .usingRecursiveFieldByFieldElementComparator()
-                    .containsExactlyInAnyOrder(CommentResponse.of(Comment.builder()
-                        .id(1L)
-                        .userId(user2.getId())
-                        .content(TEST_COMMENT_CONTENT)
-                        .build()));
+                assertThat(response)
+                    .hasFieldOrPropertyWithValue("id", 1L)
+                    .hasFieldOrPropertyWithValue("userId", 3L)
+                    .hasFieldOrPropertyWithValue("content", TEST_COMMENT_CONTENT);
             })
         );
     }
 
-    private ArticleDetailResponse addComment(TokenResponse token, Long articleId, String content) {
+    private CommentResponse addComment(TokenResponse token, Long articleId, String content) {
         Map<String, String> params = new HashMap<>();
         params.put("content", content);
 
@@ -72,7 +55,7 @@ public class CommentAcceptanceTest extends AcceptanceTest {
             .then()
                 .log().all()
                 .statusCode(HttpStatus.OK.value())
-                .extract().as(ArticleDetailResponse.class);
+                .extract().as(CommentResponse.class);
     }
 
 }

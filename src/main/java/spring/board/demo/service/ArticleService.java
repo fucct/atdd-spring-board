@@ -11,7 +11,9 @@ import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.comment.Comment;
+import spring.board.demo.domain.comment.CommentRepository;
 import spring.board.demo.domain.comment.dto.CommentRequest;
+import spring.board.demo.domain.comment.dto.CommentResponse;
 import spring.board.demo.domain.users.User;
 import spring.board.demo.exception.ArticleNotFoundException;
 
@@ -20,11 +22,14 @@ import spring.board.demo.exception.ArticleNotFoundException;
 public class ArticleService {
     private final UserService userService;
     private final ArticleRepository articleRepository;
+    private final CommentRepository commentRepository;
 
     public ArticleService(UserService userService,
-        ArticleRepository articleRepository) {
+        ArticleRepository articleRepository,
+        CommentRepository commentRepository) {
         this.userService = userService;
         this.articleRepository = articleRepository;
+        this.commentRepository = commentRepository;
     }
 
     public ArticleResponse save(User user, ArticleRequest request) {
@@ -61,12 +66,13 @@ public class ArticleService {
         userService.save(user);
     }
 
-    public ArticleDetailResponse addComment(Long articleId, Long userId, CommentRequest request) {
+    public CommentResponse addComment(Long articleId, Long userId, CommentRequest request) {
         Article article = articleRepository.findById(articleId)
             .orElseThrow(() -> new ArticleNotFoundException(articleId));
         Comment comment = request.toComment(userId);
-        article.addComment(comment);
-        Article persistArticle = articleRepository.save(article);
-        return ArticleDetailResponse.of(persistArticle);
+        Comment persistComment = commentRepository.save(comment);
+        article.addComment(persistComment);
+        articleRepository.save(article);
+        return CommentResponse.of(persistComment);
     }
 }

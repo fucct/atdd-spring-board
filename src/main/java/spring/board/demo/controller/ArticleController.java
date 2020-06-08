@@ -20,6 +20,7 @@ import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.comment.dto.CommentRequest;
+import spring.board.demo.domain.comment.dto.CommentResponse;
 import spring.board.demo.domain.users.User;
 import spring.board.demo.service.ArticleService;
 
@@ -73,7 +74,7 @@ public class ArticleController {
 
     @AuthorizeCheck
     @PostMapping("/{id}/comments")
-    public ResponseEntity<ArticleDetailResponse> addComment(@PathVariable("id") Long articleId,
+    public ResponseEntity<CommentResponse> addComment(@PathVariable("id") Long articleId,
         @LoginUser User user, @Valid @RequestBody CommentRequest request) {
         return ResponseEntity.ok(articleService.addComment(articleId, user.getId(), request));
     }
