@@ -35,6 +35,7 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import spring.board.demo.docs.ArticleDocumentation;
 import spring.board.demo.domain.article.Article;
+import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.token.TokenProvider;
@@ -119,7 +120,7 @@ public class ArticleControllerTest {
     @Test
     @DisplayName("특정 게시글 가져오기")
     void getArticle() throws Exception {
-        given(articleService.getArticle(anyLong())).willReturn(ArticleResponse.of(article));
+        given(articleService.getArticle(anyLong())).willReturn(ArticleDetailResponse.of(article));
 
         mockMvc.perform(get("/articles/" + TEST_ID)
             .accept(APPLICATION_JSON_VALUE))

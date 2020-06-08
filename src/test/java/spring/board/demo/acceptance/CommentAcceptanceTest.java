@@ -1,6 +1,7 @@
 package spring.board.demo.acceptance;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.springframework.http.MediaType.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +10,6 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 
 import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleResponse;
@@ -42,6 +42,17 @@ public class CommentAcceptanceTest extends AcceptanceTest {
                         .userId(user2.getId())
                         .content(TEST_COMMENT_CONTENT)
                         .build()));
+            }),
+            DynamicTest.dynamicTest("Get Article with Comments", () -> {
+                ArticleDetailResponse response = getArticle(article.getId());
+                assertThat(response.getComments()).hasSize(1);
+                assertThat(response.getComments())
+                    .usingRecursiveFieldByFieldElementComparator()
+                    .containsExactlyInAnyOrder(CommentResponse.of(Comment.builder()
+                        .id(1L)
+                        .userId(user2.getId())
+                        .content(TEST_COMMENT_CONTENT)
+                        .build()));
             })
         );
     }
@@ -53,8 +64,8 @@ public class CommentAcceptanceTest extends AcceptanceTest {
         //@formatter:off
         return given()
                 .cookie("token", token.getAccessToken())
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
+                .accept(APPLICATION_JSON_VALUE)
                 .body(params)
             .when()
                 .post("/articles/{id}/comments", articleId)

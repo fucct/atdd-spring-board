@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.users.dto.UserCreateResponse;
@@ -42,7 +43,7 @@ class ArticleAcceptanceTest extends AcceptanceTest {
                 }
             ),
             DynamicTest.dynamicTest("Get a Article", () -> {
-                ArticleResponse article = getArticle(TEST_ID);
+                ArticleDetailResponse article = getArticle(TEST_ID);
                 assertThat(article.getTitle()).isEqualTo(TEST_ARTICLE_TITLE);
                 assertThat(article.getContent()).isEqualTo(TEST_ARTICLE_CONTENT);
                 assertThat(article.getUserName()).isEqualTo(TEST_USER_NAME);
@@ -54,7 +55,7 @@ class ArticleAcceptanceTest extends AcceptanceTest {
             DynamicTest.dynamicTest("Update Article", () -> {
                 updateArticle(token1, TEST_ID, "NEW_" + TEST_ARTICLE_TITLE,
                     "NEW_" + TEST_ARTICLE_CONTENT);
-                ArticleResponse articleResponse = getArticle(TEST_ID);
+                ArticleDetailResponse articleResponse = getArticle(TEST_ID);
                 assertThat(articleResponse.getTitle()).isEqualTo("NEW_" + TEST_ARTICLE_TITLE);
                 assertThat(articleResponse.getContent()).isEqualTo("NEW_" + TEST_ARTICLE_CONTENT);
             }),

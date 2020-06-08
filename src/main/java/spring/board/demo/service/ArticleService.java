@@ -41,10 +41,10 @@ public class ArticleService {
         return ArticleResponse.listOf(articles);
     }
 
-    public ArticleResponse getArticle(Long id) {
+    public ArticleDetailResponse getArticle(Long id) {
         Article article = articleRepository.findById(id)
             .orElseThrow(() -> new ArticleNotFoundException(id));
-        return ArticleResponse.of(article);
+        return ArticleDetailResponse.of(article);
     }
 
     public void update(Long id, User user, ArticleRequest request) {

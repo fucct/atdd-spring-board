@@ -16,6 +16,7 @@ import org.springframework.test.context.jdbc.Sql;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
+import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.users.dto.UserCreateResponse;
@@ -181,16 +182,16 @@ public class AcceptanceTest {
             statusCode(HttpStatus.NO_CONTENT.value());
     }
 
-    protected ArticleResponse getArticle(Long id) {
+    protected ArticleDetailResponse getArticle(Long id) {
         //@formatter:off
         return given().
             accept(APPLICATION_JSON_VALUE).
             when().
-            get("/articles/"+id).
+            get("/articles/{id}",id).
             then().
             log().all().
             statusCode(HttpStatus.OK.value()).
-            extract().as(ArticleResponse.class);
+            extract().as(ArticleDetailResponse.class);
     }
 
     protected List<ArticleResponse> getAllArticles() {
