@@ -10,14 +10,12 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.jdbc.Sql;
 
 import spring.board.demo.domain.error.dto.ErrorResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.user.dto.UserCreateResponse;
 import spring.board.demo.domain.user.dto.UserResponse;
 
-@Sql("/truncate.sql")
 public class UserAcceptanceTest extends AcceptanceTest {
     @TestFactory
     Stream<DynamicTest> manageUser() {

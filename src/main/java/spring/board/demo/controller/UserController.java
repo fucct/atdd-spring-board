@@ -42,6 +42,12 @@ public class UserController {
     }
 
     @AuthorizeCheck(check = true)
+    @GetMapping("/mypage")
+    public ResponseEntity<UserResponse> getLoginMember(@LoginUser User user) {
+        return ResponseEntity.ok(UserResponse.of(user));
+    }
+
+    @AuthorizeCheck(check = true)
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUser(@PathVariable("id") Long id, @LoginUser User user) {
         user.validateId(id);

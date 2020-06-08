@@ -1,12 +1,4 @@
 spring:
-  profiles:
-    active: local
-
-# local 환경
----
-spring:
-  profiles: local
-
   datasource:
     url: jdbc:h2:tcp://localhost/~/spring-board
     username: sa
@@ -14,27 +6,10 @@ spring:
     driver-class-name: org.h2.Driver
     data: classpath:data.sql
     schema: classpath:schema.sql
----
-
-# test 환경
-spring:
-  profiles: test
-
-  datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        #        show_sql: true
-        format_sql: true
+  output:
+    ansi:
+      enabled: always
 
 logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type: trace
+  level: org.springframework.jdbc.core.JdbcTemplate=debug
+

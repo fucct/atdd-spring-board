@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import spring.board.demo.controller.prehandler.LoginUserMethodArgumentResolver;
@@ -30,5 +31,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List resolvers) {
         resolvers.add(loginUserMethodArgumentResolver);
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("service/index");
+        registry.addViewController("/board").setViewName("service/board");
+        registry.addViewController("/write").setViewName("service/write");
+        registry.addViewController("/join").setViewName("service/join");
+        registry.addViewController("/login").setViewName("service/login");
+        registry.addViewController("/mypage").setViewName("service/mypage");
+        registry.addViewController("/mypage-edit").setViewName("service/mypage-edit");
+
     }
 }

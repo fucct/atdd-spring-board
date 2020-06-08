@@ -61,9 +61,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
-        log.debug("======================");
-        log.debug("Business Excetpion", e);
-        log.debug("======================");
+        log.info("======================");
+        log.info("Business Excetpion", e);
+        log.info("======================");
 
         return ResponseEntity.badRequest()
             .body(new ErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
@@ -71,9 +71,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(Exception e) {
-        log.debug("======================");
-        log.debug("UnExpected Excetpion", e);
-        log.debug("======================");
+        log.info("======================");
+        log.info("UnExpected Excetpion", e);
+        log.info("======================");
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(new ErrorResponse(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
