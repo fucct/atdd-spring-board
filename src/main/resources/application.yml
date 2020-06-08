@@ -11,5 +11,6 @@ spring:
       enabled: always
 
 logging:
-  level: org.springframework.jdbc.core.JdbcTemplate=debug
+  level:
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
 

@@ -1,3 +1,12 @@
 spring:
   datasource:
-    data:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:h2:mem:testdb
+
+logging:
+  level:
+    root: info
+    test: info
+
+
+
