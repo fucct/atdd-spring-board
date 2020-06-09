@@ -26,13 +26,7 @@ public class ArticleDocumentation {
                 headerWithName("Location").description("The location of article that just created")
             ),
             responseFields(
-                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The no of article"),
-                fieldWithPath("title").type(JsonFieldType.STRING)
-                    .description("The title of article"),
-                fieldWithPath("content").type(JsonFieldType.STRING)
-                    .description("The content of article"),
-                fieldWithPath("userName").type(JsonFieldType.STRING)
-                    .description("The userName of article")
+                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The no of article")
             )
         );
     }
@@ -49,13 +43,17 @@ public class ArticleDocumentation {
             getDocumentRequest(),
             getDocumentResponse(),
             responseFields(
-                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The no of article"),
+                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The id of article"),
+                fieldWithPath("accountId").type(JsonFieldType.NUMBER)
+                    .description("The id of author"),
                 fieldWithPath("title").type(JsonFieldType.STRING)
                     .description("The title of article"),
                 fieldWithPath("content").type(JsonFieldType.STRING)
                     .description("The content of article"),
-                fieldWithPath("userName").type(JsonFieldType.STRING)
-                    .description("The userName of article")
+                fieldWithPath("accountName").type(JsonFieldType.STRING)
+                    .description("The userName of article"),
+                fieldWithPath("comments").type(JsonFieldType.ARRAY)
+                    .description("The comments of article").optional()
             )
         );
     }

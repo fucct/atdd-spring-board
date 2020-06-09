@@ -34,7 +34,9 @@ import spring.board.demo.docs.ArticleDocumentation;
 import spring.board.demo.domain.accounts.Account;
 import spring.board.demo.domain.articles.Article;
 import spring.board.demo.domain.articles.dto.ArticleCreateResponse;
+import spring.board.demo.domain.articles.dto.ArticleDetailResponse;
 import spring.board.demo.domain.articles.dto.ArticleRequest;
+import spring.board.demo.domain.articles.dto.ArticleResponse;
 import spring.board.demo.domain.token.TokenProvider;
 import spring.board.demo.service.AccountService;
 import spring.board.demo.service.ArticleService;
@@ -63,6 +65,7 @@ public class ArticleControllerTest {
 
     private Account account;
     private Article article;
+    private ArticleDetailResponse articleResponse;
     private Cookie cookie;
 
     @BeforeEach
@@ -76,6 +79,8 @@ public class ArticleControllerTest {
         account = Account.of(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD);
         cookie = new Cookie("token", TEST_ACCOUNT_TOKEN);
         article = Article.of(TEST_ID, account, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
+        articleResponse = ArticleDetailResponse.of(ArticleResponse.of(article, account.getName()),
+            null);
     }
 
     @Test
@@ -93,7 +98,7 @@ public class ArticleControllerTest {
             .accept(APPLICATION_JSON_VALUE)
             .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isCreated())
-            .andExpect(jsonPath("id", Matchers.is(article.getId())))
+            .andExpect(jsonPath("id", Matchers.is(article.getId().intValue())))
             .andDo(print())
             .andDo(ArticleDocumentation.createArticle());
     }
@@ -113,14 +118,15 @@ public class ArticleControllerTest {
     @Test
     @DisplayName("특정 게시글 가져오기")
     void getArticle() throws Exception {
-        given(articleService.getArticle(anyLong())).willReturn(null);
+        given(articleService.getArticle(anyLong())).willReturn(articleResponse);
 
         mockMvc.perform(get("/articles/" + TEST_ID)
             .accept(APPLICATION_JSON_VALUE))
             .andExpect(status().isOk())
-            // .andExpect(jsonPath("userName", Matchers.is(article.getUserName())))
-            // .andExpect(jsonPath("title", Matchers.is(article.getTitle())))
-            // .andExpect(jsonPath("content", Matchers.is(article.getContent())))
+            .andExpect(jsonPath("accountName").exists())
+            .andExpect(jsonPath("title").exists())
+            .andExpect(jsonPath("content").exists())
+            .andExpect(jsonPath("accountId").exists())
             .andDo(print())
             .andDo(ArticleDocumentation.getArticle());
     }
