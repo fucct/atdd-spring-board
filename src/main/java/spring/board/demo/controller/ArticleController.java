@@ -15,14 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import spring.board.demo.controller.prehandler.AuthorizeCheck;
 import spring.board.demo.controller.prehandler.LoginUser;
-import spring.board.demo.domain.article.dto.ArticleDetailResponse;
-import spring.board.demo.domain.article.dto.ArticleRequest;
-import spring.board.demo.domain.article.dto.ArticleResponse;
-import spring.board.demo.domain.comment.dto.CommentDetailResponse;
-import spring.board.demo.domain.comment.dto.CommentRequest;
-import spring.board.demo.domain.comment.dto.CommentResponse;
-import spring.board.demo.domain.users.User;
+import spring.board.demo.domain.accounts.Account;
+import spring.board.demo.domain.articles.dto.ArticleCreateResponse;
+import spring.board.demo.domain.articles.dto.ArticleDetailResponse;
+import spring.board.demo.domain.articles.dto.ArticlePreviewResponse;
+import spring.board.demo.domain.articles.dto.ArticleRequest;
 import spring.board.demo.service.ArticleService;
 
 @RestController
@@ -37,9 +36,9 @@ public class ArticleController {
 
     @AuthorizeCheck
     @PostMapping
-    public ResponseEntity<ArticleResponse> create(@LoginUser User user,
+    public ResponseEntity<ArticleCreateResponse> create(@LoginUser Account account,
         @Valid @RequestBody ArticleRequest request) {
-        ArticleResponse response = articleService.save(user, request);
+        ArticleCreateResponse response = articleService.save(account, request);
 
         return ResponseEntity
             .created(URI.create("/board/" + response.getId()))
@@ -47,8 +46,8 @@ public class ArticleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ArticleResponse>> getArticles() {
-        List<ArticleResponse> responses = articleService.getArticles();
+    public ResponseEntity<List<ArticlePreviewResponse>> getArticles() {
+        List<ArticlePreviewResponse> responses = articleService.getArticles();
         return ResponseEntity.ok(responses);
     }
 
@@ -60,30 +59,18 @@ public class ArticleController {
 
     @AuthorizeCheck
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateArticle(@PathVariable("id") Long id, @LoginUser User user,
+    public ResponseEntity<Void> updateArticle(@PathVariable("id") Long id,
+        @LoginUser Account account,
         @Valid @RequestBody ArticleRequest request) {
-        articleService.update(id, user, request);
+        articleService.update(id, account, request);
         return ResponseEntity.noContent().build();
     }
 
     @AuthorizeCheck
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteArticle(@PathVariable("id") Long id, @LoginUser User user) {
-        articleService.delete(id, user);
+    public ResponseEntity<Void> deleteArticle(@PathVariable("id") Long id,
+        @LoginUser Account account) {
+        articleService.delete(id, account);
         return ResponseEntity.noContent().build();
-    }
-
-    @AuthorizeCheck
-    @PostMapping("/{id}/comments")
-    public ResponseEntity<CommentResponse> addComment(@PathVariable("id") Long articleId,
-        @LoginUser User user, @Valid @RequestBody CommentRequest request) {
-        return ResponseEntity.ok(articleService.addComment(articleId, user.getId(), request));
-    }
-
-    @GetMapping("/{articleId}/comments/{commentId}")
-    public ResponseEntity<CommentDetailResponse> getComment(
-        @PathVariable("articleId") Long articleId, @PathVariable("commentId") Long commentId) {
-        CommentDetailResponse response = articleService.getComment(commentId);
-        return ResponseEntity.ok(response);
     }
 }

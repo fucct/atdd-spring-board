@@ -12,7 +12,6 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import spring.board.demo.controller.AuthorizeCheck;
 import spring.board.demo.domain.token.TokenProvider;
 
 @Component
@@ -37,8 +36,8 @@ public class UserInterceptor implements HandlerInterceptor {
             return true;
         }
         String accessToken = tokenExtractor.extract(request);
-        String userId = tokenProvider.getSubject(accessToken);
-        request.setAttribute("loginUserId", userId);
+        String email = tokenProvider.getSubject(accessToken);
+        request.setAttribute("loginEmail", email);
         return true;
     }
 

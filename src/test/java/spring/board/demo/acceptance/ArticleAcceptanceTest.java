@@ -9,47 +9,48 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import spring.board.demo.domain.article.dto.ArticleDetailResponse;
-import spring.board.demo.domain.article.dto.ArticleResponse;
+import spring.board.demo.domain.accounts.dto.AccountCreateResponse;
+import spring.board.demo.domain.accounts.dto.AccountDetailResponse;
+import spring.board.demo.domain.articles.dto.ArticleDetailResponse;
+import spring.board.demo.domain.articles.dto.ArticlePreviewResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
-import spring.board.demo.domain.users.dto.UserCreateResponse;
-import spring.board.demo.domain.users.dto.UserDetailResponse;
 
 class ArticleAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("게시글을 관리한다")
     @TestFactory
     public Stream<DynamicTest> manageArticle() {
-        UserCreateResponse user1 = createUser(TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD);
-        UserCreateResponse user2 = createUser(TEST_OTHER_USER_ID, TEST_OTHER_USER_NAME,
-            TEST_OTHER_USER_PASSWORD);
-        TokenResponse token1 = login(TEST_USER_ID, TEST_USER_PASSWORD);
-        TokenResponse token2 = login(TEST_OTHER_USER_ID, TEST_OTHER_USER_PASSWORD);
+        AccountCreateResponse user1 = createUser(TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME,
+            TEST_ACCOUNT_PASSWORD);
+        AccountCreateResponse user2 = createUser(TEST_OTHER_ACCOUNT_ID, TEST_OTHER_ACCOUNT_NAME,
+            TEST_OTHER_ACCOUNT_PASSWORD);
+        TokenResponse token1 = login(TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_PASSWORD);
+        TokenResponse token2 = login(TEST_OTHER_ACCOUNT_ID, TEST_OTHER_ACCOUNT_PASSWORD);
 
         return Stream.of(
             DynamicTest.dynamicTest("Create user's article", () -> {
                 createArticle(token1, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
-                UserDetailResponse user = getUser(user1.getId(), token1);
+                AccountDetailResponse user = getAccount(user1.getId());
                 assertThat(user.getArticles()).hasSize(1);
-                assertThat(getArticles()).extracting(ArticleResponse::getUserName)
-                    .containsExactly(TEST_USER_NAME);
+                // assertThat(getArticles()).extracting(ArticlePreviewResponse::getNickname)
+                //     .containsExactly(TEST_USER_NAME);
             }),
             DynamicTest.dynamicTest("Create another user's article", () -> {
                     createArticle(token2, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
-                UserDetailResponse user = getUser(user2.getId(), token2);
+                    AccountDetailResponse user = getAccount(user2.getId());
                     assertThat(user.getArticles()).hasSize(1);
-                    assertThat(getArticles()).extracting(ArticleResponse::getUserName)
-                        .containsExactly(TEST_USER_NAME, TEST_OTHER_USER_NAME);
+                    // assertThat(getArticles()).extracting(ArticlePreviewResponse::getNickname)
+                    //     .containsExactly(TEST_USER_NAME, TEST_OTHER_USER_NAME);
                 }
             ),
             DynamicTest.dynamicTest("Get a Article", () -> {
                 ArticleDetailResponse article = getArticle(TEST_ID);
                 assertThat(article.getTitle()).isEqualTo(TEST_ARTICLE_TITLE);
                 assertThat(article.getContent()).isEqualTo(TEST_ARTICLE_CONTENT);
-                assertThat(article.getUserName()).isEqualTo(TEST_USER_NAME);
+                // assertThat(article.getUserName()).isEqualTo(TEST_USER_NAME);
             }),
             DynamicTest.dynamicTest("Get All Articles", () -> {
-                List<ArticleResponse> articles = getAllArticles();
+                List<ArticlePreviewResponse> articles = getAllArticles();
                 assertThat(articles).hasSize(2);
             }),
             DynamicTest.dynamicTest("Update Article", () -> {
@@ -61,7 +62,7 @@ class ArticleAcceptanceTest extends AcceptanceTest {
             }),
             DynamicTest.dynamicTest("Delete Article", () -> {
                 deleteArticle(token1, TEST_ID);
-                assertThat(getUser(user1.getId(), token1).getArticles()).hasSize(0);
+                assertThat(getAccount(user1.getId()).getArticles()).hasSize(0);
             })
         );
     }

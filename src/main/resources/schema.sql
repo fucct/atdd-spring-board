@@ -1,11 +1,11 @@
-drop table if exists user cascade;
+drop table if exists account cascade;
 drop table if exists article cascade;
 drop table if exists comments cascade;
 
-create table if not exists user
+create table if not exists account
 (
     id           bigint auto_increment not null,
-    user_id      varchar(20)           not null unique,
+    email        varchar(50)           not null unique,
     name         varchar(20)           not null unique,
     password     varchar(20)           not null,
     created_date datetime,
@@ -16,8 +16,9 @@ create table if not exists user
 create table if not exists article
 (
     id           bigint auto_increment not null,
-    title        varchar(255)          not null,
-    content      varchar(1000)         not null,
+    account_id   bigint                not null,
+    title        varchar(256)          not null,
+    content      varchar(2048)         not null,
     created_date datetime,
     updated_date datetime,
     primary key (id)
@@ -26,27 +27,14 @@ create table if not exists article
 create table if not exists comments
 (
     id           bigint auto_increment not null,
-    user_id      bigint                not null,
-    content      varchar(255)          not null,
+    account_id   bigint                not null,
+    article_id   bigint                not null,
+    content      varchar(256)          not null,
     created_date datetime,
     updated_date datetime,
     primary key (id)
 );
 
-create table if not exists user_article
-(
-    user    bigint not null,
-    article bigint not null,
-    primary key (user, article)
-);
-
-create table if not exists article_user
-(
-    article   bigint       not null,
-    user      bigint       not null,
-    user_name varchar(255) not null,
-    primary key (user, article)
-);
 
 create table if not exists article_comment
 (
@@ -54,8 +42,3 @@ create table if not exists article_comment
     comment bigint not null,
     primary key (article, comment)
 )
-
-
-
-
-

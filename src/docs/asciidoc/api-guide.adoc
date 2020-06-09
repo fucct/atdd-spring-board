@@ -15,36 +15,40 @@ endif::[]
 [[resources]]
 = Resources
 
-[[resources-users]]
+[[resources-accounts]]
 == User
 
-[[resources-users-create]]
+[[resources-accounts-create]]
 === 회원 가입
 
-[[resources-users-create-successful]]
+[[resources-accounts-create-successful]]
 ==== 성공
-operation::users/create[snippets='http-request,http-response,request-fields,response-fields']
 
-[[resources-users-get]]
+operation::accounts/create[snippets='http-request,http-response,request-fields,response-fields']
+
+[[resources-accounts-get]]
 === 회원 정보 보기
 
-[[resources-users-get-successful]]
+[[resources-accounts-get-successful]]
 ==== 성공
-operation::users/get[snippets='http-request,http-response,response-fields']
 
-[[resources-users-update]]
+operation::accounts/get[snippets='http-request,http-response,response-fields']
+
+[[resources-accounts-update]]
 === 회원 정보 수정
 
-[[resources-users-update-successful]]
+[[resources-accounts-update-successful]]
 ==== 성공
-operation::users/update[snippets='http-request,http-response,request-fields']
 
-[[resources-users-delete]]
+operation::accounts/update[snippets='http-request,http-response,request-fields']
+
+[[resources-accounts-delete]]
 === 회원 탈퇴
 
-[[resources-users-delete-successful]]
+[[resources-accounts-delete-successful]]
 ==== 성공
-operation::users/delete[snippets='http-request,http-response']
+
+operation::accounts/delete[snippets='http-request,http-response']
 
 [[resources-articles]]
 == Article

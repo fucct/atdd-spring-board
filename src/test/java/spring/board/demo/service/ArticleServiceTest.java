@@ -13,18 +13,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import spring.board.demo.domain.article.Article;
-import spring.board.demo.domain.article.ArticleRepository;
-import spring.board.demo.domain.article.dto.ArticleRequest;
-import spring.board.demo.domain.article.dto.ArticleResponse;
-import spring.board.demo.domain.comment.CommentRepository;
-import spring.board.demo.domain.users.User;
+import spring.board.demo.domain.accounts.Account;
+import spring.board.demo.domain.articles.Article;
+import spring.board.demo.domain.articles.ArticleRepository;
+import spring.board.demo.domain.articles.dto.ArticleCreateResponse;
+import spring.board.demo.domain.articles.dto.ArticlePreviewResponse;
+import spring.board.demo.domain.articles.dto.ArticleRequest;
+import spring.board.demo.domain.comments.CommentRepository;
 
 @ExtendWith(SpringExtension.class)
 class ArticleServiceTest {
 
     @MockBean
-    private UserService userService;
+    private AccountService accountService;
 
     @MockBean
     private ArticleRepository articleRepository;
@@ -34,28 +35,25 @@ class ArticleServiceTest {
 
     private ArticleService articleService;
 
-    private User user;
+    private Account account;
     private Article article;
 
     @BeforeEach
     void setUp() {
-        articleService = new ArticleService(userService, articleRepository, commentRepository);
-        user = User.of(TEST_ID, TEST_USER_ID, TEST_USER_NAME, TEST_USER_PASSWORD);
-        article = Article.of(TEST_ID, TEST_ARTICLE_TITLE, user, TEST_ARTICLE_CONTENT);
+        articleService = new ArticleService(accountService, articleRepository, commentRepository);
+        account = Account.of(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD);
+        article = Article.of(account, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
     }
 
     @Test
     void save() {
         when(articleRepository.save(any())).thenReturn(article);
-        when(userService.save(any())).thenReturn(user);
+        when(accountService.save(any())).thenReturn(account);
 
-        ArticleResponse response = articleService.save(user,
+        ArticleCreateResponse response = articleService.save(account,
             new ArticleRequest(TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT));
         assertThat(response)
-            .hasFieldOrPropertyWithValue("id", TEST_ID)
-            .hasFieldOrPropertyWithValue("title", TEST_ARTICLE_TITLE)
-            .hasFieldOrPropertyWithValue("content", TEST_ARTICLE_CONTENT)
-            .hasFieldOrPropertyWithValue("userName", TEST_USER_NAME);
+            .hasFieldOrPropertyWithValue("id", TEST_ID);
     }
 
     @Test
@@ -64,21 +62,20 @@ class ArticleServiceTest {
 
         assertThat(articleService.getArticles())
             .usingRecursiveFieldByFieldElementComparator()
-            .containsExactlyInAnyOrder(ArticleResponse.of(article));
+            .containsExactlyInAnyOrder(ArticlePreviewResponse.of(article, account.getName()));
     }
 
     @Test
     void get() {
         when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article));
         assertThat(articleService.getArticle(TEST_ID)).isEqualToComparingFieldByField(
-            ArticleResponse.of(article));
+            ArticlePreviewResponse.of(article, account.getName()));
     }
 
     @Test
     void update() {
         when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article));
-        user.addArticle(article);
-        articleService.update(TEST_ID, user,
+        articleService.update(TEST_ID, account,
             new ArticleRequest("NEW_" + TEST_ARTICLE_TITLE, "NEW_" + TEST_ARTICLE_CONTENT));
         assertThat(article)
             .hasFieldOrPropertyWithValue("title", "NEW_" + TEST_ARTICLE_TITLE)
@@ -87,8 +84,6 @@ class ArticleServiceTest {
 
     @Test
     void delete() {
-        user.addArticle(article);
-        articleService.delete(TEST_ID, user);
-        assertThat(user.getArticles()).hasSize(0);
+        articleService.delete(TEST_ID, account);
     }
 }

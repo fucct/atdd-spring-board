@@ -12,20 +12,19 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import spring.board.demo.domain.users.User;
+import spring.board.demo.domain.accounts.Account;
 import spring.board.demo.exception.AccessDeniedException;
 import spring.board.demo.exception.UserNotFoundException;
-import spring.board.demo.service.UserService;
-
+import spring.board.demo.service.AccountService;
 
 @Component
 @Qualifier("loginUser")
 public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final UserService userService;
+    private final AccountService accountService;
 
-    public LoginUserMethodArgumentResolver(UserService userService) {
-        this.userService = userService;
+    public LoginUserMethodArgumentResolver(AccountService accountService) {
+        this.accountService = accountService;
     }
 
     @Override
@@ -36,13 +35,12 @@ public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentRes
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String userId = (String) webRequest.getAttribute("loginUserId", SCOPE_REQUEST);
-        if (Objects.isNull(userId)) {
-            return new User();
+        String email = (String)webRequest.getAttribute("loginEmail", SCOPE_REQUEST);
+        if (Objects.isNull(email)) {
+            return new Account();
         }
         try {
-            return userService.findByUserId(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+            return accountService.findByEmail(email);
         } catch (UserNotFoundException e) {
             throw new AccessDeniedException("비정상적인 접근입니다. 다시 로그인해주세요");
         }

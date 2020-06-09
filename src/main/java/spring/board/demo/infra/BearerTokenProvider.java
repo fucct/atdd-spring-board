@@ -19,11 +19,11 @@ public class BearerTokenProvider implements TokenProvider {
     private static final Long ACCESS_EXPIRE_PERIOD = 1000 * 60 * 30L;
     private static final Long REFRESH_EXPIRE_PERIOD = 1000 * 60 * 60 * 24 * 14L;
 
-    public Token createToken(String userId) {
+    public Token createToken(String email) {
         String accessToken = Jwts.builder()
             .setHeaderParam("type", TOKEN_TYPE)
             .setHeaderParam("issueDate", System.currentTimeMillis())
-            .setSubject(userId)
+            .setSubject(email)
             .signWith(ACCESS_SIGNATURE, ACCESS_SECRET_KEY)
             .compact();
 

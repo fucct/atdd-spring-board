@@ -16,11 +16,11 @@ import org.springframework.test.context.jdbc.Sql;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
-import spring.board.demo.domain.article.dto.ArticleDetailResponse;
-import spring.board.demo.domain.article.dto.ArticleResponse;
+import spring.board.demo.domain.accounts.dto.AccountCreateResponse;
+import spring.board.demo.domain.accounts.dto.AccountDetailResponse;
+import spring.board.demo.domain.articles.dto.ArticleDetailResponse;
+import spring.board.demo.domain.articles.dto.ArticlePreviewResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
-import spring.board.demo.domain.users.dto.UserCreateResponse;
-import spring.board.demo.domain.users.dto.UserDetailResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql("/truncate.sql")
@@ -28,14 +28,14 @@ import spring.board.demo.domain.users.dto.UserDetailResponse;
 public class AcceptanceTest {
     public static final Long TEST_ID = 1L;
     public static final Long TEST_OTHER_ID = 2L;
-    public static final String TEST_USER_ID = "fucct";
-    public static final String TEST_OTHER_USER_ID = "dqrd123";
-    public static final String TEST_USER_NAME = "DD";
-    public static final String TEST_OTHER_USER_NAME = "TAEHEON";
-    public static final String TEST_USER_PASSWORD = "1234";
-    public static final String TEST_OTHER_USER_PASSWORD = "qwer";
-    public static final String TEST_USER_TOKEN = "testToken";
-    public static final String TEST_OTHER_USER_TOKEN = "otherTestToken";
+    public static final String TEST_ACCOUNT_EMAIL = "fucct";
+    public static final String TEST_OTHER_ACCOUNT_ID = "dqrd123";
+    public static final String TEST_ACCOUNT_NAME = "DD";
+    public static final String TEST_OTHER_ACCOUNT_NAME = "TAEHEON";
+    public static final String TEST_ACCOUNT_PASSWORD = "1234";
+    public static final String TEST_OTHER_ACCOUNT_PASSWORD = "qwer";
+    public static final String TEST_ACCOUNT_TOKEN = "testToken";
+    public static final String TEST_OTHER_ACCOUNT_TOKEN = "otherTestToken";
     public static final String TEST_ARTICLE_TITLE = "안녕하세요";
     public static final String TEST_ARTICLE_CONTENT = "안녕하십니까. 우아한 테크코스 2기 디디 김태헌입니다.";
     public static final String TEST_COMMENT_CONTENT = "안녕하세용";
@@ -53,9 +53,9 @@ public class AcceptanceTest {
         return RestAssured.given().log().all();
     }
 
-    protected UserCreateResponse createUser(String userID, String name, String password) {
+    protected AccountCreateResponse createUser(String email, String name, String password) {
         Map<String, String> params = new HashMap<>();
-        params.put("userId", userID);
+        params.put("email", email);
         params.put("name", name);
         params.put("password", password);
 
@@ -66,30 +66,29 @@ public class AcceptanceTest {
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
             when().
-                post("/users").
+                post("/accounts").
             then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value()).
-                extract().as(UserCreateResponse.class);
+                extract().as(AccountCreateResponse.class);
     }
 
-    protected UserDetailResponse getUser(Long id, TokenResponse token) {
+    protected AccountDetailResponse getAccount(Long id) {
         //@formatter:off
         return
             given().
-                cookie("token", token.getAccessToken()).
                 contentType(APPLICATION_JSON_VALUE).
                 accept(APPLICATION_JSON_VALUE).
             when().
-                get("/users/"+ id).
+                get("/accounts/{id}", id).
             then().
                 statusCode(HttpStatus.OK.value()).
-                extract().as(UserDetailResponse.class);
+                extract().as(AccountDetailResponse.class);
     }
 
-    protected TokenResponse login(String userId, String password) {
+    protected TokenResponse login(String email, String password) {
         Map<String, String> params = new HashMap<>();
-        params.put("userId", userId);
+        params.put("email", email);
         params.put("password", password);
 
         //@formatter:off
@@ -99,14 +98,14 @@ public class AcceptanceTest {
                 contentType(MediaType.APPLICATION_JSON_VALUE).
                 accept(MediaType.APPLICATION_JSON_VALUE).
             when().
-                post("/users/login").
+                post("/accounts/login").
             then().
                 log().all().
                 statusCode(HttpStatus.OK.value()).
                 extract().as(TokenResponse.class);
     }
 
-    protected void updateUser(Long id, String name, String oldPassword, String newPassword, TokenResponse token) {
+    protected void updateAccount(Long id, String name, String oldPassword, String newPassword, TokenResponse token) {
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("oldPassword", oldPassword);
@@ -119,7 +118,7 @@ public class AcceptanceTest {
             .accept(APPLICATION_JSON_VALUE)
             .body(params)
         .when()
-            .put("/users/"+id)
+            .put("/accounts/"+id)
         .then()
             .log().all()
             .statusCode(HttpStatus.NO_CONTENT.value());
@@ -130,13 +129,13 @@ public class AcceptanceTest {
         given().
             cookie("token", tokenResponse.getAccessToken()).
         when().
-            delete("/users/" + id).
+            delete("/accounts/" + id).
         then().
             log().all().
             statusCode(HttpStatus.NO_CONTENT.value());
     }
 
-    protected ArticleResponse createArticle(TokenResponse token, String title, String content) {
+    protected ArticlePreviewResponse createArticle(TokenResponse token, String title, String content) {
         Map<String, String> params = new HashMap<>();
         params.put("title", title);
         params.put("content", content);
@@ -153,7 +152,7 @@ public class AcceptanceTest {
             then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value()).
-                extract().as(ArticleResponse.class);
+                extract().as(ArticlePreviewResponse.class);
     }
 
     protected void deleteArticle(TokenResponse token, Long articleId) {
@@ -195,7 +194,7 @@ public class AcceptanceTest {
             extract().as(ArticleDetailResponse.class);
     }
 
-    protected List<ArticleResponse> getAllArticles() {
+    protected List<ArticlePreviewResponse> getAllArticles() {
         //@formatter:off
         return given().
             accept(APPLICATION_JSON_VALUE).
@@ -205,10 +204,10 @@ public class AcceptanceTest {
             log().all().
             statusCode(HttpStatus.OK.value()).
             extract().jsonPath().
-            getList(".", ArticleResponse.class);
+            getList(".", ArticlePreviewResponse.class);
     }
 
-    protected List<ArticleResponse> getArticles() {
+    protected List<ArticlePreviewResponse> getArticles() {
         //@formatter:off
         return given().
             accept(APPLICATION_JSON_VALUE).
@@ -218,6 +217,6 @@ public class AcceptanceTest {
             log().all().
             statusCode(HttpStatus.OK.value()).
             extract().jsonPath().
-            getList(".", ArticleResponse.class);
+            getList(".", ArticlePreviewResponse.class);
     }
 }
