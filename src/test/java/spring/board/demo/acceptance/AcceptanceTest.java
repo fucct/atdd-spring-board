@@ -39,6 +39,7 @@ public class AcceptanceTest {
     public static final String TEST_ARTICLE_TITLE = "안녕하세요";
     public static final String TEST_ARTICLE_CONTENT = "안녕하십니까. 우아한 테크코스 2기 디디 김태헌입니다.";
     public static final String TEST_COMMENT_CONTENT = "안녕하세용";
+    public static final String TEST_OTHER_COMMENT_CONTENT = "반가워용";
 
     @LocalServerPort
     int port;

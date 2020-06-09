@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.board.demo.domain.BaseTime;
+import spring.board.demo.domain.users.User;
+import spring.board.demo.exception.AccessDeniedException;
 
 @Table("COMMENTS")
 @Getter
@@ -33,5 +35,15 @@ public class Comment extends BaseTime {
             .userId(userId)
             .content(content)
             .build();
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void validateUser(User user) {
+        if (!user.isSameId(userId)) {
+            throw new AccessDeniedException();
+        }
     }
 }

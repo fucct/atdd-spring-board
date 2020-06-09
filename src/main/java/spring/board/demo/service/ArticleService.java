@@ -19,6 +19,7 @@ import spring.board.demo.domain.comment.dto.CommentRequest;
 import spring.board.demo.domain.comment.dto.CommentResponse;
 import spring.board.demo.domain.users.User;
 import spring.board.demo.exception.ArticleNotFoundException;
+import spring.board.demo.exception.CommentNotFoundException;
 
 @Service
 @Transactional
@@ -83,5 +84,10 @@ public class ArticleService {
         article.addComment(persistComment);
         articleRepository.save(article);
         return CommentResponse.of(persistComment);
+    }
+
+    public CommentDetailResponse getComment(Long id) {
+        return commentRepository.findCommentById(id)
+            .orElseThrow(() -> new CommentNotFoundException(id));
     }
 }

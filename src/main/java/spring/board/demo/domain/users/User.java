@@ -90,4 +90,8 @@ public class User extends BaseTime {
             throw new AccessDeniedException();
         }
     }
+
+    public boolean isSameId(Long userId) {
+        return this.id.equals(userId);
+    }
 }

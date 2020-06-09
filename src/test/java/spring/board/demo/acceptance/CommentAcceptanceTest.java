@@ -30,12 +30,10 @@ public class CommentAcceptanceTest extends AcceptanceTest {
         TokenResponse token1 = login(TEST_USER_ID, TEST_USER_PASSWORD);
         TokenResponse token2 = login(TEST_OTHER_USER_ID, TEST_OTHER_USER_PASSWORD);
         ArticleResponse article = createArticle(token1, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
-
+        CommentResponse commentResponse = addComment(token2, article.getId(), TEST_COMMENT_CONTENT);
         return Stream.of(
             DynamicTest.dynamicTest("Create comment", () -> {
-                CommentResponse response = addComment(token2, article.getId(),
-                    TEST_COMMENT_CONTENT);
-                assertThat(response)
+                assertThat(commentResponse)
                     .hasFieldOrPropertyWithValue("id", 1L)
                     .hasFieldOrPropertyWithValue("userId", 3L)
                     .hasFieldOrPropertyWithValue("content", TEST_COMMENT_CONTENT);
@@ -49,8 +47,66 @@ public class CommentAcceptanceTest extends AcceptanceTest {
             DynamicTest.dynamicTest("User has comment", () -> {
                 UserDetailResponse response = getUser(user2.getId(), token2);
                 assertThat(response.getComments()).hasSize(1);
+            }),
+            DynamicTest.dynamicTest("Get comment", () -> {
+                CommentDetailResponse detailResponse = getComment(article.getId(),
+                    commentResponse.getId());
+                assertThat(detailResponse)
+                    .hasFieldOrPropertyWithValue("id", commentResponse.getId())
+                    .hasFieldOrPropertyWithValue("userId", commentResponse.getUserId())
+                    .hasFieldOrPropertyWithValue("userName", TEST_OTHER_USER_NAME)
+                    .hasFieldOrPropertyWithValue("content", commentResponse.getContent());
+            }),
+            DynamicTest.dynamicTest("Update Comment", () -> {
+                updateComment(commentResponse.getId(), token2, TEST_OTHER_COMMENT_CONTENT);
+                assertThat(getComment(article.getId(), commentResponse.getId()))
+                    .hasFieldOrPropertyWithValue("content", TEST_OTHER_COMMENT_CONTENT);
+            }),
+            DynamicTest.dynamicTest("Delete Comment", () -> {
+                deleteComment(commentResponse.getId(), token2);
+                ArticleDetailResponse articleResponse = getArticle(article.getId());
+                assertThat(articleResponse.getComments()).hasSize(0);
             })
         );
+    }
+
+    private void deleteComment(Long id, TokenResponse token) {
+        //@formatter:off
+        given()
+                .cookie("token", token.getAccessToken())
+                .contentType(APPLICATION_JSON_VALUE)
+            .when()
+                .delete("/comments/{id}", id)
+            .then()
+                .log().all()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    private void updateComment(Long id, TokenResponse token, String content) {
+        Map<String, String> body = new HashMap<>();
+        body.put("content", content);
+
+        //@formatter:off
+        given()
+                .cookie("token", token.getAccessToken())
+                .contentType(APPLICATION_JSON_VALUE)
+                .body(body)
+            .when()
+                .put("/comments/{id}", id)
+            .then()
+                .log().all()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    private CommentDetailResponse getComment(Long articleId, Long commentId) {
+        return given()
+            .accept(APPLICATION_JSON_VALUE)
+            .when()
+            .get("/articles/{articleId}/comments/{commentId}", articleId, commentId)
+            .then()
+            .log().all()
+            .statusCode(HttpStatus.OK.value())
+            .extract().as(CommentDetailResponse.class);
     }
 
     private CommentResponse addComment(TokenResponse token, Long articleId, String content) {

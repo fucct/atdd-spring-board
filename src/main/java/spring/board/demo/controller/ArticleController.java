@@ -19,6 +19,7 @@ import spring.board.demo.controller.prehandler.LoginUser;
 import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.article.dto.ArticleResponse;
+import spring.board.demo.domain.comment.dto.CommentDetailResponse;
 import spring.board.demo.domain.comment.dto.CommentRequest;
 import spring.board.demo.domain.comment.dto.CommentResponse;
 import spring.board.demo.domain.users.User;
@@ -77,5 +78,12 @@ public class ArticleController {
     public ResponseEntity<CommentResponse> addComment(@PathVariable("id") Long articleId,
         @LoginUser User user, @Valid @RequestBody CommentRequest request) {
         return ResponseEntity.ok(articleService.addComment(articleId, user.getId(), request));
+    }
+
+    @GetMapping("/{articleId}/comments/{commentId}")
+    public ResponseEntity<CommentDetailResponse> getComment(
+        @PathVariable("articleId") Long articleId, @PathVariable("commentId") Long commentId) {
+        CommentDetailResponse response = articleService.getComment(commentId);
+        return ResponseEntity.ok(response);
     }
 }
