@@ -13,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import spring.board.demo.domain.article.ArticleRepository;
+import spring.board.demo.domain.comment.CommentRepository;
 import spring.board.demo.domain.token.Token;
 import spring.board.demo.domain.token.TokenProvider;
 import spring.board.demo.domain.token.dto.TokenResponse;
@@ -32,6 +34,12 @@ class UserServiceTest {
     @MockBean
     private TokenProvider tokenProvider;
 
+    @MockBean
+    private ArticleRepository articleRepository;
+
+    @MockBean
+    private CommentRepository commentRepository;
+
     private UserService userService;
 
     private User user;
@@ -45,7 +53,8 @@ class UserServiceTest {
             .refreshToken(TEST_OTHER_USER_TOKEN)
             .tokenType("bearer")
             .build();
-        userService = new UserService(userRepository, tokenProvider);
+        userService = new UserService(userRepository, articleRepository, commentRepository,
+            tokenProvider);
     }
 
     @Test

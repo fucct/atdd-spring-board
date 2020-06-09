@@ -67,7 +67,7 @@ public class User extends BaseTime {
     }
 
     public void addArticle(Article article) {
-        this.articles.add(new ArticleRef(article.getId()));
+        this.articles.add(ArticleRef.of(article));
     }
 
     public void validateArticle(Long id) {

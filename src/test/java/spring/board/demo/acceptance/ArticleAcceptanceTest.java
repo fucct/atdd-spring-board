@@ -13,7 +13,7 @@ import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.users.dto.UserCreateResponse;
-import spring.board.demo.domain.users.dto.UserResponse;
+import spring.board.demo.domain.users.dto.UserDetailResponse;
 
 class ArticleAcceptanceTest extends AcceptanceTest {
 
@@ -29,14 +29,14 @@ class ArticleAcceptanceTest extends AcceptanceTest {
         return Stream.of(
             DynamicTest.dynamicTest("Create user's article", () -> {
                 createArticle(token1, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
-                UserResponse user = getUser(user1.getId(), token1);
+                UserDetailResponse user = getUser(user1.getId(), token1);
                 assertThat(user.getArticles()).hasSize(1);
                 assertThat(getArticles()).extracting(ArticleResponse::getUserName)
                     .containsExactly(TEST_USER_NAME);
             }),
             DynamicTest.dynamicTest("Create another user's article", () -> {
                     createArticle(token2, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
-                    UserResponse user = getUser(user2.getId(), token2);
+                UserDetailResponse user = getUser(user2.getId(), token2);
                     assertThat(user.getArticles()).hasSize(1);
                     assertThat(getArticles()).extracting(ArticleResponse::getUserName)
                         .containsExactly(TEST_USER_NAME, TEST_OTHER_USER_NAME);

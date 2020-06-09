@@ -1,10 +1,6 @@
 drop table if exists user cascade;
 drop table if exists article cascade;
 drop table if exists comments cascade;
-drop table if exists user_comment;
-drop table if exists article_comment;
-drop table if exists user_article;
-drop table if exists article_user;
 
 create table if not exists user
 (

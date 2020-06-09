@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import spring.board.demo.domain.error.dto.ErrorResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.users.dto.UserCreateResponse;
-import spring.board.demo.domain.users.dto.UserResponse;
+import spring.board.demo.domain.users.dto.UserDetailResponse;
 
 public class UserAcceptanceTest extends AcceptanceTest {
     @TestFactory
@@ -31,7 +31,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
                 assertThat(token).isNotNull();
             }),
             DynamicTest.dynamicTest("Get user test", () -> {
-                UserResponse userResponse = getUser(user.getId(), token);
+                UserDetailResponse userResponse = getUser(user.getId(), token);
                 assertThat(userResponse)
                     .hasFieldOrPropertyWithValue("id", user.getId())
                     .hasFieldOrPropertyWithValue("userId", TEST_USER_ID)
@@ -40,7 +40,7 @@ public class UserAcceptanceTest extends AcceptanceTest {
             DynamicTest.dynamicTest("Update user info test", () -> {
                 updateUser(user.getId(), TEST_OTHER_USER_NAME, TEST_USER_PASSWORD,
                     TEST_OTHER_USER_PASSWORD, token);
-                UserResponse userResponse = getUser(user.getId(), token);
+                UserDetailResponse userResponse = getUser(user.getId(), token);
                 assertThat(userResponse)
                     .hasFieldOrPropertyWithValue("id", user.getId())
                     .hasFieldOrPropertyWithValue("userId", TEST_USER_ID)

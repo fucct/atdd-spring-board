@@ -17,6 +17,7 @@ import spring.board.demo.domain.comment.dto.CommentDetailResponse;
 import spring.board.demo.domain.comment.dto.CommentResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.users.dto.UserCreateResponse;
+import spring.board.demo.domain.users.dto.UserDetailResponse;
 
 public class CommentAcceptanceTest extends AcceptanceTest {
 
@@ -44,6 +45,10 @@ public class CommentAcceptanceTest extends AcceptanceTest {
                 assertThat(response.getComments()).hasSize(1)
                     .extracting(CommentDetailResponse::getUserName)
                     .containsExactlyInAnyOrder(TEST_OTHER_USER_NAME);
+            }),
+            DynamicTest.dynamicTest("User has comment", () -> {
+                UserDetailResponse response = getUser(user2.getId(), token2);
+                assertThat(response.getComments()).hasSize(1);
             })
         );
     }

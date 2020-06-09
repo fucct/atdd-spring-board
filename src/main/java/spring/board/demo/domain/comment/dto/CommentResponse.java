@@ -1,5 +1,8 @@
 package spring.board.demo.domain.comment.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,5 +28,9 @@ public class CommentResponse {
             .userId(comment.getUserId())
             .content(comment.getContent())
             .build();
+    }
+
+    public static List<CommentResponse> listOf(List<Comment> comments) {
+        return comments.stream().map(CommentResponse::of).collect(Collectors.toList());
     }
 }

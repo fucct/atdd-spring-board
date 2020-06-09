@@ -12,4 +12,6 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
 
     @Query("SELECT comments.id, comments.user_id, user.name AS user_name, comments.content, FROM comments INNER JOIN user ON comments.user_id = user.id WHERE comments.id IN (:ids)")
     List<CommentDetailResponse> findCommentsByIds(@Param("ids") List<Long> ids);
+
+    List<Comment> findAllByUserId(Long id);
 }

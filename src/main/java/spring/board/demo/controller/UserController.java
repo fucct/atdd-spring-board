@@ -20,6 +20,7 @@ import spring.board.demo.domain.users.User;
 import spring.board.demo.domain.users.dto.LoginRequest;
 import spring.board.demo.domain.users.dto.UserCreateRequest;
 import spring.board.demo.domain.users.dto.UserCreateResponse;
+import spring.board.demo.domain.users.dto.UserDetailResponse;
 import spring.board.demo.domain.users.dto.UserResponse;
 import spring.board.demo.domain.users.dto.UserUpdateRequest;
 import spring.board.demo.service.UserService;
@@ -49,9 +50,10 @@ public class UserController {
 
     @AuthorizeCheck
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable("id") Long id, @LoginUser User user) {
-        user.validateId(id);
-        return ResponseEntity.ok(UserResponse.of(user));
+    public ResponseEntity<UserDetailResponse> getUser(@PathVariable("id") Long id,
+        @LoginUser User user) {
+        UserDetailResponse response = userService.getDetailUser(user);
+        return ResponseEntity.ok(response);
     }
 
     @AuthorizeCheck

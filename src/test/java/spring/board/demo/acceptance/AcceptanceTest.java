@@ -20,7 +20,7 @@ import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.users.dto.UserCreateResponse;
-import spring.board.demo.domain.users.dto.UserResponse;
+import spring.board.demo.domain.users.dto.UserDetailResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql("/truncate.sql")
@@ -72,7 +72,7 @@ public class AcceptanceTest {
                 extract().as(UserCreateResponse.class);
     }
 
-    protected UserResponse getUser(Long id, TokenResponse token) {
+    protected UserDetailResponse getUser(Long id, TokenResponse token) {
         //@formatter:off
         return
             given().
@@ -83,7 +83,7 @@ public class AcceptanceTest {
                 get("/users/"+ id).
             then().
                 statusCode(HttpStatus.OK.value()).
-                extract().as(UserResponse.class);
+                extract().as(UserDetailResponse.class);
     }
 
     protected TokenResponse login(String userId, String password) {

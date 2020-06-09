@@ -8,7 +8,7 @@ import spring.board.demo.domain.users.User;
 
 @Getter
 @AllArgsConstructor
-@Table("article_user")
+@Table("ARTICLE_USER")
 public class UserRef {
     private Long user;
     private String userName;

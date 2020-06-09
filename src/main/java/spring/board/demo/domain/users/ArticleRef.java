@@ -4,15 +4,20 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import spring.board.demo.domain.article.Article;
 
 @Getter
-@Table("user_article")
 @NoArgsConstructor
+@Table("USER_ARTICLE")
 public class ArticleRef {
     private Long article;
 
     public ArticleRef(Long article) {
         this.article = article;
+    }
+
+    public static ArticleRef of(Article article) {
+        return new ArticleRef(article.getId());
     }
 
     public boolean hasSameId(Long id) {

@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import spring.board.demo.domain.BaseTime;
 
-@Table(value = "comments")
+@Table("COMMENTS")
 @Getter
 @NoArgsConstructor
 public class Comment extends BaseTime {

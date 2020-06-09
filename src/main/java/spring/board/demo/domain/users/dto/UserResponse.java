@@ -1,13 +1,11 @@
 package spring.board.demo.domain.users.dto;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import spring.board.demo.domain.users.ArticleRef;
 import spring.board.demo.domain.users.User;
 
 @Getter
@@ -16,11 +14,10 @@ import spring.board.demo.domain.users.User;
 public class UserResponse {
     private Long id;
     private String userId;
-    private String name;
-    private Set<ArticleRef> articles;
+    private String userName;
 
     public static UserResponse of(User user) {
-        return new UserResponse(user.getId(), user.getUserId(), user.getName(), user.getArticles());
+        return new UserResponse(user.getId(), user.getUserId(), user.getName());
     }
 
     public static List<UserResponse> listOf(List<User> users) {
