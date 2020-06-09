@@ -1,17 +1,20 @@
 package spring.board.demo.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import spring.board.demo.domain.article.Article;
 import spring.board.demo.domain.article.ArticleRepository;
+import spring.board.demo.domain.article.CommentRef;
 import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleRequest;
 import spring.board.demo.domain.article.dto.ArticleResponse;
 import spring.board.demo.domain.comment.Comment;
 import spring.board.demo.domain.comment.CommentRepository;
+import spring.board.demo.domain.comment.dto.CommentDetailResponse;
 import spring.board.demo.domain.comment.dto.CommentRequest;
 import spring.board.demo.domain.comment.dto.CommentResponse;
 import spring.board.demo.domain.users.User;
@@ -49,7 +52,13 @@ public class ArticleService {
     public ArticleDetailResponse getArticle(Long id) {
         Article article = articleRepository.findById(id)
             .orElseThrow(() -> new ArticleNotFoundException(id));
-        return ArticleDetailResponse.of(article);
+        List<Long> commentIds = article.getComments()
+            .stream()
+            .map(CommentRef::getComment)
+            .collect(Collectors.toList());
+        List<CommentDetailResponse> detailResponses = commentRepository.findCommentsByIds(
+            commentIds);
+        return ArticleDetailResponse.of(article, detailResponses);
     }
 
     public void update(Long id, User user, ArticleRequest request) {

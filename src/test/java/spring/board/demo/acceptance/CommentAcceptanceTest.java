@@ -11,7 +11,9 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.springframework.http.HttpStatus;
 
+import spring.board.demo.domain.article.dto.ArticleDetailResponse;
 import spring.board.demo.domain.article.dto.ArticleResponse;
+import spring.board.demo.domain.comment.dto.CommentDetailResponse;
 import spring.board.demo.domain.comment.dto.CommentResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
 import spring.board.demo.domain.users.dto.UserCreateResponse;
@@ -36,6 +38,12 @@ public class CommentAcceptanceTest extends AcceptanceTest {
                     .hasFieldOrPropertyWithValue("id", 1L)
                     .hasFieldOrPropertyWithValue("userId", 3L)
                     .hasFieldOrPropertyWithValue("content", TEST_COMMENT_CONTENT);
+            }),
+            DynamicTest.dynamicTest("Article has comment", () -> {
+                ArticleDetailResponse response = getArticle(article.getId());
+                assertThat(response.getComments()).hasSize(1)
+                    .extracting(CommentDetailResponse::getUserName)
+                    .containsExactlyInAnyOrder(TEST_OTHER_USER_NAME);
             })
         );
     }
