@@ -15,7 +15,7 @@ public class CommentRequest {
     @NotBlank
     private String content;
 
-    public Comment toComment(Long articleId, Long userId) {
-        return Comment.of(articleId, userId, this.content);
+    public Comment toComment(Long accountId) {
+        return Comment.of(accountId, this.content);
     }
 }

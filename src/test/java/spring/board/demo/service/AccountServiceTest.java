@@ -94,7 +94,7 @@ class AccountServiceTest {
             .newPassword(TEST_OTHER_ACCOUNT_PASSWORD)
             .build());
         assertThat(account)
-            .hasFieldOrPropertyWithValue("userId", TEST_ACCOUNT_EMAIL)
+            .hasFieldOrPropertyWithValue("email", TEST_ACCOUNT_EMAIL)
             .hasFieldOrPropertyWithValue("name", TEST_OTHER_ACCOUNT_NAME)
             .hasFieldOrPropertyWithValue("password", TEST_OTHER_ACCOUNT_PASSWORD);
     }

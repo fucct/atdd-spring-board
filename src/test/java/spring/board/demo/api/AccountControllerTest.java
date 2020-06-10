@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static spring.board.demo.acceptance.AcceptanceTest.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,8 +36,10 @@ import spring.board.demo.controller.prehandler.TokenExtractor;
 import spring.board.demo.docs.UserDocumentation;
 import spring.board.demo.domain.accounts.Account;
 import spring.board.demo.domain.accounts.dto.AccountCreateResponse;
+import spring.board.demo.domain.accounts.dto.AccountDetailResponse;
 import spring.board.demo.domain.token.TokenProvider;
 import spring.board.demo.service.AccountService;
+import spring.board.demo.service.DomainService;
 
 @ExtendWith(RestDocumentationExtension.class)
 @SpringBootTest
@@ -47,6 +50,9 @@ public class AccountControllerTest {
 
     @MockBean
     private AccountService accountService;
+
+    @MockBean
+    private DomainService domainService;
 
     @MockBean
     private TokenProvider tokenProvider;
@@ -62,6 +68,7 @@ public class AccountControllerTest {
 
     private Account account;
     private Cookie cookie;
+    private AccountDetailResponse accountResponse;
 
     @BeforeEach
     public void setUp(WebApplicationContext webApplicationContext,
@@ -73,6 +80,8 @@ public class AccountControllerTest {
 
         account = Account.of(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD);
         cookie = new Cookie("token", TEST_ACCOUNT_TOKEN);
+        accountResponse = new AccountDetailResponse(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME,
+            new ArrayList<>(), new ArrayList<>());
     }
 
     @Test
@@ -80,33 +89,33 @@ public class AccountControllerTest {
         when(accountService.create(any())).thenReturn(new AccountCreateResponse(account.getId()));
 
         Map<String, String> params = new HashMap<>();
-        params.put("userId", TEST_ACCOUNT_EMAIL);
+        params.put("email", TEST_ACCOUNT_EMAIL);
         params.put("name", TEST_ACCOUNT_NAME);
         params.put("password", TEST_ACCOUNT_PASSWORD);
 
-        mockMvc.perform(post("/users")
+        mockMvc.perform(post("/accounts")
             .content(objectMapper.writeValueAsString(params))
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON))
             .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.id", Matchers.is(1)))
+            .andExpect(jsonPath("id").value(1L))
             .andDo(print())
             .andDo(UserDocumentation.create());
     }
 
     @Test
-    void getUser() throws Exception {
-        // when(accountService.findByUserId(anyString())).thenReturn(Optional.of(account));
+    void getAccount() throws Exception {
+        when(domainService.getAccount(any())).thenReturn(accountResponse);
         when(tokenExtractor.extract(any())).thenReturn(TEST_ACCOUNT_TOKEN);
         when(tokenProvider.getSubject(any())).thenReturn(TEST_ACCOUNT_EMAIL);
 
-        mockMvc.perform(get("/users/" + account.getId())
+        mockMvc.perform(get("/accounts/" + account.getId())
             .cookie(cookie)
             .accept(APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.id", Matchers.is(1)))
-            .andExpect(jsonPath("$.userId", Matchers.is(TEST_ACCOUNT_EMAIL)))
-            .andExpect(jsonPath("$.name", Matchers.is(TEST_ACCOUNT_NAME)))
+            .andExpect(jsonPath("id", Matchers.is(1)))
+            .andExpect(jsonPath("email", Matchers.is(TEST_ACCOUNT_EMAIL)))
+            .andExpect(jsonPath("name", Matchers.is(TEST_ACCOUNT_NAME)))
             .andDo(print())
             .andDo(UserDocumentation.get());
     }
@@ -122,7 +131,7 @@ public class AccountControllerTest {
         params.put("oldPassword", TEST_ACCOUNT_PASSWORD);
         params.put("newPassword", TEST_OTHER_ACCOUNT_PASSWORD);
 
-        mockMvc.perform(put("/users/" + account.getId())
+        mockMvc.perform(put("/accounts/" + account.getId())
             .cookie(cookie)
             .contentType(APPLICATION_JSON_VALUE)
             .content(objectMapper.writeValueAsString(params)))
@@ -132,12 +141,12 @@ public class AccountControllerTest {
     }
 
     @Test
-    void deleteUser() throws Exception {
+    void deleteAccount() throws Exception {
         // when(accountService.findByUserId(anyString())).thenReturn(Optional.of(account));
         when(tokenExtractor.extract(any())).thenReturn(TEST_ACCOUNT_TOKEN);
         when(tokenProvider.getSubject(any())).thenReturn(TEST_ACCOUNT_EMAIL);
 
-        mockMvc.perform(delete("/users/" + account.getId())
+        mockMvc.perform(delete("/accounts/" + account.getId())
             .cookie(cookie))
             .andExpect(status().isNoContent())
             .andDo(print())

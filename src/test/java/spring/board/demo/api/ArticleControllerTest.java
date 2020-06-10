@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static spring.board.demo.acceptance.AcceptanceTest.*;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.Cookie;
 
 import org.hamcrest.Matchers;
@@ -36,7 +38,6 @@ import spring.board.demo.domain.articles.Article;
 import spring.board.demo.domain.articles.dto.ArticleCreateResponse;
 import spring.board.demo.domain.articles.dto.ArticleDetailResponse;
 import spring.board.demo.domain.articles.dto.ArticleRequest;
-import spring.board.demo.domain.articles.dto.ArticleResponse;
 import spring.board.demo.domain.token.TokenProvider;
 import spring.board.demo.service.AccountService;
 import spring.board.demo.service.ArticleService;
@@ -79,8 +80,7 @@ public class ArticleControllerTest {
         account = Account.of(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD);
         cookie = new Cookie("token", TEST_ACCOUNT_TOKEN);
         article = Article.of(TEST_ID, account, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
-        articleResponse = ArticleDetailResponse.of(ArticleResponse.of(article, account.getName()),
-            null);
+        articleResponse = ArticleDetailResponse.of(article, account, new ArrayList<>());
     }
 
     @Test

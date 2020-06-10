@@ -18,22 +18,19 @@ public class Comment extends BaseTime {
     @Id
     private Long id;
     private Long accountId;
-    private Long articleId;
     private String content;
 
     @Builder
-    public Comment(Long id, Long accountId, Long articleId, String content) {
+    public Comment(Long id, Long accountId, String content) {
         this.id = id;
         this.accountId = accountId;
-        this.articleId = articleId;
         this.content = content;
     }
 
-    public static Comment of(Long accountId, Long articleId, String content) {
+    public static Comment of(Long accountId, String content) {
         return Comment.builder()
             .id(null)
             .accountId(accountId)
-            .articleId(articleId)
             .content(content)
             .build();
     }

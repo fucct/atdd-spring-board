@@ -18,6 +18,7 @@ import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import spring.board.demo.domain.accounts.dto.AccountCreateResponse;
 import spring.board.demo.domain.accounts.dto.AccountDetailResponse;
+import spring.board.demo.domain.articles.dto.ArticleCreateResponse;
 import spring.board.demo.domain.articles.dto.ArticleDetailResponse;
 import spring.board.demo.domain.articles.dto.ArticlePreviewResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
@@ -135,7 +136,7 @@ public class AcceptanceTest {
             statusCode(HttpStatus.NO_CONTENT.value());
     }
 
-    protected ArticlePreviewResponse createArticle(TokenResponse token, String title, String content) {
+    protected ArticleCreateResponse createArticle(TokenResponse token, String title, String content) {
         Map<String, String> params = new HashMap<>();
         params.put("title", title);
         params.put("content", content);
@@ -152,7 +153,7 @@ public class AcceptanceTest {
             then().
                 log().all().
                 statusCode(HttpStatus.CREATED.value()).
-                extract().as(ArticlePreviewResponse.class);
+                extract().as(ArticleCreateResponse.class);
     }
 
     protected void deleteArticle(TokenResponse token, Long articleId) {
@@ -185,13 +186,13 @@ public class AcceptanceTest {
     protected ArticleDetailResponse getArticle(Long id) {
         //@formatter:off
         return given().
-            accept(APPLICATION_JSON_VALUE).
+                accept(APPLICATION_JSON_VALUE).
             when().
-            get("/articles/{id}",id).
+                get("/articles/{id}",id).
             then().
-            log().all().
-            statusCode(HttpStatus.OK.value()).
-            extract().as(ArticleDetailResponse.class);
+                log().all().
+                statusCode(HttpStatus.OK.value()).
+                extract().as(ArticleDetailResponse.class);
     }
 
     protected List<ArticlePreviewResponse> getAllArticles() {

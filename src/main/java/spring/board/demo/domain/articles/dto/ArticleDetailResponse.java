@@ -5,6 +5,8 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import spring.board.demo.domain.accounts.Account;
+import spring.board.demo.domain.articles.Article;
 import spring.board.demo.domain.comments.dto.CommentDetailResponse;
 
 @NoArgsConstructor
@@ -29,14 +31,14 @@ public class ArticleDetailResponse {
         this.comments = comments;
     }
 
-    public static ArticleDetailResponse of(ArticleResponse article,
+    public static ArticleDetailResponse of(Article article, Account account,
         List<CommentDetailResponse> comments) {
         return ArticleDetailResponse.builder()
             .id(article.getId())
             .accountId(article.getAccountId())
             .title(article.getTitle())
             .content(article.getContent())
-            .accountName(article.getAccountName())
+            .accountName(account.getName())
             .comments(comments)
             .build();
     }

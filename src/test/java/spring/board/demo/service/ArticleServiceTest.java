@@ -4,7 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static spring.board.demo.acceptance.AcceptanceTest.*;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ import spring.board.demo.domain.accounts.Account;
 import spring.board.demo.domain.articles.Article;
 import spring.board.demo.domain.articles.ArticleRepository;
 import spring.board.demo.domain.articles.dto.ArticleCreateResponse;
+import spring.board.demo.domain.articles.dto.ArticleDetailResponse;
 import spring.board.demo.domain.articles.dto.ArticlePreviewResponse;
 import spring.board.demo.domain.articles.dto.ArticleRequest;
 import spring.board.demo.domain.comments.CommentRepository;
@@ -42,7 +44,7 @@ class ArticleServiceTest {
     void setUp() {
         articleService = new ArticleService(accountService, articleRepository, commentRepository);
         account = Account.of(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD);
-        article = Article.of(account, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
+        article = Article.of(TEST_ID, account, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
     }
 
     @Test
@@ -58,7 +60,8 @@ class ArticleServiceTest {
 
     @Test
     void getAll() {
-        when(articleRepository.findAll()).thenReturn(Arrays.asList(article));
+        when(articleRepository.findAllWithAccountName()).thenReturn(
+            Collections.singletonList(ArticlePreviewResponse.of(article, account.getName())));
 
         assertThat(articleService.getArticles())
             .usingRecursiveFieldByFieldElementComparator()
@@ -68,8 +71,11 @@ class ArticleServiceTest {
     @Test
     void get() {
         when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article));
+        when(accountService.findById(any())).thenReturn(account);
+
         assertThat(articleService.getArticle(TEST_ID)).isEqualToComparingFieldByField(
-            ArticlePreviewResponse.of(article, account.getName()));
+            ArticleDetailResponse.of(article, account, new ArrayList<>()));
+        // TODO: 2020/06/10 Comment 추가해서 다시 테스트
     }
 
     @Test

@@ -17,7 +17,7 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
     List<Account> findAll();
 
     @Query("SELECT account.id AS id, account.email AS email, account.name AS name, "
-        + "account.password AS password, article.id AS article_id, comments.id AS comment_id "
+        + "account.password AS password, article.id AS article_ids, comments.id AS comment_ids "
         + "FROM account "
         + "LEFT JOIN article ON account.id = article.account_id "
         + "LEFT JOIN comments ON account.id = comments.account_id "

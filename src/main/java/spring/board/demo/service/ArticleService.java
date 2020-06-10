@@ -14,7 +14,6 @@ import spring.board.demo.domain.articles.dto.ArticleCreateResponse;
 import spring.board.demo.domain.articles.dto.ArticleDetailResponse;
 import spring.board.demo.domain.articles.dto.ArticlePreviewResponse;
 import spring.board.demo.domain.articles.dto.ArticleRequest;
-import spring.board.demo.domain.articles.dto.ArticleResponse;
 import spring.board.demo.domain.comments.CommentRepository;
 import spring.board.demo.domain.comments.dto.CommentDetailResponse;
 import spring.board.demo.exception.ArticleNotFoundException;
@@ -36,8 +35,8 @@ public class ArticleService {
 
     public ArticleCreateResponse save(Account account, ArticleRequest request) {
         Article article = request.toArticle(account);
-        articleRepository.save(article);
-        return ArticleCreateResponse.of(article);
+        Article persistArticle = articleRepository.save(article);
+        return ArticleCreateResponse.of(persistArticle);
     }
 
     @Transactional(readOnly = true)
@@ -46,15 +45,15 @@ public class ArticleService {
     }
 
     public ArticleDetailResponse getArticle(Long id) {
-        ArticleResponse article = articleRepository.findByIdWithAccountName(id)
+        Article article = articleRepository.findById(id)
             .orElseThrow(() -> new ArticleNotFoundException(id));
+        Account account = accountService.findById(article.getAccountId());
         List<Long> commentIds = article.getComments()
             .stream()
             .map(CommentRef::getComment)
             .collect(Collectors.toList());
-        List<CommentDetailResponse> detailResponses = commentRepository.findCommentsByIds(
-            commentIds);
-        return ArticleDetailResponse.of(article, detailResponses);
+        List<CommentDetailResponse> comments = commentRepository.findCommentsByIds(commentIds);
+        return ArticleDetailResponse.of(article, account, comments);
     }
 
     public void update(Long id, Account account, ArticleRequest request) {
@@ -68,6 +67,4 @@ public class ArticleService {
         articleRepository.deleteById(id);
         accountService.save(account);
     }
-
-
 }

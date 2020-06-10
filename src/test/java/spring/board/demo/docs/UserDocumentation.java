@@ -11,54 +11,57 @@ import org.springframework.restdocs.payload.JsonFieldType;
 public class UserDocumentation {
 
     public static RestDocumentationResultHandler create() {
-        return document("users/create",
+        return document("accounts/create",
             getDocumentRequest(),
             getDocumentResponse(),
             requestFields(
-                fieldWithPath("userId").type(JsonFieldType.STRING).description("The user's Id"),
-                fieldWithPath("name").type(JsonFieldType.STRING).description("The user's name"),
+                fieldWithPath("email").type(JsonFieldType.STRING).description("The account's Id"),
+                fieldWithPath("name").type(JsonFieldType.STRING).description("The account's name"),
                 fieldWithPath("password").type(JsonFieldType.STRING)
-                    .description("The user's password")
+                    .description("The account's password")
             ),
             responseFields(
-                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The user's no")
+                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The account's no")
             )
         );
     }
 
     public static RestDocumentationResultHandler get() {
-        return document("users/get",
+        return document("accounts/get",
             getDocumentRequest(),
             getDocumentResponse(),
             responseFields(
-                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The user's no"),
-                fieldWithPath("userId").type(JsonFieldType.STRING).description("The user's id"),
-                fieldWithPath("name").type(JsonFieldType.STRING).description("The user's name"),
+                fieldWithPath("id").type(JsonFieldType.NUMBER).description("The account's no"),
+                fieldWithPath("email").type(JsonFieldType.STRING).description("The account's id"),
+                fieldWithPath("name").type(JsonFieldType.STRING).description("The account's name"),
                 fieldWithPath("articles").type(JsonFieldType.ARRAY)
-                    .description("The user's articles")
+                    .description("The account's articles")
+                    .optional(),
+                fieldWithPath("comments").type(JsonFieldType.ARRAY)
+                    .description("The account's comments")
                     .optional()
             )
         );
     }
 
     public static RestDocumentationResultHandler update() {
-        return document("users/update",
+        return document("accounts/update",
             getDocumentRequest(),
             getDocumentResponse(),
             requestFields(
-                fieldWithPath("name").type(JsonFieldType.STRING).description("The user's id"),
+                fieldWithPath("name").type(JsonFieldType.STRING).description("The account's id"),
                 fieldWithPath("oldPassword").type(JsonFieldType.STRING)
-                    .description("The user's previous password")
+                    .description("The account's previous password")
                     .attributes(getPasswordFormat()),
                 fieldWithPath("newPassword").type(JsonFieldType.STRING)
-                    .description("The user's new password")
+                    .description("The account's new password")
                     .attributes(getPasswordFormat())
             )
         );
     }
 
     public static RestDocumentationResultHandler delete() {
-        return document("users/delete",
+        return document("accounts/delete",
             getDocumentRequest(),
             getDocumentResponse()
         );

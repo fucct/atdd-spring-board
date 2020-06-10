@@ -30,14 +30,16 @@ public class UserInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
         Object handler) throws Exception {
 
-        AuthorizeCheck annotation = getCheckAnnotation((HandlerMethod)handler,
-            AuthorizeCheck.class);
-        if (Objects.isNull(annotation)) {
-            return true;
+        if (handler instanceof HandlerMethod) {
+            AuthorizeCheck annotation = getCheckAnnotation((HandlerMethod)handler,
+                AuthorizeCheck.class);
+            if (Objects.isNull(annotation)) {
+                return true;
+            }
+            String accessToken = tokenExtractor.extract(request);
+            String email = tokenProvider.getSubject(accessToken);
+            request.setAttribute("loginEmail", email);
         }
-        String accessToken = tokenExtractor.extract(request);
-        String email = tokenProvider.getSubject(accessToken);
-        request.setAttribute("loginEmail", email);
         return true;
     }
 

@@ -13,8 +13,8 @@ import org.springframework.http.HttpStatus;
 
 import spring.board.demo.domain.accounts.dto.AccountCreateResponse;
 import spring.board.demo.domain.accounts.dto.AccountDetailResponse;
+import spring.board.demo.domain.articles.dto.ArticleCreateResponse;
 import spring.board.demo.domain.articles.dto.ArticleDetailResponse;
-import spring.board.demo.domain.articles.dto.ArticlePreviewResponse;
 import spring.board.demo.domain.comments.dto.CommentDetailResponse;
 import spring.board.demo.domain.comments.dto.CommentResponse;
 import spring.board.demo.domain.token.dto.TokenResponse;
@@ -30,14 +30,14 @@ public class CommentAcceptanceTest extends AcceptanceTest {
             TEST_OTHER_ACCOUNT_PASSWORD);
         TokenResponse token1 = login(TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_PASSWORD);
         TokenResponse token2 = login(TEST_OTHER_ACCOUNT_ID, TEST_OTHER_ACCOUNT_PASSWORD);
-        ArticlePreviewResponse article = createArticle(token1, TEST_ARTICLE_TITLE,
+        ArticleCreateResponse article = createArticle(token1, TEST_ARTICLE_TITLE,
             TEST_ARTICLE_CONTENT);
         CommentResponse commentResponse = addComment(token2, article.getId(), TEST_COMMENT_CONTENT);
         return Stream.of(
             DynamicTest.dynamicTest("Create comment", () -> {
                 assertThat(commentResponse)
                     .hasFieldOrPropertyWithValue("id", 1L)
-                    .hasFieldOrPropertyWithValue("userId", 3L)
+                    .hasFieldOrPropertyWithValue("accountId", 2L)
                     .hasFieldOrPropertyWithValue("content", TEST_COMMENT_CONTENT);
             }),
             DynamicTest.dynamicTest("Article has comment", () -> {
@@ -51,17 +51,16 @@ public class CommentAcceptanceTest extends AcceptanceTest {
                 assertThat(response.getComments()).hasSize(1);
             }),
             DynamicTest.dynamicTest("Get comment", () -> {
-                CommentDetailResponse detailResponse = getComment(article.getId(),
-                    commentResponse.getId());
+                CommentDetailResponse detailResponse = getComment(commentResponse.getId());
                 assertThat(detailResponse)
                     .hasFieldOrPropertyWithValue("id", commentResponse.getId())
-                    .hasFieldOrPropertyWithValue("userId", commentResponse.getAccountId())
-                    .hasFieldOrPropertyWithValue("userName", TEST_OTHER_ACCOUNT_NAME)
+                    .hasFieldOrPropertyWithValue("accountId", commentResponse.getAccountId())
+                    .hasFieldOrPropertyWithValue("accountName", TEST_OTHER_ACCOUNT_NAME)
                     .hasFieldOrPropertyWithValue("content", commentResponse.getContent());
             }),
             DynamicTest.dynamicTest("Update Comment", () -> {
                 updateComment(commentResponse.getId(), token2, TEST_OTHER_COMMENT_CONTENT);
-                assertThat(getComment(article.getId(), commentResponse.getId()))
+                assertThat(getComment(commentResponse.getId()))
                     .hasFieldOrPropertyWithValue("content", TEST_OTHER_COMMENT_CONTENT);
             }),
             DynamicTest.dynamicTest("Delete Comment", () -> {
@@ -100,11 +99,11 @@ public class CommentAcceptanceTest extends AcceptanceTest {
                 .statusCode(HttpStatus.OK.value());
     }
 
-    private CommentDetailResponse getComment(Long articleId, Long commentId) {
+    private CommentDetailResponse getComment(Long commentId) {
         return given()
             .accept(APPLICATION_JSON_VALUE)
             .when()
-            .get("/articles/{articleId}/comments/{commentId}", articleId, commentId)
+            .get("/comments/{commentId}", commentId)
             .then()
             .log().all()
             .statusCode(HttpStatus.OK.value())

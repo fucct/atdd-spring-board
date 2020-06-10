@@ -28,7 +28,6 @@ create table if not exists comments
 (
     id           bigint auto_increment not null,
     account_id   bigint                not null,
-    article_id   bigint                not null,
     content      varchar(256)          not null,
     created_date datetime,
     updated_date datetime,

@@ -11,7 +11,7 @@ import spring.board.demo.domain.articles.ArticleRepository;
 import spring.board.demo.domain.articles.dto.ArticlePreviewResponse;
 import spring.board.demo.domain.comments.CommentRepository;
 import spring.board.demo.domain.comments.dto.CommentDetailResponse;
-import spring.board.demo.exception.UserNotFoundException;
+import spring.board.demo.exception.AccountNotFoundException;
 
 @Service
 public class DomainService {
@@ -30,10 +30,10 @@ public class DomainService {
     @Transactional(readOnly = true)
     public AccountDetailResponse getAccount(Long id) {
         AccountSampleDto accountSampleDto = accountRepository.findSampleById(id)
-            .orElseThrow(() -> new UserNotFoundException(id));
+            .orElseThrow(() -> new AccountNotFoundException(id));
         List<Long> articleIds = accountSampleDto.getArticleIds();
         List<Long> commentIds = accountSampleDto.getCommentIds();
-        List<ArticlePreviewResponse> articles = articleRepository.findAllWithAccountNameById(
+        List<ArticlePreviewResponse> articles = articleRepository.findAllWithAccountNameByIds(
             articleIds);
         List<CommentDetailResponse> comments = commentRepository.findCommentsByIds(commentIds);
         return AccountDetailResponse.of(accountSampleDto, articles, comments);

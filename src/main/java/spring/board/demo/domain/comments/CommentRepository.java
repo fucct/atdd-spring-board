@@ -11,11 +11,21 @@ import spring.board.demo.domain.comments.dto.CommentDetailResponse;
 
 public interface CommentRepository extends CrudRepository<Comment, Long> {
 
-    @Query("SELECT comments.id, comments.account_id, account.name AS account_name, comments.content, FROM comments INNER JOIN account ON comments.account_id = account.id WHERE comments.id = :id")
+    @Query("SELECT comments.id AS id, comments.account_id AS account_id, "
+        + "account.name AS account_name, comments.content AS content "
+        + "FROM comments LEFT JOIN account "
+        + "ON comments.account_id = account.id "
+        + "WHERE comments.id = :id")
     Optional<CommentDetailResponse> findCommentById(@Param("id") Long id);
 
-    @Query("SELECT comments.id, comments.account_id, account.name AS account_name, comments.content, FROM comments INNER JOIN account ON comments.account_id = account.id WHERE comments.id IN (:ids)")
+    @Query("SELECT comments.id AS id, comments.account_id AS account_id, "
+        + "account.name AS account_name, comments.content AS content "
+        + "FROM comments "
+        + "LEFT JOIN account "
+        + "ON comments.account_id = account.id "
+        + "WHERE comments.id IN (:ids)")
     List<CommentDetailResponse> findCommentsByIds(@Param("ids") List<Long> ids);
 
-    List<Comment> findAllByAccountId(Long id);
+    @Override
+    List<Comment> findAllById(Iterable<Long> longs);
 }

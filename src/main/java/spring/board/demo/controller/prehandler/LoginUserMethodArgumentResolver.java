@@ -14,7 +14,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import spring.board.demo.domain.accounts.Account;
 import spring.board.demo.exception.AccessDeniedException;
-import spring.board.demo.exception.UserNotFoundException;
+import spring.board.demo.exception.AccountNotFoundException;
 import spring.board.demo.service.AccountService;
 
 @Component
@@ -41,7 +41,7 @@ public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentRes
         }
         try {
             return accountService.findByEmail(email);
-        } catch (UserNotFoundException e) {
+        } catch (AccountNotFoundException e) {
             throw new AccessDeniedException("비정상적인 접근입니다. 다시 로그인해주세요");
         }
     }
