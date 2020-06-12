@@ -5,7 +5,7 @@ import { deleteCookie, getCookie } from '../../utils/loginUtils.js';
 function MyPage() {
   const $logoutButton = document.querySelector("#logout-button");
 
-  const logout = (e) =>{
+  const logout = (e) => {
     e.preventDefault();
     if (!getCookie()) {
       alert("이미 로그아웃 되었습니다.");

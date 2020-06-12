@@ -1,7 +1,5 @@
 package spring.board.demo.domain.articles.dto;
 
-import org.springframework.data.relational.core.mapping.Column;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +8,9 @@ import spring.board.demo.domain.articles.Article;
 @Getter
 @NoArgsConstructor
 public class ArticlePreviewResponse {
-    @Column("article_id")
     private Long id;
     private Long accountId;
     private String title;
-    @Column("article_content")
     private String content;
     private String accountName;
 
