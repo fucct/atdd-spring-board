@@ -7,8 +7,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import spring.board.demo.controller.prehandler.LoginUserMethodArgumentResolver;
-import spring.board.demo.controller.prehandler.UserInterceptor;
+import spring.board.demo.common.prehandler.LoginUserMethodArgumentResolver;
+import spring.board.demo.common.prehandler.UserInterceptor;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {

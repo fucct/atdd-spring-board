@@ -4,12 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import spring.board.demo.domain.accounts.Account;
-import spring.board.demo.domain.accounts.AccountRepository;
-import spring.board.demo.domain.articles.Article;
-import spring.board.demo.domain.articles.ArticleRepository;
-import spring.board.demo.domain.comments.Comment;
-import spring.board.demo.domain.comments.CommentRepository;
+import spring.board.demo.accounts.domain.Account;
+import spring.board.demo.accounts.domain.AccountRepository;
+import spring.board.demo.articles.domain.Article;
+import spring.board.demo.articles.domain.ArticleRepository;
+import spring.board.demo.comments.Comment;
+import spring.board.demo.comments.CommentRepository;
 
 @SpringBootTest
 class BoardApplicationTests {

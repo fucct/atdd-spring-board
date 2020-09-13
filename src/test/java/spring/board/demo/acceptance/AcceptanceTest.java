@@ -17,12 +17,12 @@ import org.springframework.test.context.jdbc.Sql;
 
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
-import spring.board.demo.domain.accounts.dto.AccountCreateResponse;
-import spring.board.demo.domain.accounts.dto.AccountDetailResponse;
-import spring.board.demo.domain.articles.dto.ArticleCreateResponse;
-import spring.board.demo.domain.articles.dto.ArticleDetailResponse;
-import spring.board.demo.domain.articles.dto.ArticlePreviewResponse;
-import spring.board.demo.domain.token.dto.TokenResponse;
+import spring.board.demo.accounts.view.dto.AccountCreateResponse;
+import spring.board.demo.accounts.view.dto.AccountDetailResponse;
+import spring.board.demo.articles.view.dto.ArticleCreateResponse;
+import spring.board.demo.articles.view.dto.ArticleDetailResponse;
+import spring.board.demo.articles.view.dto.ArticlePreviewResponse;
+import spring.board.demo.infra.dto.TokenResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql("/truncate.sql")

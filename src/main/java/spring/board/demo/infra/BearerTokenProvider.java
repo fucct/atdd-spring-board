@@ -5,8 +5,6 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import spring.board.demo.domain.token.Token;
-import spring.board.demo.domain.token.TokenProvider;
 import spring.board.demo.exception.InvalidAccessTokenException;
 
 @Component
