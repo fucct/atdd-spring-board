@@ -23,7 +23,6 @@ create table if not exists account_article
 create table if not exists article
 (
     id           bigint auto_increment not null,
-    account_id   bigint                not null,
     title        varchar(256)          not null,
     content      varchar(2048)         not null,
     created_date datetime,

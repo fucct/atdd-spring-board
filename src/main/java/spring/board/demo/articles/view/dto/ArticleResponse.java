@@ -32,7 +32,6 @@ public class ArticleResponse {
     public static ArticleResponse of(Article article, String accountName) {
         return ArticleResponse.builder()
             .id(article.getId())
-            .accountId(article.getAccountId())
             .accountName(accountName)
             .title(article.getTitle())
             .content(article.getContent())

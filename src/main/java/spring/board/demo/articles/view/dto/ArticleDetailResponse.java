@@ -19,27 +19,4 @@ public class ArticleDetailResponse {
     private String content;
     private String accountName;
     private List<CommentDetailResponse> comments;
-
-    @Builder
-    public ArticleDetailResponse(Long id, Long accountId, String title, String content,
-        String accountName, List<CommentDetailResponse> comments) {
-        this.id = id;
-        this.accountId = accountId;
-        this.title = title;
-        this.content = content;
-        this.accountName = accountName;
-        this.comments = comments;
-    }
-
-    public static ArticleDetailResponse of(Article article, Account account,
-        List<CommentDetailResponse> comments) {
-        return ArticleDetailResponse.builder()
-            .id(article.getId())
-            .accountId(article.getAccountId())
-            .title(article.getTitle())
-            .content(article.getContent())
-            .accountName(account.getName())
-            .comments(comments)
-            .build();
-    }
 }

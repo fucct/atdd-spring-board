@@ -19,7 +19,6 @@ public class Article extends BaseTime {
 
     @Id @With
     private final Long id;
-    private final Long accountId;
     private final String title;
     private final String content;
     private final Set<CommentRef> comments = new LinkedHashSet<>();

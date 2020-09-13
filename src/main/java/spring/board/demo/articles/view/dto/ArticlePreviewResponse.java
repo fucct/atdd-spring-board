@@ -27,7 +27,6 @@ public class ArticlePreviewResponse {
     public static ArticlePreviewResponse of(Article article, String accountName) {
         return ArticlePreviewResponse.builder()
             .id(article.getId())
-            .accountId(article.getAccountId())
             .title(article.getTitle())
             .content(article.getContent())
             .accountName(accountName)
