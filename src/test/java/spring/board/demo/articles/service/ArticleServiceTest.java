@@ -12,8 +12,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import spring.board.demo.accounts.AccountFixture;
 import spring.board.demo.accounts.service.AccountService;
 import spring.board.demo.accounts.domain.Account;
+import spring.board.demo.articles.ArticleFixture;
 import spring.board.demo.articles.service.ArticleService;
 import spring.board.demo.articles.domain.Article;
 import spring.board.demo.articles.domain.ArticleRepository;
@@ -40,7 +42,7 @@ class ArticleServiceTest {
     @BeforeEach
     void setUp() {
         articleService = new ArticleService(accountService, articleRepository, commentRepository);
-        account = Account.of(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD);
+        account = Account.of(ArticleFixture.ID1, AccountFixture.EMAIL1, AccountFixture.NAME1, AccountFixture.PASSWORD1);
     }
 
     @Test
@@ -65,6 +67,6 @@ class ArticleServiceTest {
 
     @Test
     void delete() {
-        articleService.delete(TEST_ID, account);
+        articleService.delete(ArticleFixture.ID1, account);
     }
 }

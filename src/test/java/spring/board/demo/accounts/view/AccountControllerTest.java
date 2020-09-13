@@ -31,6 +31,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import spring.board.demo.accounts.AccountFixture;
+import spring.board.demo.articles.ArticleFixture;
 import spring.board.demo.common.prehandler.TokenExtractor;
 import spring.board.demo.docs.AccountDocumentation;
 import spring.board.demo.accounts.domain.Account;
@@ -77,9 +79,9 @@ public class AccountControllerTest {
             .apply(documentationConfiguration(restDocumentation))
             .build();
 
-        account = Account.of(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD);
-        cookie = new Cookie("token", TEST_ACCOUNT_TOKEN);
-        accountResponse = new AccountDetailResponse(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME,
+        account = Account.of(ArticleFixture.ID1, AccountFixture.EMAIL1, AccountFixture.NAME1, AccountFixture.PASSWORD1);
+        cookie = new Cookie("token", AccountFixture.TOKEN1);
+        accountResponse = new AccountDetailResponse(ArticleFixture.ID1, AccountFixture.EMAIL1, AccountFixture.NAME1,
             new ArrayList<>(), new ArrayList<>());
     }
 
@@ -88,9 +90,9 @@ public class AccountControllerTest {
         when(accountService.create(any())).thenReturn(new AccountCreateResponse(account.getId()));
 
         Map<String, String> params = new HashMap<>();
-        params.put("email", TEST_ACCOUNT_EMAIL);
-        params.put("name", TEST_ACCOUNT_NAME);
-        params.put("password", TEST_ACCOUNT_PASSWORD);
+        params.put("email", AccountFixture.EMAIL1);
+        params.put("name", AccountFixture.NAME1);
+        params.put("password", AccountFixture.PASSWORD1);
 
         mockMvc.perform(post("/accounts")
             .content(objectMapper.writeValueAsString(params))
@@ -106,13 +108,13 @@ public class AccountControllerTest {
     @Test
     void update() throws Exception {
         // when(accountService.findByUserId(anyString())).thenReturn(Optional.of(account));
-        when(tokenExtractor.extract(any())).thenReturn(TEST_ACCOUNT_TOKEN);
-        when(tokenProvider.getSubject(any())).thenReturn(TEST_ACCOUNT_EMAIL);
+        when(tokenExtractor.extract(any())).thenReturn(AccountFixture.TOKEN1);
+        when(tokenProvider.getSubject(any())).thenReturn(AccountFixture.EMAIL1);
 
         Map<String, String> params = new HashMap<>();
-        params.put("name", TEST_OTHER_ACCOUNT_NAME);
-        params.put("oldPassword", TEST_ACCOUNT_PASSWORD);
-        params.put("newPassword", TEST_OTHER_ACCOUNT_PASSWORD);
+        params.put("name", AccountFixture.NAME2);
+        params.put("oldPassword", AccountFixture.PASSWORD1);
+        params.put("newPassword", AccountFixture.PASSWORD2);
 
         mockMvc.perform(put("/accounts/" + account.getId())
             .cookie(cookie)
@@ -126,8 +128,8 @@ public class AccountControllerTest {
     @Test
     void deleteAccount() throws Exception {
         // when(accountService.findByUserId(anyString())).thenReturn(Optional.of(account));
-        when(tokenExtractor.extract(any())).thenReturn(TEST_ACCOUNT_TOKEN);
-        when(tokenProvider.getSubject(any())).thenReturn(TEST_ACCOUNT_EMAIL);
+        when(tokenExtractor.extract(any())).thenReturn(AccountFixture.TOKEN1);
+        when(tokenProvider.getSubject(any())).thenReturn(AccountFixture.EMAIL1);
 
         mockMvc.perform(delete("/accounts/" + account.getId())
             .cookie(cookie))

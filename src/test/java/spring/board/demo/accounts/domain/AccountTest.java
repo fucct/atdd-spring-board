@@ -7,8 +7,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import spring.board.demo.accounts.AccountFixture;
 import spring.board.demo.accounts.domain.Account;
 import spring.board.demo.accounts.view.dto.AccountUpdateRequest;
+import spring.board.demo.articles.ArticleFixture;
 import spring.board.demo.exception.AccessDeniedException;
 import spring.board.demo.exception.NotMatchPasswordException;
 
@@ -18,7 +20,7 @@ class AccountTest {
 
     @BeforeEach
     void setUp() {
-        account = Account.of(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD);
+        account = Account.of(ArticleFixture.ID1, AccountFixture.EMAIL1, AccountFixture.NAME1, AccountFixture.PASSWORD1);
     }
 
     @Test
@@ -30,29 +32,29 @@ class AccountTest {
     @Test
     @DisplayName("회원 정보 수정")
     void update() {
-        account.update(TEST_ID, AccountUpdateRequest.builder()
-            .name(TEST_OTHER_ACCOUNT_NAME)
-            .oldPassword(TEST_ACCOUNT_PASSWORD)
-            .newPassword(TEST_OTHER_ACCOUNT_PASSWORD)
+        account.update(ArticleFixture.ID1, AccountUpdateRequest.builder()
+            .name(AccountFixture.NAME2)
+            .oldPassword(AccountFixture.PASSWORD1)
+            .newPassword(AccountFixture.PASSWORD2)
             .build());
         assertThat(account)
-            .hasFieldOrPropertyWithValue("id", TEST_ID)
-            .hasFieldOrPropertyWithValue("email", TEST_ACCOUNT_EMAIL)
-            .hasFieldOrPropertyWithValue("name", TEST_OTHER_ACCOUNT_NAME)
-            .hasFieldOrPropertyWithValue("password", TEST_OTHER_ACCOUNT_PASSWORD);
+            .hasFieldOrPropertyWithValue("id", ArticleFixture.ID1)
+            .hasFieldOrPropertyWithValue("email", AccountFixture.EMAIL1)
+            .hasFieldOrPropertyWithValue("name", AccountFixture.NAME2)
+            .hasFieldOrPropertyWithValue("password", AccountFixture.PASSWORD2);
     }
 
     @Test
     @DisplayName("비밀번호 확인")
     void checkPassword() {
-        assertThatThrownBy(() -> account.checkPassword(TEST_OTHER_ACCOUNT_PASSWORD))
+        assertThatThrownBy(() -> account.checkPassword(AccountFixture.PASSWORD2))
             .isInstanceOf(NotMatchPasswordException.class);
     }
 
     @Test
     @DisplayName("Id 확인")
     void validateId() {
-        assertThatThrownBy(() -> account.validateId(TEST_OTHER_ID))
+        assertThatThrownBy(() -> account.validateId(AccountFixture.ID2))
             .isInstanceOf(AccessDeniedException.class);
     }
 }

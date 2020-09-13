@@ -12,6 +12,7 @@ import org.junit.jupiter.api.TestFactory;
 import org.springframework.http.HttpStatus;
 
 import spring.board.demo.acceptance.AcceptanceTest;
+import spring.board.demo.accounts.AccountFixture;
 import spring.board.demo.accounts.view.dto.AccountCreateResponse;
 import spring.board.demo.accounts.view.dto.AccountDetailResponse;
 import spring.board.demo.exception.dto.ErrorResponse;
@@ -20,9 +21,9 @@ import spring.board.demo.infra.dto.TokenResponse;
 public class AccountAcceptanceTest extends AcceptanceTest {
     @TestFactory
     Stream<DynamicTest> manageUser() {
-        AccountCreateResponse account = createUser(TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME,
-            TEST_ACCOUNT_PASSWORD);
-        TokenResponse token = login(TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_PASSWORD);
+        AccountCreateResponse account = createUser(AccountFixture.EMAIL1, AccountFixture.NAME1,
+            AccountFixture.PASSWORD1);
+        TokenResponse token = login(AccountFixture.EMAIL1, AccountFixture.PASSWORD1);
 
         return Stream.of(
             DynamicTest.dynamicTest("Create account test", () -> {
@@ -36,23 +37,23 @@ public class AccountAcceptanceTest extends AcceptanceTest {
                 AccountDetailResponse response = getAccount(account.getId());
                 assertThat(response)
                     .hasFieldOrPropertyWithValue("id", account.getId())
-                    .hasFieldOrPropertyWithValue("email", TEST_ACCOUNT_EMAIL)
-                    .hasFieldOrPropertyWithValue("name", TEST_ACCOUNT_NAME);
+                    .hasFieldOrPropertyWithValue("email", AccountFixture.EMAIL1)
+                    .hasFieldOrPropertyWithValue("name", AccountFixture.NAME1);
             }),
             DynamicTest.dynamicTest("Update account info test", () -> {
-                updateAccount(account.getId(), TEST_OTHER_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD,
-                    TEST_OTHER_ACCOUNT_PASSWORD, token);
+                updateAccount(account.getId(), AccountFixture.NAME2, AccountFixture.PASSWORD1,
+                    AccountFixture.PASSWORD2, token);
                 AccountDetailResponse userResponse = getAccount(account.getId());
                 assertThat(userResponse)
                     .hasFieldOrPropertyWithValue("id", account.getId())
-                    .hasFieldOrPropertyWithValue("email", TEST_ACCOUNT_EMAIL)
-                    .hasFieldOrPropertyWithValue("name", TEST_OTHER_ACCOUNT_NAME);
+                    .hasFieldOrPropertyWithValue("email", AccountFixture.EMAIL1)
+                    .hasFieldOrPropertyWithValue("name", AccountFixture.NAME2);
             }),
             DynamicTest.dynamicTest("Sign out account test", () -> {
-                TokenResponse tokenResponse = login(TEST_ACCOUNT_EMAIL,
-                    TEST_OTHER_ACCOUNT_PASSWORD);
+                TokenResponse tokenResponse = login(AccountFixture.EMAIL1,
+                    AccountFixture.PASSWORD2);
                 deleteUser(account.getId(), tokenResponse);
-                assertThat(loginNotExistUser(TEST_ACCOUNT_EMAIL, TEST_OTHER_ACCOUNT_PASSWORD))
+                assertThat(loginNotExistUser(AccountFixture.EMAIL1, AccountFixture.PASSWORD2))
                     .isInstanceOf(ErrorResponse.class);
             })
         );

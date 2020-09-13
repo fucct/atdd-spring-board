@@ -29,6 +29,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import spring.board.demo.accounts.AccountFixture;
+import spring.board.demo.articles.ArticleFixture;
 import spring.board.demo.docs.ArticleDocumentation;
 import spring.board.demo.accounts.domain.Account;
 import spring.board.demo.articles.domain.Article;
@@ -73,14 +75,14 @@ public class ArticleControllerTest {
             .apply(documentationConfiguration(restDocumentation))
             .build();
 
-        account = Account.of(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD);
-        cookie = new Cookie("token", TEST_ACCOUNT_TOKEN);
+        account = Account.of(ArticleFixture.ID1, AccountFixture.EMAIL1, AccountFixture.NAME1, AccountFixture.PASSWORD1);
+        cookie = new Cookie("token", AccountFixture.TOKEN1);
     }
 
     @Test
     @DisplayName("게시글 작성")
     void createTest() throws Exception {
-        given(tokenProvider.getSubject(anyString())).willReturn(TEST_ACCOUNT_EMAIL);
+        given(tokenProvider.getSubject(anyString())).willReturn(AccountFixture.EMAIL1);
         given(accountService.findByEmail(anyString())).willReturn(account);
     }
 
@@ -100,10 +102,10 @@ public class ArticleControllerTest {
     @Test
     @DisplayName("게시글 수정")
     void update() throws Exception {
-        ArticleRequest request = new ArticleRequest(TEST_ARTICLE_TITLE,
-            TEST_ARTICLE_CONTENT);
+        ArticleRequest request = new ArticleRequest(ArticleFixture.TITLE1,
+            ArticleFixture.CONTENT1);
 
-        mockMvc.perform(put("/articles/" + TEST_ID)
+        mockMvc.perform(put("/articles/" + ArticleFixture.ID1)
             .contentType(APPLICATION_JSON_VALUE)
             .content(objectMapper.writeValueAsString(request))
             .cookie(cookie))
@@ -115,7 +117,7 @@ public class ArticleControllerTest {
     @Test
     @DisplayName("게시글 삭제")
     void deleteArticle() throws Exception {
-        mockMvc.perform(delete("/articles/" + TEST_ID)
+        mockMvc.perform(delete("/articles/" + ArticleFixture.ID1)
             .cookie(cookie))
             .andExpect(status().isNoContent())
             .andDo(print())

@@ -11,6 +11,8 @@ public class AccountFixture {
     public static final String NAME2 = "Honey Bee";
     public static final String PASSWORD1 = "1234";
     public static final String PASSWORD2 = "5678";
+    public static final String TOKEN1 = "token1";
+    public static final String TOKEN2 = "token2";
 
     public static Account createWithoutId() {
         return Account.builder()

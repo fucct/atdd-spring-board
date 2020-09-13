@@ -1,6 +1,6 @@
 drop table if exists account cascade;
 drop table if exists article cascade;
-drop table if exists comment cascade;
+drop table if exists comments cascade;
 
 create table if not exists account
 (
@@ -37,7 +37,7 @@ create table if not exists article_comment
     primary key (article, comment)
 );
 
-create table if not exists comment
+create table if not exists comments
 (
     id           bigint auto_increment not null,
     account_id   bigint                not null,

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import spring.board.demo.accounts.AccountFixture;
 import spring.board.demo.accounts.service.AccountService;
 import spring.board.demo.accounts.domain.Account;
 import spring.board.demo.accounts.domain.AccountRepository;
@@ -20,6 +21,7 @@ import spring.board.demo.accounts.view.dto.AccountCreateRequest;
 import spring.board.demo.accounts.view.dto.AccountCreateResponse;
 import spring.board.demo.accounts.view.dto.AccountUpdateRequest;
 import spring.board.demo.accounts.view.dto.LoginRequest;
+import spring.board.demo.articles.ArticleFixture;
 import spring.board.demo.articles.domain.ArticleRepository;
 import spring.board.demo.comments.CommentRepository;
 import spring.board.demo.infra.Token;
@@ -48,10 +50,10 @@ class AccountServiceTest {
 
     @BeforeEach
     void setUp() {
-        account = Account.of(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD);
+        account = Account.of(ArticleFixture.ID1, AccountFixture.EMAIL1, AccountFixture.NAME1, AccountFixture.PASSWORD1);
         token = Token.builder()
-            .accessToken(TEST_ACCOUNT_TOKEN)
-            .refreshToken(TEST_OTHER_ACCOUNT_TOKEN)
+            .accessToken(AccountFixture.TOKEN1)
+            .refreshToken(AccountFixture.TOKEN2)
             .tokenType("bearer")
             .build();
         accountService = new AccountService(accountRepository, tokenProvider);
@@ -62,7 +64,7 @@ class AccountServiceTest {
     void create() {
         when(accountRepository.save(any())).thenReturn(account);
         AccountCreateResponse response = accountService.create(
-            new AccountCreateRequest(TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD));
+            new AccountCreateRequest(AccountFixture.EMAIL1, AccountFixture.NAME1, AccountFixture.PASSWORD1));
         assertThat(response.getId()).isEqualTo(account.getId());
     }
 
@@ -80,8 +82,8 @@ class AccountServiceTest {
         when(tokenProvider.createToken(any())).thenReturn(token);
         TokenResponse tokenResponse = accountService.login(
             LoginRequest.builder()
-                .email(TEST_ACCOUNT_EMAIL)
-                .password(TEST_ACCOUNT_PASSWORD)
+                .email(AccountFixture.EMAIL1)
+                .password(AccountFixture.PASSWORD1)
                 .build());
         assertThat(tokenResponse).isEqualToComparingFieldByField(token);
     }
@@ -89,14 +91,14 @@ class AccountServiceTest {
     @Test
     @DisplayName("업데이트 시 정보 변경")
     void update() {
-        accountService.update(TEST_ID, account, AccountUpdateRequest.builder()
-            .name(TEST_OTHER_ACCOUNT_NAME)
-            .oldPassword(TEST_ACCOUNT_PASSWORD)
-            .newPassword(TEST_OTHER_ACCOUNT_PASSWORD)
+        accountService.update(ArticleFixture.ID1, account, AccountUpdateRequest.builder()
+            .name(AccountFixture.NAME2)
+            .oldPassword(AccountFixture.PASSWORD1)
+            .newPassword(AccountFixture.PASSWORD2)
             .build());
         assertThat(account)
-            .hasFieldOrPropertyWithValue("email", TEST_ACCOUNT_EMAIL)
-            .hasFieldOrPropertyWithValue("name", TEST_OTHER_ACCOUNT_NAME)
-            .hasFieldOrPropertyWithValue("password", TEST_OTHER_ACCOUNT_PASSWORD);
+            .hasFieldOrPropertyWithValue("email", AccountFixture.EMAIL1)
+            .hasFieldOrPropertyWithValue("name", AccountFixture.NAME2)
+            .hasFieldOrPropertyWithValue("password", AccountFixture.PASSWORD2);
     }
 }

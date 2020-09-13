@@ -1,6 +1,7 @@
 package spring.board.demo.comments;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -12,6 +13,7 @@ import spring.board.demo.accounts.domain.Account;
 @Builder
 @EqualsAndHashCode(of = "id", callSuper = false)
 @Getter
+@Table("COMMENTS")
 public class Comment extends BaseTime {
 
     @Id

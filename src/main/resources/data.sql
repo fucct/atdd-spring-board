@@ -1,1 +1,0 @@
-insert into account (email, name, password) VALUES ('dqrd123@gmail.com', 'DD', 'qwer');

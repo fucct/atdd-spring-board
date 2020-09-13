@@ -26,23 +26,8 @@ import spring.board.demo.infra.dto.TokenResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql("/truncate.sql")
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ActiveProfiles("test")
 public class AcceptanceTest {
-    public static final Long TEST_ID = 1L;
-    public static final Long TEST_OTHER_ID = 2L;
-    public static final String TEST_ACCOUNT_EMAIL = "fucct";
-    public static final String TEST_OTHER_ACCOUNT_ID = "dqrd123";
-    public static final String TEST_ACCOUNT_NAME = "DD";
-    public static final String TEST_OTHER_ACCOUNT_NAME = "TAEHEON";
-    public static final String TEST_ACCOUNT_PASSWORD = "1234";
-    public static final String TEST_OTHER_ACCOUNT_PASSWORD = "qwer";
-    public static final String TEST_ACCOUNT_TOKEN = "testToken";
-    public static final String TEST_OTHER_ACCOUNT_TOKEN = "otherTestToken";
-    public static final String TEST_ARTICLE_TITLE = "안녕하세요";
-    public static final String TEST_ARTICLE_CONTENT = "안녕하십니까. 우아한 테크코스 2기 디디 김태헌입니다.";
-    public static final String TEST_COMMENT_CONTENT = "안녕하세용";
-    public static final String TEST_OTHER_COMMENT_CONTENT = "반가워용";
 
     @LocalServerPort
     int port;
