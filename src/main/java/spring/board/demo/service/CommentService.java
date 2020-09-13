@@ -31,8 +31,6 @@ public class CommentService {
         Comment comment = commentRepository.findById(id)
             .orElseThrow(() -> new CommentNotFoundException(id));
         comment.validateUser(account);
-        comment.updateContent(commentRequest.getContent());
-        commentRepository.save(comment);
     }
 
     public void deleteComment(Long id, Account account) {

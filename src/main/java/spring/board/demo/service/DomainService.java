@@ -27,16 +27,5 @@ public class DomainService {
         this.commentRepository = commentRepository;
     }
 
-    @Transactional(readOnly = true)
-    public AccountDetailResponse getAccount(Long id) {
-        AccountSampleDto accountSampleDto = accountRepository.findSampleById(id)
-            .orElseThrow(() -> new AccountNotFoundException(id));
-        List<Long> articleIds = accountSampleDto.getArticleIds();
-        List<Long> commentIds = accountSampleDto.getCommentIds();
-        List<ArticlePreviewResponse> articles = articleRepository.findAllWithAccountNameByIds(
-            articleIds);
-        List<CommentDetailResponse> comments = commentRepository.findCommentsByIds(commentIds);
-        return AccountDetailResponse.of(accountSampleDto, articles, comments);
-    }
 
 }

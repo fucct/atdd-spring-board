@@ -38,11 +38,8 @@ public class ArticleController {
     @PostMapping
     public ResponseEntity<ArticleCreateResponse> create(@LoginUser Account account,
         @Valid @RequestBody ArticleRequest request) {
-        ArticleCreateResponse response = articleService.save(account, request);
 
-        return ResponseEntity
-            .created(URI.create("/board/" + response.getId()))
-            .body(response);
+        return null;
     }
 
     @GetMapping
@@ -51,20 +48,6 @@ public class ArticleController {
         return ResponseEntity.ok(responses);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ArticleDetailResponse> getArticle(@PathVariable("id") Long id) {
-        ArticleDetailResponse response = articleService.getArticle(id);
-        return ResponseEntity.ok(response);
-    }
-
-    @AuthorizeCheck
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> updateArticle(@PathVariable("id") Long id,
-        @LoginUser Account account,
-        @Valid @RequestBody ArticleRequest request) {
-        articleService.update(id, account, request);
-        return ResponseEntity.noContent().build();
-    }
 
     @AuthorizeCheck
     @DeleteMapping("/{id}")

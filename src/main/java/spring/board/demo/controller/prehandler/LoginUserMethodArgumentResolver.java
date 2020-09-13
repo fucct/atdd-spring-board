@@ -37,7 +37,7 @@ public class LoginUserMethodArgumentResolver implements HandlerMethodArgumentRes
         NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String email = (String)webRequest.getAttribute("loginEmail", SCOPE_REQUEST);
         if (Objects.isNull(email)) {
-            return new Account();
+            return Account.builder().build();
         }
         try {
             return accountService.findByEmail(email);

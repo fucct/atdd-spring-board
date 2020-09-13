@@ -1,24 +1,49 @@
 package spring.board.demo;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import spring.board.demo.domain.accounts.Account;
+import spring.board.demo.domain.accounts.AccountRepository;
+import spring.board.demo.domain.articles.Article;
+import spring.board.demo.domain.articles.ArticleRepository;
+import spring.board.demo.domain.comments.Comment;
+import spring.board.demo.domain.comments.CommentRepository;
 
 @SpringBootTest
 class BoardApplicationTests {
 
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
     @Test
     void contextLoads() {
-        // Article article = Article.of("안녕하세요", "디디", "반갑습니다.");
-        //
-        // Article persistArticle = articleRepository.save(article);
-        //
-        // Comment comment1 = Comment.of("ㅂㅅㅋㅋ");
-        // Comment comment2 = Comment.of("마닥치라");
-        //
-        // persistArticle.addComment(comment1);
-        // persistArticle.addComment(comment2);
-        //
-        // articleRepository.save(persistArticle);
+        final Account account = Account.builder()
+            .email("dd")
+            .name("dd")
+            .password("dd")
+            .build();
+
+        final Article article = Article.builder()
+            .title("dd")
+            .content("dd")
+            .accountId(1L)
+            .build();
+
+        final Comment comment = Comment.builder()
+            .accountId(1L)
+            .content("dd")
+            .build();
+        accountRepository.save(account);
+        articleRepository.save(article);
+        commentRepository.save(comment);
     }
 
 }

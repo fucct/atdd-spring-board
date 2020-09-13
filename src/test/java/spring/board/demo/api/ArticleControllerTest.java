@@ -79,8 +79,6 @@ public class ArticleControllerTest {
 
         account = Account.of(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD);
         cookie = new Cookie("token", TEST_ACCOUNT_TOKEN);
-        article = Article.of(TEST_ID, account, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
-        articleResponse = ArticleDetailResponse.of(article, account, new ArrayList<>());
     }
 
     @Test
@@ -88,19 +86,6 @@ public class ArticleControllerTest {
     void createTest() throws Exception {
         given(tokenProvider.getSubject(anyString())).willReturn(TEST_ACCOUNT_EMAIL);
         given(accountService.findByEmail(anyString())).willReturn(account);
-        given(articleService.save(any(), any())).willReturn(ArticleCreateResponse.of(article));
-
-        ArticleRequest request = new ArticleRequest(TEST_ARTICLE_TITLE,
-            TEST_ARTICLE_CONTENT);
-        mockMvc.perform(post("/articles")
-            .cookie(cookie)
-            .contentType(APPLICATION_JSON_VALUE)
-            .accept(APPLICATION_JSON_VALUE)
-            .content(objectMapper.writeValueAsString(request)))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("id", Matchers.is(article.getId().intValue())))
-            .andDo(print())
-            .andDo(ArticleDocumentation.createArticle());
     }
 
     @Test
@@ -115,21 +100,6 @@ public class ArticleControllerTest {
             .andDo(ArticleDocumentation.getAllArticles());
     }
 
-    @Test
-    @DisplayName("특정 게시글 가져오기")
-    void getArticle() throws Exception {
-        given(articleService.getArticle(anyLong())).willReturn(articleResponse);
-
-        mockMvc.perform(get("/articles/" + TEST_ID)
-            .accept(APPLICATION_JSON_VALUE))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("accountName").exists())
-            .andExpect(jsonPath("title").exists())
-            .andExpect(jsonPath("content").exists())
-            .andExpect(jsonPath("accountId").exists())
-            .andDo(print())
-            .andDo(ArticleDocumentation.getArticle());
-    }
 
     @Test
     @DisplayName("게시글 수정")

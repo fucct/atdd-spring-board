@@ -44,18 +44,11 @@ class ArticleServiceTest {
     void setUp() {
         articleService = new ArticleService(accountService, articleRepository, commentRepository);
         account = Account.of(TEST_ID, TEST_ACCOUNT_EMAIL, TEST_ACCOUNT_NAME, TEST_ACCOUNT_PASSWORD);
-        article = Article.of(TEST_ID, account, TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT);
     }
 
     @Test
     void save() {
-        when(articleRepository.save(any())).thenReturn(article);
-        when(accountService.save(any())).thenReturn(account);
 
-        ArticleCreateResponse response = articleService.save(account,
-            new ArticleRequest(TEST_ARTICLE_TITLE, TEST_ARTICLE_CONTENT));
-        assertThat(response)
-            .hasFieldOrPropertyWithValue("id", TEST_ID);
     }
 
     @Test
@@ -68,24 +61,9 @@ class ArticleServiceTest {
             .containsExactlyInAnyOrder(ArticlePreviewResponse.of(article, account.getName()));
     }
 
-    @Test
-    void get() {
-        when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article));
-        when(accountService.findById(any())).thenReturn(account);
-
-        assertThat(articleService.getArticle(TEST_ID)).isEqualToComparingFieldByField(
-            ArticleDetailResponse.of(article, account, new ArrayList<>()));
-        // TODO: 2020/06/10 Comment 추가해서 다시 테스트
-    }
 
     @Test
     void update() {
-        when(articleRepository.findById(anyLong())).thenReturn(Optional.of(article));
-        articleService.update(TEST_ID, account,
-            new ArticleRequest("NEW_" + TEST_ARTICLE_TITLE, "NEW_" + TEST_ARTICLE_CONTENT));
-        assertThat(article)
-            .hasFieldOrPropertyWithValue("title", "NEW_" + TEST_ARTICLE_TITLE)
-            .hasFieldOrPropertyWithValue("content", "NEW_" + TEST_ARTICLE_CONTENT);
     }
 
     @Test

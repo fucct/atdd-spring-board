@@ -3,29 +3,26 @@ package spring.board.demo.domain.comments;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.With;
 import spring.board.demo.domain.BaseTime;
 import spring.board.demo.domain.accounts.Account;
 import spring.board.demo.exception.AccessDeniedException;
 
+@Builder
+@EqualsAndHashCode(of = "id", callSuper = false)
 @Getter
-@NoArgsConstructor
-@Table("COMMENTS")
 public class Comment extends BaseTime {
 
     @Id
-    private Long id;
-    private Long accountId;
-    private String content;
-
-    @Builder
-    public Comment(Long id, Long accountId, String content) {
-        this.id = id;
-        this.accountId = accountId;
-        this.content = content;
-    }
+    @With
+    private final Long id;
+    private final Long accountId;
+    private final String content;
 
     public static Comment of(Long accountId, String content) {
         return Comment.builder()
@@ -35,13 +32,7 @@ public class Comment extends BaseTime {
             .build();
     }
 
-    public void updateContent(String content) {
-        this.content = content;
-    }
-
     public void validateUser(Account account) {
-        if (!account.isSameId(accountId)) {
-            throw new AccessDeniedException();
-        }
+        account.validateId(accountId);
     }
 }

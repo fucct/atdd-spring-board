@@ -18,8 +18,4 @@ public class ArticleRequest {
 
     @NotBlank(message = "내용은 필수 입력 요소입니다.")
     private String content;
-
-    public Article toArticle(Account account) {
-        return Article.of(account, title, content);
-    }
 }

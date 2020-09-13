@@ -49,11 +49,6 @@ public class AccountController {
         return ResponseEntity.ok(AccountResponse.of(account));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AccountDetailResponse> getAccount(@PathVariable("id") Long id) {
-        AccountDetailResponse response = domainService.getAccount(id);
-        return ResponseEntity.ok(response);
-    }
 
     @AuthorizeCheck
     @PutMapping("/{id}")

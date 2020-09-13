@@ -103,22 +103,6 @@ public class AccountControllerTest {
             .andDo(UserDocumentation.create());
     }
 
-    @Test
-    void getAccount() throws Exception {
-        when(domainService.getAccount(any())).thenReturn(accountResponse);
-        when(tokenExtractor.extract(any())).thenReturn(TEST_ACCOUNT_TOKEN);
-        when(tokenProvider.getSubject(any())).thenReturn(TEST_ACCOUNT_EMAIL);
-
-        mockMvc.perform(get("/accounts/" + account.getId())
-            .cookie(cookie)
-            .accept(APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("id", Matchers.is(1)))
-            .andExpect(jsonPath("email", Matchers.is(TEST_ACCOUNT_EMAIL)))
-            .andExpect(jsonPath("name", Matchers.is(TEST_ACCOUNT_NAME)))
-            .andDo(print())
-            .andDo(UserDocumentation.get());
-    }
 
     @Test
     void update() throws Exception {

@@ -33,34 +33,9 @@ public class ArticleService {
         this.commentRepository = commentRepository;
     }
 
-    public ArticleCreateResponse save(Account account, ArticleRequest request) {
-        Article article = request.toArticle(account);
-        Article persistArticle = articleRepository.save(article);
-        return ArticleCreateResponse.of(persistArticle);
-    }
-
     @Transactional(readOnly = true)
     public List<ArticlePreviewResponse> getArticles() {
         return articleRepository.findAllWithAccountName();
-    }
-
-    public ArticleDetailResponse getArticle(Long id) {
-        Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new ArticleNotFoundException(id));
-        Account account = accountService.findById(article.getAccountId());
-        List<Long> commentIds = article.getComments()
-            .stream()
-            .map(CommentRef::getComment)
-            .collect(Collectors.toList());
-        List<CommentDetailResponse> comments = commentRepository.findCommentsByIds(commentIds);
-        return ArticleDetailResponse.of(article, account, comments);
-    }
-
-    public void update(Long id, Account account, ArticleRequest request) {
-        Article article = articleRepository.findById(id)
-            .orElseThrow(() -> new ArticleNotFoundException(id));
-        article.update(request);
-        articleRepository.save(article);
     }
 
     public void delete(Long id, Account account) {
