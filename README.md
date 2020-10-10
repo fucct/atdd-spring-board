@@ -1,4 +1,4 @@
-# [Spring Boot 게시판](https://github.com/fucct/spring-boot-board)
+# [Spring Boot 게시판](https://github.com/fucct/atdd-spring-board)
 
 ## 기능 목록
 
